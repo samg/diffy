@@ -1,42 +1,48 @@
 require 'rubygems'
-require 'diff/lcs'
-require 'set'
+require 'tempfile'
+require 'open3'
 module Dirb
   class Diff
     include Enumerable
-    attr_reader :string1, :string2, :seperator
-    def initialize(string1, string2, seperator="\n")
-      @string1, @string2, @seperator = string1, string2, seperator
+    attr_reader :string1, :string2
+    def initialize(string1, string2)
+      @string1, @string2 = string1, string2
     end
 
     def diff
-      @diff ||= ::Diff::LCS.diff(split(@string1), split(@string2))
+      @diff ||= Open3.popen3(
+        *['diff', '-U 1000', tempfile(string1), tempfile(string2)]
+      ) { |i, o, e| o.read }
     end
 
-    def each
-      seen = Set[]
-      longer = [split(@string1), split(@string2)].sort_by(&:size).last
-      longer.each_with_index do |item, index|
-        if changes = diff.detect{|changes| changes.any?{|x| x.position == index}}
-          changes.sort_by do |x|
-            "#{x.action=='+' ? 1 : 0}#{x.position}"
-          end.each do |change|
-            next if seen.include?(change)
-            seen.add(change)
-            yield "#{change.action}#{change.element}"
-          end
-        else
-          yield " #{item}"
-        end
-      end
+    def each &block
+      diff.each_line.reject{|x| x =~ /^---|\+\+\+|@@/ }.each &block
+    end
+
+    def tempfile(string)
+      t = Tempfile.new('dirb')
+      t.print(string)
+      t.flush
+      t.path
     end
 
     def to_s
-      map{|x| x.to_s}.join(seperator) + seperator
+      to_a.join
     end
 
-    def split(string)
-      string.split(seperator)
+    def to_html
+      lines = map do |line|
+        case line
+        when /^\+/
+          "<ins>" + line.gsub(/^./, '').strip + "</ins>"
+        when /^-/
+          "<del>" + line.gsub(/^./, '').strip + "</del>"
+        when /^ /
+          line.gsub(/^-/, '').strip
+        end
+      end
+
+      %'<ul class="diff">\n  <li>#{lines.join("</li>\n  <li>")}</li>\n</ul>\n'
     end
   end
 end
