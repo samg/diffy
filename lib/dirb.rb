@@ -13,6 +13,8 @@ module Dirb
       @diff ||= Open3.popen3(
         *['diff', '-U 1000', tempfile(string1), tempfile(string2)]
       ) { |i, o, e| o.read }
+      @diff = @string1.gsub(/^/, " ") if @diff =~ /\A\s*\Z/
+      @diff
     end
 
     def each &block
@@ -34,15 +36,15 @@ module Dirb
       lines = map do |line|
         case line
         when /^\+/
-          "<ins>" + line.gsub(/^./, '').strip + "</ins>"
+          '  <li class="ins"><ins>' + line.gsub(/^./, '').chomp + '</ins></li>'
         when /^-/
-          "<del>" + line.gsub(/^./, '').strip + "</del>"
+          '  <li class="del"><del>' + line.gsub(/^./, '').chomp + '</del></li>'
         when /^ /
-          line.gsub(/^-/, '').strip
+          '  <li class="unchanged"><span>' + line.gsub(/^./, '').chomp + '</span></li>'
         end
       end
 
-      %'<ul class="diff">\n  <li>#{lines.join("</li>\n  <li>")}</li>\n</ul>\n'
+      %'<ul class="diff">\n#{lines.join("\n")}\n</ul>\n'
     end
   end
 end

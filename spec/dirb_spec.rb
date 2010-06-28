@@ -3,6 +3,20 @@ require File.join(File.dirname(__FILE__), '..', 'lib', 'dirb')
 
 describe Dirb::Diff do
   describe "#to_s" do
+    describe "with no line different" do
+      before do
+        @string1 = "foo\nbar\nbang\n"
+        @string2 = "foo\nbar\nbang\n"
+      end
+
+      it "should show everything" do
+        Dirb::Diff.new(@string1, @string2).to_s.should == <<-DIFF
+ foo
+ bar
+ bang
+        DIFF
+      end
+    end
     describe "with one line different" do
       before do
         @string1 = "foo\nbar\nbang\n"
@@ -80,14 +94,14 @@ describe Dirb::Diff do
       it "should make an awesome html diff" do
         @diff.to_html.should == <<-HTML
 <ul class="diff">
-  <li><del>foo</del></li>
-  <li><ins>one</ins></li>
-  <li><ins>two</ins></li>
-  <li><ins>three</ins></li>
-  <li>bar</li>
-  <li>bang</li>
-  <li><del>woot</del></li>
-  <li><ins>baz</ins></li>
+  <li class="del"><del>foo</del></li>
+  <li class="ins"><ins>one</ins></li>
+  <li class="ins"><ins>two</ins></li>
+  <li class="ins"><ins>three</ins></li>
+  <li class="unchanged"><span>bar</span></li>
+  <li class="unchanged"><span>bang</span></li>
+  <li class="del"><del>woot</del></li>
+  <li class="ins"><ins>baz</ins></li>
 </ul>
         HTML
 
