@@ -18,7 +18,7 @@ module Dirb
 
     def diff
       @diff ||= Open3.popen3(
-        *['diff', diff_options, tempfile(string1), tempfile(string2)]
+        *[diff_bin, diff_options, tempfile(string1), tempfile(string2)]
       ) { |i, o, e| o.read }
       @diff = @string1.gsub(/^/, " ") if @diff =~ /\A\s*\Z/
       @diff
@@ -46,6 +46,15 @@ module Dirb
         raise ArgumentError,
           "Format #{format.inspect} not found in #{formats.inspect}"
       end
+    end
+    private
+
+    def diff_bin
+      bin = `which diff`.chomp
+      if bin.empty?
+        raise "Can't find a diff executable in PATH #{ENV['PATH']}"
+      end
+      bin
     end
 
     module Format
