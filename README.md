@@ -10,10 +10,14 @@ It provides several built in format options.  Pass `:text`, `:color`, or
 `:html` to `Dirb::Diff#to_s` to force that format, or set
 `Dirb::Diff.default_format`
 
+Getting Started
+---------------
+
+    sudo gem install dirb
+
+Here's an example of using Dirb to diff two strings
+
     $ irb
-    >> require 'rubygems'
-    >> require 'dirb'
-    => true
     >> string1 = <<-TXT
     >" Hello how are you
     >" I'm fine
@@ -32,7 +36,9 @@ It provides several built in format options.  Pass `:text`, `:color`, or
      I'm fine
     -That's great
     +That's swell
-    => nil
+
+Outputing the diff as html is easy too.
+
     >> puts Dirb::Diff.new(string1, string2).to_s(:html)
     <ul class="diff">
       <li class="del"><del>Hello how are you</del></li>
@@ -41,16 +47,18 @@ It provides several built in format options.  Pass `:text`, `:color`, or
       <li class="del"><del>That's great</del></li>
       <li class="ins"><ins>That's swell</ins></li>
     </ul>
-    => nil
+
+Dirb::Diff also alows you to set a default format.  Here we set the default to
+use ANSI termnial color escape sequences.
+
     >> Dirb::Diff.default_format = :color
     => :color
-    irb(main):015:0> puts Dirb::Diff.new(string1, string2) # prints color in the terminal
+    >> puts Dirb::Diff.new(string1, string2) # prints color in the terminal
     -Hello how are you
     +Hello how are you?
      I'm fine
     -That's great
     +That's swell
-    => nil
 
 
 Creating custom formatted output is easy too.  `Dirb::Diff` provides an
