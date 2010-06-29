@@ -50,14 +50,14 @@ Outputing the diff as html is easy too.
 
 Then try adding this css to your stylesheets:
 
-  .diff{overflow:auto;}
-  .diff ul{background:#fff;overflow:auto;font-size:13px;list-style:none;margin:0;padding:0;display:table;width:100%;}
-  .diff del, .diff ins{display:block;text-decoration:none;}
-  .diff li{padding:0; display:table-row;margin: 0;}
-  .diff li.ins{background:#9f9;}
-  .diff li.del{background:#ccf;}
-  .diff li:hover{background:#ffc}
-  .diff del, .diff ins, .diff span{white-space:pre;font-family:courier;}
+    .diff{overflow:auto;}
+    .diff ul{background:#fff;overflow:auto;font-size:13px;list-style:none;margin:0;padding:0;display:table;width:100%;}
+    .diff del, .diff ins{display:block;text-decoration:none;}
+    .diff li{padding:0; display:table-row;margin: 0;}
+    .diff li.ins{background:#9f9;}
+    .diff li.del{background:#ccf;}
+    .diff li:hover{background:#ffc}
+    .diff del, .diff ins, .diff span{white-space:pre;font-family:courier;}
 
 Dirb::Diff also alows you to set a default format.  Here we set the default to
 use ANSI termnial color escape sequences.
