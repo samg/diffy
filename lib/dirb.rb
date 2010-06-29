@@ -4,7 +4,7 @@ require 'open3'
 module Dirb
   class Diff
     class << self
-      attr_accessor :default_format
+      attr_writer :default_format
       def default_format
         @default_format || :text
       end
@@ -59,7 +59,7 @@ module Dirb
           else
             line.chomp
           end
-        end.join("\n")
+        end.join("\n") + "\n"
       end
 
       def text

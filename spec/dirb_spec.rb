@@ -33,14 +33,14 @@ describe Dirb::Diff do
 
       it "to_s should accept a format key" do
         Dirb::Diff.new(@string1, @string2).to_s(:color).
-          should == " foo\n\n\e[31m-bar\e[0m\n bang\n"
+          should == " foo\n\e[31m-bar\e[0m\n bang\n"
       end
 
       it "should accept a default format option" do
         old_format = Dirb::Diff.default_format
         Dirb::Diff.default_format = :color
         Dirb::Diff.new(@string1, @string2).to_s.
-          should == " foo\n\n\e[31m-bar\e[0m\n bang\n"
+          should == " foo\n\e[31m-bar\e[0m\n bang\n"
         Dirb::Diff.default_format = old_format
       end
 
