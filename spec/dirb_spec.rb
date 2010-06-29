@@ -106,16 +106,18 @@ describe Dirb::Diff do
 
       it "should make an awesome html diff" do
         @diff.to_s(:html).should == <<-HTML
-<ul class="diff">
-  <li class="del"><del>foo</del></li>
-  <li class="ins"><ins>one</ins></li>
-  <li class="ins"><ins>two</ins></li>
-  <li class="ins"><ins>three</ins></li>
-  <li class="unchanged"><span>bar</span></li>
-  <li class="unchanged"><span>bang</span></li>
-  <li class="del"><del>woot</del></li>
-  <li class="ins"><ins>baz</ins></li>
-</ul>
+<div class="diff">
+  <ul>
+    <li class="del"><del>foo</del></li>
+    <li class="ins"><ins>one</ins></li>
+    <li class="ins"><ins>two</ins></li>
+    <li class="ins"><ins>three</ins></li>
+    <li class="unchanged"><span>bar</span></li>
+    <li class="unchanged"><span>bang</span></li>
+    <li class="del"><del>woot</del></li>
+    <li class="ins"><ins>baz</ins></li>
+  </ul>
+</div>
         HTML
       end
 

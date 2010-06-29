@@ -79,14 +79,14 @@ module Dirb
         lines = map do |line|
           case line
           when /^\+/
-            '  <li class="ins"><ins>' + line.gsub(/^./, '').chomp + '</ins></li>'
+            '    <li class="ins"><ins>' + line.gsub(/^./, '').chomp + '</ins></li>'
           when /^-/
-            '  <li class="del"><del>' + line.gsub(/^./, '').chomp + '</del></li>'
+            '    <li class="del"><del>' + line.gsub(/^./, '').chomp + '</del></li>'
           when /^ /
-            '  <li class="unchanged"><span>' + line.gsub(/^./, '').chomp + '</span></li>'
+            '    <li class="unchanged"><span>' + line.gsub(/^./, '').chomp + '</span></li>'
           end
         end
-        %'<ul class="diff">\n#{lines.join("\n")}\n</ul>\n'
+        %'<div class="diff">\n  <ul>\n#{lines.join("\n")}\n  </ul>\n</div>\n'
       end
     end
   end
