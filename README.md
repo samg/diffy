@@ -57,7 +57,7 @@ Then try adding this css to your stylesheets:
   .diff li.ins{background:#9f9;}
   .diff li.del{background:#ccf;}
   .diff li:hover{background:#ffc}
-  del, ins, span{white-space:pre;font-family:courier;}
+  .diff del, .diff ins, .diff span{white-space:pre;font-family:courier;}
 
 Dirb::Diff also alows you to set a default format.  Here we set the default to
 use ANSI termnial color escape sequences.
