@@ -40,13 +40,15 @@ Here's an example of using Dirb to diff two strings
 Outputing the diff as html is easy too.
 
     >> puts Dirb::Diff.new(string1, string2).to_s(:html)
-    <ul class="diff">
-      <li class="del"><del>Hello how are you</del></li>
-      <li class="ins"><ins>Hello how are you?</ins></li>
-      <li class="unchanged"><span>I'm fine</span></li>
-      <li class="del"><del>That's great</del></li>
-      <li class="ins"><ins>That's swell</ins></li>
-    </ul>
+    <div class="diff">
+      <ul>
+        <li class="del"><del>Hello how are you</del></li>
+        <li class="ins"><ins>Hello how are you?</ins></li>
+        <li class="unchanged"><span>I'm fine</span></li>
+        <li class="del"><del>That's great</del></li>
+        <li class="ins"><ins>That's swell</ins></li>
+      </ul>
+    </div>
 
 Then try adding this css to your stylesheets:
 
