@@ -59,7 +59,7 @@ Then try adding this css to your stylesheets:
     .diff li:hover{background:#ffc}
     .diff del, .diff ins, .diff span{white-space:pre;font-family:courier;}
 
-Dirb::Diff also alows you to set a default format.  Here we set the default to
+`Dirb::Diff` also alows you to set a default format.  Here we set the default to
 use ANSI termnial color escape sequences.
 
     >> Dirb::Diff.default_format = :color
