@@ -7,7 +7,7 @@ algorithm Dirb uses battle tested Unix diff to generate diffs, and focuses on
 providing a convenient interface, and getting out of your way.
 
 It provides several built in format options.  Pass `:text`, `:color`, or
-`:html` to Dirb::Diff#to_s to force that format, or set
+`:html` to `Dirb::Diff#to_s` to force that format, or set
 `Dirb::Diff.default_format`
 
     $ irb
