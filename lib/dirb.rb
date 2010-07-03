@@ -25,7 +25,9 @@ module Dirb
     end
 
     def each &block
-      diff.each_line.reject{|x| x =~ /^---|\+\+\+|@@/ }.each &block
+      diff.split("\n").reject{|x| x =~ /^---|\+\+\+|@@/ }.each do |line| 
+        block.call line + "\n"
+      end
     end
 
     def tempfile(string)
@@ -37,9 +39,9 @@ module Dirb
 
     def to_s(format = nil)
       format ||= self.class.default_format
-      formats = Format.instance_methods(false)
+      formats = Format.instance_methods(false).map{|x| x.to_s}
       if formats.include? format.to_s
-        enum = self.each
+        enum = self.to_a
         enum.extend Format
         enum.send format
       else
