@@ -1,0 +1,5 @@
+== 1.0.1 ==
+* Compatibility with ruby 1.8.6 and 1.9
+
+== 1.0.0 ==
+* HTML output and better documentation
