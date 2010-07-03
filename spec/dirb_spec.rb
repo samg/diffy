@@ -135,6 +135,15 @@ baz
           DIFF
       end
     end
+
+    it "should be easy to generate custom format" do
+      Dirb::Diff.new("foo\nbar\n", "foo\nbar\nbaz\n").map do |line|
+        case line
+        when /^\+/ then "line #{line.chomp} added"
+        when /^-/ then "line #{line.chomp} removed"
+        end
+      end.compact.join.should == "line +baz added"
+    end
   end
 end
 
