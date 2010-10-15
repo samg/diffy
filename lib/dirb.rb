@@ -1,6 +1,7 @@
 require 'rubygems'
 require 'tempfile'
 require 'open3'
+require 'erb'
 module Dirb
   class Diff
     class << self
@@ -81,11 +82,11 @@ module Dirb
         lines = map do |line|
           case line
           when /^\+/
-            '    <li class="ins"><ins>' + line.gsub(/^./, '').chomp + '</ins></li>'
+            '    <li class="ins"><ins>' + ERB::Util.h(line.gsub(/^./, '').chomp) + '</ins></li>'
           when /^-/
-            '    <li class="del"><del>' + line.gsub(/^./, '').chomp + '</del></li>'
+            '    <li class="del"><del>' + ERB::Util.h(line.gsub(/^./, '').chomp) + '</del></li>'
           when /^ /
-            '    <li class="unchanged"><span>' + line.gsub(/^./, '').chomp + '</span></li>'
+            '    <li class="unchanged"><span>' + ERB::Util.h(line.gsub(/^./, '').chomp) + '</span></li>'
           end
         end
         %'<div class="diff">\n  <ul>\n#{lines.join("\n")}\n  </ul>\n</div>\n'

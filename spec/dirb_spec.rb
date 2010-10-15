@@ -136,6 +136,12 @@ baz
       end
     end
 
+    it "should escape diffed html in html output" do
+      diff = Dirb::Diff.new("<script>alert('bar')</script>", "<script>alert('foo')</script>").to_s(:html)
+      diff.should include('&lt;script&gt;')
+      diff.should_not include('<script>')
+    end
+
     it "should be easy to generate custom format" do
       Dirb::Diff.new("foo\nbar\n", "foo\nbar\nbaz\n").map do |line|
         case line
