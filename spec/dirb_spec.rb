@@ -150,6 +150,18 @@ baz
         end
       end.compact.join.should == "line +baz added"
     end
+
+    it "should let you iterate over chunks instead of lines" do
+      Dirb::Diff.new("foo\nbar\n", "foo\nbar\nbaz\n").each_chunk.map do |chunk|
+        chunk
+      end.should == [" foo\n bar\n", "+baz\n"]
+    end
+
+    it "should allow chaining enumerable methods" do
+      Dirb::Diff.new("foo\nbar\n", "foo\nbar\nbaz\n").each.map do |line|
+        line
+      end.should == [" foo\n", " bar\n", "+baz\n"]
+    end
   end
 end
 

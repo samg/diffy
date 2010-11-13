@@ -25,9 +25,33 @@ module Dirb
       @diff
     end
 
-    def each &block
-      diff.split("\n").reject{|x| x =~ /^---|\+\+\+|@@/ }.each do |line| 
-        block.call line + "\n"
+    def each
+      lines = diff.split("\n").reject{|x| x =~ /^---|\+\+\+|@@/ }.
+        map{|line| line + "\n"}
+      if block_given?
+        lines.each{|line| yield line}
+      else
+        Enumerable::Enumerator.new(lines)
+      end
+    end
+
+    def each_chunk
+      old_state = nil
+      chunks = inject([]) do |cc, line|
+        state = line.each_char.first
+        if state == old_state
+          cc.last << line
+        else
+          cc.push line.dup
+        end
+        old_state = state
+        cc
+      end
+
+      if block_given?
+        chunks.each{|chunk| yield chunk }
+      else
+        Enumerable::Enumerator.new(chunks)
       end
     end
 
