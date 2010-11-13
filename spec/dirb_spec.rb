@@ -136,6 +136,25 @@ baz
       end
     end
 
+    describe "with a diff with some words changed on one line" do
+      before do
+        @string1 = "time flies like an arrow\n"
+        @string2 = "fruit flies like a banana\n"
+        @diff = Dirb::Diff.new(@string1, @string2)
+      end
+
+      it "should highlight the word changes within the line" do
+        @diff.to_s(:html_with_inline_highlights).should == <<-HTML
+<div class="diff">
+  <ul>
+    <li class="del"><del><em>time</em> flies like <em>an arrow</em></del></li>
+    <li class="ins"><ins><em>fruit</em> flies like <em>a banana</em></ins></li>
+  </ul>
+</div>
+        HTML
+      end
+    end
+
     it "should escape diffed html in html output" do
       diff = Dirb::Diff.new("<script>alert('bar')</script>", "<script>alert('foo')</script>").to_s(:html)
       diff.should include('&lt;script&gt;')

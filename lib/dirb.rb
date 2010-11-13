@@ -66,7 +66,7 @@ module Dirb
       format ||= self.class.default_format
       formats = Format.instance_methods(false).map{|x| x.to_s}
       if formats.include? format.to_s
-        enum = self.to_a
+        enum = self
         enum.extend Format
         enum.send format
       else
@@ -103,17 +103,81 @@ module Dirb
       end
 
       def html
-        lines = map do |line|
-          case line
-          when /^\+/
-            '    <li class="ins"><ins>' + ERB::Util.h(line.gsub(/^./, '').chomp) + '</ins></li>'
-          when /^-/
-            '    <li class="del"><del>' + ERB::Util.h(line.gsub(/^./, '').chomp) + '</del></li>'
-          when /^ /
-            '    <li class="unchanged"><span>' + ERB::Util.h(line.gsub(/^./, '').chomp) + '</span></li>'
-          end
+        HtmlFormatter.new(self).to_s
+      end
+
+      def html_with_inline_highlights
+        HtmlFormatter.new(self, :highlight_words => true).to_s
+      end
+    end
+
+    class HtmlFormatter
+      def initialize(diff, options = {})
+        @diff = diff
+        @options = options
+      end
+
+      def to_s
+        if @options[:highlight_words]
+          wrap_lines(highlighted_words)
+        else
+          wrap_lines(@diff.map{|line| wrap_line(ERB::Util.h(line))})
         end
+      end
+
+      private
+      def wrap_line(line)
+        cleaned = line.gsub(/^./, '').chomp
+        case line
+        when /^\+/
+          '    <li class="ins"><ins>' + cleaned + '</ins></li>'
+        when /^-/
+          '    <li class="del"><del>' + cleaned + '</del></li>'
+        when /^ /
+          '    <li class="unchanged"><span>' + cleaned + '</span></li>'
+        end
+      end
+
+      def wrap_lines(lines)
         %'<div class="diff">\n  <ul>\n#{lines.join("\n")}\n  </ul>\n</div>\n'
+      end
+
+      def highlighted_words
+        lines = @diff.each_chunk.each_cons(2).map do |(chunk1, chunk2)|
+          dir1 = chunk1.each_char.first
+          dir2 = chunk2.each_char.first
+          case [dir1, dir2]
+          when ['-', '+']
+            word_diff = Dirb::Diff.new(
+              words_from(chunk1),
+              words_from(chunk2)
+            )
+            hi1 = dir1 + word_diff.each_chunk.map do |l|
+              l.chomp!
+              case l
+              when /^-/
+                "<em>" + l.gsub(/^-/, '') + "</em>"
+              when /^ /
+                l.gsub(/^./, '')
+              end
+            end.compact.join(' ').gsub(/\n/, ' ')
+            hi2 = dir2 + word_diff.each_chunk.map do |l|
+              l.chomp!
+              case l
+              when /^\+/
+                "<em>" + l.gsub(/^\+/, '') + "</em>"
+              when /^ /
+                l.gsub(/^./, '')
+              end
+            end.compact.join(' ').gsub(/\n/, ' ')
+            [hi1, hi2]
+          end
+        end.flatten
+        lines.map{|x| wrap_line(x) }
+      end
+
+      def words_from(line)
+        ERB::Util.h(line.sub(/./, '').split(' ').join("\n"))
       end
     end
   end
