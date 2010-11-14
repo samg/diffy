@@ -136,14 +136,16 @@ baz
       end
     end
 
-    describe "with a diff with some words changed on one line" do
+    describe "html_with_inline_highlights" do
       before do
-        @string1 = "time flies like an arrow\n"
-        @string2 = "fruit flies like a banana\n"
+        @string1 = "hahaha\ntime flies like an arrow\nfoo bar\nbang baz\n"
+        @string2 = "hahaha\nfruit flies like a banana\nbang baz\n"
         @diff = Dirb::Diff.new(@string1, @string2)
       end
 
       it "should highlight the word changes within the line" do
+
+        puts @diff.to_s(:html_with_inline_highlights)
         @diff.to_s(:html_with_inline_highlights).should == <<-HTML
 <div class="diff">
   <ul>

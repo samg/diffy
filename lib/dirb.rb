@@ -171,6 +171,10 @@ module Dirb
               end
             end.compact.join(' ').gsub(/\n/, ' ')
             [hi1, hi2]
+          when [' ', '-'], [' ', '+']
+            chunk1
+          when ['-', ' '], ['+', ' ']
+            chunk2
           end
         end.flatten
         lines.map{|x| wrap_line(x) }
