@@ -144,44 +144,51 @@ module Dirb
 
       def highlighted_words
         lines = @diff.each_chunk.each_cons(2).map do |(chunk1, chunk2)|
+          chunk1 = ERB::Util.h(chunk1)
+          chunk2 = ERB::Util.h(chunk2)
           dir1 = chunk1.each_char.first
           dir2 = chunk2.each_char.first
           case [dir1, dir2]
           when ['-', '+']
-            word_diff = Dirb::Diff.new(
-              words_from(chunk1),
-              words_from(chunk2)
+            line_diff = Dirb::Diff.new(
+              split_characters(chunk1),
+              split_characters(chunk2)
             )
-            hi1 = dir1 + word_diff.each_chunk.map do |l|
-              l.chomp!
-              case l
-              when /^-/
-                "<em>" + l.gsub(/^-/, '') + "</em>"
-              when /^ /
-                l.gsub(/^./, '')
-              end
-            end.compact.join(' ').gsub(/\n/, ' ')
-            hi2 = dir2 + word_diff.each_chunk.map do |l|
-              l.chomp!
-              case l
-              when /^\+/
-                "<em>" + l.gsub(/^\+/, '') + "</em>"
-              when /^ /
-                l.gsub(/^./, '')
-              end
-            end.compact.join(' ').gsub(/\n/, ' ')
+            hi1 = reconstruct_characters(line_diff, '-')
+            hi2 = reconstruct_characters(line_diff, '+')
             [hi1, hi2]
           when [' ', '-'], [' ', '+']
             chunk1
           when ['-', ' '], ['+', ' ']
             chunk2
+          else
+            [chunk1, chunk2]
           end
         end.flatten
-        lines.map{|x| wrap_line(x) }
+        lines.map{|line| line.split("\n") if line }.flatten.compact.
+          map{|line|wrap_line(line) }
       end
 
-      def words_from(line)
-        ERB::Util.h(line.sub(/./, '').split(' ').join("\n"))
+      def split_characters(chunk)
+        chunk.gsub(/^./, '').each_line.map do |line|
+          line.chomp.split('') + ['\n']
+        end.flatten.join("\n")
+      end
+
+      def reconstruct_characters(line_diff, type)
+        line_diff.each_chunk.map do |l|
+          re = /(^|\\n)#{Regexp.escape(type)}/
+          case l
+          when re
+            "<strong>" + l.gsub(re, '').gsub("\n", '').
+              gsub('\n', "</strong>\n<strong>") + "</strong>"
+          when /^ /
+            l.gsub(/^./, '').gsub("\n", '').
+              gsub('\r', "\r").gsub('\n', "\n")
+          end
+        end.join('').split("\n").map do |l|
+          type + l
+        end
       end
     end
   end

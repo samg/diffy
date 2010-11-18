@@ -137,23 +137,41 @@ baz
     end
 
     describe "html_with_inline_highlights" do
-      before do
+
+      it "should highlight the changes within the line" do
         @string1 = "hahaha\ntime flies like an arrow\nfoo bar\nbang baz\n"
         @string2 = "hahaha\nfruit flies like a banana\nbang baz\n"
         @diff = Dirb::Diff.new(@string1, @string2)
-      end
-
-      it "should highlight the word changes within the line" do
-
-        puts @diff.to_s(:html_with_inline_highlights)
-        @diff.to_s(:html_with_inline_highlights).should == <<-HTML
+        html = <<-HTML
 <div class="diff">
   <ul>
-    <li class="del"><del><em>time</em> flies like <em>an arrow</em></del></li>
-    <li class="ins"><ins><em>fruit</em> flies like <em>a banana</em></ins></li>
+    <li class="unchanged"><span>hahaha</span></li>
+    <li class="del"><del><strong>t</strong>i<strong>me</strong> flies like a<strong>n arrow</strong></del></li>
+    <li class="del"><del><strong>foo</strong> ba<strong>r</strong></del></li>
+    <li class="ins"><ins><strong>fru</strong>i<strong>t</strong> flies like a ba<strong>nana</strong></ins></li>
+    <li class="unchanged"><span>bang baz</span></li>
   </ul>
 </div>
         HTML
+        @diff.to_s(:html_with_inline_highlights).should ==  html
+      end
+
+      it "should highlight the changes within the line with windows style line breaks" do
+        @string1 = "hahaha\r\ntime flies like an arrow\r\nfoo bar\r\nbang baz\n"
+        @string2 = "hahaha\r\nfruit flies like a banana\r\nbang baz\n"
+        @diff = Dirb::Diff.new(@string1, @string2)
+        html = <<-HTML
+<div class="diff">
+  <ul>
+    <li class="unchanged"><span>hahaha</span></li>
+    <li class="del"><del><strong>t</strong>i<strong>me</strong> flies like a<strong>n arrow</strong></del></li>
+    <li class="del"><del><strong>foo</strong> ba<strong>r</strong></del></li>
+    <li class="ins"><ins><strong>fru</strong>i<strong>t</strong> flies like a ba<strong>nana</strong></ins></li>
+    <li class="unchanged"><span>bang baz</span></li>
+  </ul>
+</div>
+        HTML
+        @diff.to_s(:html_with_inline_highlights).should ==  html
       end
     end
 
