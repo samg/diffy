@@ -143,9 +143,20 @@ module Dirb
       end
 
       def highlighted_words
-        lines = @diff.each_chunk.each_cons(2).map do |(chunk1, chunk2)|
+        chunks = @diff.each_chunk.to_a
+        processed = []
+        lines = chunks.each_with_index.map do |chunk1, index|
+          next if processed.include? index
+          processed << index
+          chunk1 = chunk1
+          chunk2 = chunks[index + 1]
+          if not chunk2
+            next chunk1
+          end
+
           chunk1 = ERB::Util.h(chunk1)
           chunk2 = ERB::Util.h(chunk2)
+
           dir1 = chunk1.each_char.first
           dir2 = chunk2.each_char.first
           case [dir1, dir2]
@@ -156,17 +167,14 @@ module Dirb
             )
             hi1 = reconstruct_characters(line_diff, '-')
             hi2 = reconstruct_characters(line_diff, '+')
+            processed << (index + 1)
             [hi1, hi2]
-          when [' ', '-'], [' ', '+']
-            chunk1
-          when ['-', ' '], ['+', ' ']
-            chunk2
           else
-            [chunk1, chunk2]
+            chunk1
           end
-        end.flatten
-        lines.map{|line| line.split("\n") if line }.flatten.compact.
-          map{|line|wrap_line(line) }
+        end.flatten.compact
+        lines.map{|line| line.each_line.map(&:chomp).to_a if line }.flatten.compact.
+          map{|line|wrap_line(line) }.compact
       end
 
       def split_characters(chunk)

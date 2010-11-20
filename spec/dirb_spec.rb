@@ -156,6 +156,40 @@ baz
         @diff.to_s(:html_with_inline_highlights).should ==  html
       end
 
+      it "should not duplicate some lines" do
+        @string1 = "hahaha\ntime flies like an arrow\n"
+        @string2 = "hahaha\nfruit flies like a banana\nbang baz"
+        @diff = Dirb::Diff.new(@string1, @string2)
+        html = <<-HTML
+<div class="diff">
+  <ul>
+    <li class="unchanged"><span>hahaha</span></li>
+    <li class="del"><del><strong>t</strong>i<strong>me</strong> flies like an a<strong>rrow</strong></del></li>
+    <li class="ins"><ins><strong>fru</strong>i<strong>t</strong> flies like a<strong> ba</strong>n<strong>ana</strong></ins></li>
+    <li class="ins"><ins><strong>bang</strong> <strong>b</strong>a<strong>z</strong></ins></li>
+  </ul>
+</div>
+        HTML
+        @diff.to_s(:html_with_inline_highlights).should ==  html
+      end
+
+      it "should escape html" do
+        @string1 = "ha<br>haha\ntime flies like an arrow\n"
+        @string2 = "ha<br>haha\nfruit flies like a banana\nbang baz"
+        @diff = Dirb::Diff.new(@string1, @string2)
+        html = <<-HTML
+<div class="diff">
+  <ul>
+    <li class="unchanged"><span>ha&lt;br&gt;haha</span></li>
+    <li class="del"><del><strong>t</strong>i<strong>me</strong> flies like an a<strong>rrow</strong></del></li>
+    <li class="ins"><ins><strong>fru</strong>i<strong>t</strong> flies like a<strong> ba</strong>n<strong>ana</strong></ins></li>
+    <li class="ins"><ins><strong>bang</strong> <strong>b</strong>a<strong>z</strong></ins></li>
+  </ul>
+</div>
+        HTML
+        @diff.to_s(:html_with_inline_highlights).should ==  html
+      end
+
       it "should highlight the changes within the line with windows style line breaks" do
         @string1 = "hahaha\r\ntime flies like an arrow\r\nfoo bar\r\nbang baz\n"
         @string2 = "hahaha\r\nfruit flies like a banana\r\nbang baz\n"
