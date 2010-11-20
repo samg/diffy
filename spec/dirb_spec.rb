@@ -1,5 +1,5 @@
 require 'spec'
-require File.join(File.dirname(__FILE__), '..', 'lib', 'dirb')
+require File.expand_path(File.join(File.dirname(__FILE__), '..', 'lib', 'dirb'))
 
 describe Dirb::Diff do
   describe "#to_s" do

@@ -2,6 +2,10 @@ require 'rubygems'
 require 'tempfile'
 require 'open3'
 require 'erb'
+# 1.9 compatibility
+if defined? Enumerator
+  Enumerable::Enumerator = Enumerator unless defined? Enumerable::Enumerator
+end
 module Dirb
   class Diff
     class << self
