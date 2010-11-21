@@ -30,7 +30,7 @@ module Dirb
     end
 
     def each
-      lines = diff.split("\n").reject{|x| x =~ /^---|\+\+\+|@@/ }.
+      lines = diff.split("\n").reject{|x| x =~ /^---|\+\+\+|@@|\\\\/ }.
         map{|line| line + "\n"}
       if block_given?
         lines.each{|line| yield line}
