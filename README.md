@@ -56,10 +56,12 @@ Then try adding this css to your stylesheets:
     .diff ul{background:#fff;overflow:auto;font-size:13px;list-style:none;margin:0;padding:0;display:table;width:100%;}
     .diff del, .diff ins{display:block;text-decoration:none;}
     .diff li{padding:0; display:table-row;margin: 0;}
-    .diff li.ins{background:#9f9;}
-    .diff li.del{background:#ccf;}
-    .diff li:hover{background:#ffc}
     .diff del, .diff ins, .diff span{white-space:pre;font-family:courier;}
+    .diff li.ins{background:#9f9;}
+    .diff li.del{background:#fcc;}
+    .diff li.ins strong{font-weight:normal; background: #6f6 }
+    .diff li.del strong{font-weight:normal; background: #f99 }
+
 
 `Dirb::Diff` also alows you to set a default format.  Here we set the default to
 use ANSI termnial color escape sequences.
