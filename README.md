@@ -77,10 +77,14 @@ Then try adding this css to your stylesheets:
     .diff li.ins strong{font-weight:normal; background: #6f6 }
     .diff li.del strong{font-weight:normal; background: #f99 }
 
+You can also diff files instead of strings
+
+    >> puts Dirb::Diff.new('/tmp/foo', '/tmp/bar', :source => 'files')
+
 Custom Formats
 --------------
 
-Dirb tries to make generating your own custom formatted output easy too.
+Dirb tries to make generating your own custom formatted output easy.
 `Dirb::Diff` provides an enumberable interface which lets you iterate over
 lines in the diff.
 
