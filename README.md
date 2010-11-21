@@ -6,9 +6,24 @@ way to generate a diff from two strings.  Instead of reimplementing the LCS diff
 algorithm Dirb uses battle tested Unix diff to generate diffs, and focuses on
 providing a convenient interface, and getting out of your way.
 
-It provides several built in format options.  Pass `:text`, `:color`, or
-`:html` to `Dirb::Diff#to_s` to force that format, or set
-`Dirb::Diff.default_format`
+Supported Formats
+-----------------
+
+It provides several built in format options which can be passed to
+`Dirb::Diff#to_s`.
+
+* `:text`         - Plain text output
+* `:color`        - ANSI colorized text suitable for use in a terminal
+* `:html`         - HTML output.  Since version 2.0 this format does inline
+                    highlighting of the changes between two the changes within
+                    lines.
+* `:html_simple`  - HTML output without inline highlighting.  This may be
+                    useful in situations where high performance is required or
+                    simpler output is desired.
+
+A default format can be set like so:
+
+    `Dirb::Diff.default_format = :html`
 
 Getting Started
 ---------------
@@ -39,7 +54,7 @@ Here's an example of using Dirb to diff two strings
 
 Outputing the diff as html is easy too.
 
-    >> puts Dirb::Diff.new(string1, string2).to_s(:html)
+    >> puts Dirb::Diff.new(string1, string2).to_s(:html_simple)
     <div class="diff">
       <ul>
         <li class="del"><del>Hello how are you</del></li>
@@ -62,22 +77,12 @@ Then try adding this css to your stylesheets:
     .diff li.ins strong{font-weight:normal; background: #6f6 }
     .diff li.del strong{font-weight:normal; background: #f99 }
 
+Custom Formats
+--------------
 
-`Dirb::Diff` also alows you to set a default format.  Here we set the default to
-use ANSI termnial color escape sequences.
-
-    >> Dirb::Diff.default_format = :color
-    => :color
-    >> puts Dirb::Diff.new(string1, string2) # prints color in the terminal
-    -Hello how are you
-    +Hello how are you?
-     I'm fine
-    -That's great
-    +That's swell
-
-
-Creating custom formatted output is easy too.  `Dirb::Diff` provides an
-enumberable interface which lets you iterate over lines in the diff.
+Dirb tries to make generating your own custom formatted output easy too.
+`Dirb::Diff` provides an enumberable interface which lets you iterate over
+lines in the diff.
 
     >> Dirb::Diff.new("foo\nbar\n", "foo\nbar\nbaz\n").each do |line|
     >*   case line
@@ -88,7 +93,25 @@ enumberable interface which lets you iterate over lines in the diff.
     line +baz added
     => [" foo\n", " bar\n", "+baz\n"]
 
+You can also use `Dirb::Diff#each_chunk` to iterate each grouping of additions,
+deletions, and unchanged in a diff.
+
+    >> Dirb::Diff.new("foo\nbar\nbang\nbaz\n", "foo\nbar\nbing\nbong\n").each_chunk.to_a
+    => [" foo\n bar\n", "-bang\n-baz\n", "+bing\n+bong\n"]
+
 Use `#map`, `#inject`, or any of Enumerable's methods.  Go crazy.
+
+Ruby Version Compatibility
+-------------------------
+
+Support for Ruby 1.8.6 was dropped beggining at version 2.0 in order to support
+the chainable enumerators available in 1.8.7 and 1.9.
+
+If you want to use Dirb and Ruby 1.8.6 then:
+
+    $ gem install dirb -v1.1.0
+
+---------------------------------------------------------------------
 
 Report bugs or request features at http://github.com/samg/Dirb/issues
 
