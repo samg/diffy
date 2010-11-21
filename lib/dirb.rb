@@ -176,7 +176,7 @@ module Dirb
           else
             chunk1
           end
-        end.flatten.compact
+        end.flatten
         lines.map{|line| line.each_line.map(&:chomp).to_a if line }.flatten.compact.
           map{|line|wrap_line(line) }.compact
       end
