@@ -2,6 +2,43 @@ require 'spec'
 require File.expand_path(File.join(File.dirname(__FILE__), '..', 'lib', 'dirb'))
 
 describe Dirb::Diff do
+
+  describe "diffing two files" do
+    def tempfile(string)
+      t = Tempfile.new('dirb-spec')
+      t.print(string)
+      t.flush
+      t.path
+    end
+
+    it "should accept file paths as arguments" do
+      string1 = "foo\nbar\nbang\n"
+      string2 = "foo\nbang\n"
+      path1, path2 = tempfile(string1), tempfile(string2)
+      Dirb::Diff.new(path1, path2, :source => 'files').to_s.should == <<-DIFF
+ foo
+-bar
+ bang
+      DIFF
+    end
+
+    describe "with no line different" do
+      before do
+        string1 = "foo\nbar\nbang\n"
+        string2 = "foo\nbar\nbang\n"
+        @path1, @path2 = tempfile(string1), tempfile(string2)
+      end
+
+      it "should show everything" do
+        Dirb::Diff.new(@path1, @path2, :source => 'files').to_s.should == <<-DIFF
+ foo
+ bar
+ bang
+        DIFF
+      end
+    end
+  end
+
   describe "#to_s" do
     describe "with no line different" do
       before do
@@ -122,7 +159,7 @@ describe Dirb::Diff do
       end
 
       it "should accept overrides to diff's options" do
-        @diff = Dirb::Diff.new(@string1, @string2, "--rcs")
+        @diff = Dirb::Diff.new(@string1, @string2, :diff => "--rcs")
         @diff.to_s.should == <<-DIFF
 d1 1
 a1 3

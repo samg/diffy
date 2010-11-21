@@ -7,18 +7,39 @@ module Dirb
       end
     end
     include Enumerable
-    attr_reader :string1, :string2, :diff_options, :diff
-    def initialize(string1, string2, diff_options = "-U 10000")
+    attr_reader :string1, :string2, :options, :diff
+
+    # supported options
+    # +:diff+::    A cli options string passed to diff
+    # +:source+::  Either _strings_ or _files_.  Determines whether string1
+    #              and string2 should be interpreted as strings or file paths.
+    def initialize(string1, string2, options = {})
+      @options = {:diff => '-U 10000', :source => 'strings'}.merge(options)
+      if ! ['strings', 'files'].include?(@options[:source])
+        raise ArgumentError, "Invalid :source option #{@options[:source].inspect}. Supported options are 'strings' and 'files'."
+      end
       @string1, @string2 = string1, string2
-      @diff_options = diff_options
     end
 
     def diff
-      @diff ||= Open3.popen3(
-        *[diff_bin, diff_options, tempfile(string1), tempfile(string2)]
-      ) { |i, o, e| o.read }
-      @diff = @string1.gsub(/^/, " ") if @diff =~ /\A\s*\Z/
-      @diff
+      @diff ||= begin
+        paths = case options[:source]
+          when 'strings'
+            [tempfile(string1), tempfile(string2)]
+          when 'files'
+            [string1, string2]
+          end
+        diff ||= Open3.popen3(
+          *[ diff_bin, options[:diff], *paths ]
+        ) { |i, o, e| o.read }
+        if diff =~ /\A\s*\Z/
+          diff = case options[:source]
+          when 'strings' then string1
+          when 'files' then File.read(string1)
+          end.gsub(/^/, " ")
+        end
+        diff
+      end
     end
 
     def each
