@@ -104,8 +104,8 @@ describe Dirb::Diff do
         DIFF
       end
 
-      it "should make an awesome html diff" do
-        @diff.to_s(:html).should == <<-HTML
+      it "should make an awesome simple html diff" do
+        @diff.to_s(:html_simple).should == <<-HTML
 <div class="diff">
   <ul>
     <li class="del"><del>foo</del></li>
@@ -136,7 +136,7 @@ baz
       end
     end
 
-    describe "html_with_inline_highlights" do
+    describe "html" do
 
       it "should highlight the changes within the line" do
         @string1 = "hahaha\ntime flies like an arrow\nfoo bar\nbang baz\n"
@@ -153,7 +153,7 @@ baz
   </ul>
 </div>
         HTML
-        @diff.to_s(:html_with_inline_highlights).should ==  html
+        @diff.to_s(:html).should ==  html
       end
 
       it "should not duplicate some lines" do
@@ -170,7 +170,7 @@ baz
   </ul>
 </div>
         HTML
-        @diff.to_s(:html_with_inline_highlights).should ==  html
+        @diff.to_s(:html).should ==  html
       end
 
       it "should escape html" do
@@ -187,7 +187,7 @@ baz
   </ul>
 </div>
         HTML
-        @diff.to_s(:html_with_inline_highlights).should ==  html
+        @diff.to_s(:html).should ==  html
       end
 
       it "should highlight the changes within the line with windows style line breaks" do
@@ -205,7 +205,7 @@ baz
   </ul>
 </div>
         HTML
-        @diff.to_s(:html_with_inline_highlights).should ==  html
+        @diff.to_s(:html).should ==  html
       end
     end
 
