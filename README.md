@@ -14,16 +14,12 @@ It provides several built in format options which can be passed to
 
 * `:text`         - Plain text output
 * `:color`        - ANSI colorized text suitable for use in a terminal
-* `:html`         - HTML output.  Since version 2.0 this format does inline
-                    highlighting of the changes between two the changes within
-                    lines.
-* `:html_simple`  - HTML output without inline highlighting.  This may be
-                    useful in situations where high performance is required or
-                    simpler output is desired.
+* `:html`         - HTML output.  Since version 2.0 this format does inline highlighting of the changes between two the changes within lines.
+* `:html_simple`  - HTML output without inline highlighting.  This may be useful in situations where high performance is required or simpler output is desired.
 
 A default format can be set like so:
 
-    `Dirb::Diff.default_format = :html`
+    Dirb::Diff.default_format = :html
 
 Getting Started
 ---------------
