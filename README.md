@@ -2,9 +2,9 @@ Diffy - Easy Diffing With Ruby
 ============================
 
 Need diffs in your ruby app?  Diffy has you covered.  It provides a convenient
-way to generate a diff from two strings.  Instead of reimplementing the LCS diff
-algorithm Diffy uses battle tested Unix diff to generate diffs, and focuses on
-providing a convenient interface, and getting out of your way.
+way to generate a diff from two strings or files.  Instead of reimplementing
+the LCS diff algorithm Diffy uses battle tested Unix diff to generate diffs,
+and focuses on providing a convenient interface, and getting out of your way.
 
 Supported Formats
 -----------------
