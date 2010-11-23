@@ -1,11 +1,11 @@
 require 'spec'
-require File.expand_path(File.join(File.dirname(__FILE__), '..', 'lib', 'dirb'))
+require File.expand_path(File.join(File.dirname(__FILE__), '..', 'lib', 'diffy'))
 
-describe Dirb::Diff do
+describe Diffy::Diff do
 
   describe "diffing two files" do
     def tempfile(string)
-      t = Tempfile.new('dirb-spec')
+      t = Tempfile.new('diffy-spec')
       t.print(string)
       t.flush
       t.path
@@ -15,7 +15,7 @@ describe Dirb::Diff do
       string1 = "foo\nbar\nbang\n"
       string2 = "foo\nbang\n"
       path1, path2 = tempfile(string1), tempfile(string2)
-      Dirb::Diff.new(path1, path2, :source => 'files').to_s.should == <<-DIFF
+      Diffy::Diff.new(path1, path2, :source => 'files').to_s.should == <<-DIFF
  foo
 -bar
  bang
@@ -30,7 +30,7 @@ describe Dirb::Diff do
       end
 
       it "should show everything" do
-        Dirb::Diff.new(@path1, @path2, :source => 'files').to_s.should == <<-DIFF
+        Diffy::Diff.new(@path1, @path2, :source => 'files').to_s.should == <<-DIFF
  foo
  bar
  bang
@@ -47,7 +47,7 @@ describe Dirb::Diff do
       end
 
       it "should show everything" do
-        Dirb::Diff.new(@string1, @string2).to_s.should == <<-DIFF
+        Diffy::Diff.new(@string1, @string2).to_s.should == <<-DIFF
  foo
  bar
  bang
@@ -61,7 +61,7 @@ describe Dirb::Diff do
       end
 
       it "should show one line removed" do
-        Dirb::Diff.new(@string1, @string2).to_s.should == <<-DIFF
+        Diffy::Diff.new(@string1, @string2).to_s.should == <<-DIFF
  foo
 -bar
  bang
@@ -69,20 +69,20 @@ describe Dirb::Diff do
       end
 
       it "to_s should accept a format key" do
-        Dirb::Diff.new(@string1, @string2).to_s(:color).
+        Diffy::Diff.new(@string1, @string2).to_s(:color).
           should == " foo\n\e[31m-bar\e[0m\n bang\n"
       end
 
       it "should accept a default format option" do
-        old_format = Dirb::Diff.default_format
-        Dirb::Diff.default_format = :color
-        Dirb::Diff.new(@string1, @string2).to_s.
+        old_format = Diffy::Diff.default_format
+        Diffy::Diff.default_format = :color
+        Diffy::Diff.new(@string1, @string2).to_s.
           should == " foo\n\e[31m-bar\e[0m\n bang\n"
-        Dirb::Diff.default_format = old_format
+        Diffy::Diff.default_format = old_format
       end
 
       it "should show one line added" do
-        Dirb::Diff.new(@string2, @string1).to_s.should == <<-DIFF
+        Diffy::Diff.new(@string2, @string1).to_s.should == <<-DIFF
  foo
 +bar
  bang
@@ -96,7 +96,7 @@ describe Dirb::Diff do
         @string2 = "foo\nbong\nbang\n"
       end
       it "should show one line added and one removed" do
-        Dirb::Diff.new(@string1, @string2).to_s.should == <<-DIFF
+        Diffy::Diff.new(@string1, @string2).to_s.should == <<-DIFF
  foo
 -bar
 +bong
@@ -111,7 +111,7 @@ describe Dirb::Diff do
         @string2 = "one\ntwo\nthree\n"
       end
       it "should show one line added and one removed" do
-        Dirb::Diff.new(@string1, @string2).to_s.should == <<-DIFF
+        Diffy::Diff.new(@string1, @string2).to_s.should == <<-DIFF
 -foo
 -bar
 -bang
@@ -126,7 +126,7 @@ describe Dirb::Diff do
       before do
         @string1 = "foo\nbar\nbang\nwoot\n"
         @string2 = "one\ntwo\nthree\nbar\nbang\nbaz\n"
-        @diff = Dirb::Diff.new(@string1, @string2)
+        @diff = Diffy::Diff.new(@string1, @string2)
       end
       it "should show one line added and one removed" do
         @diff.to_s.should == <<-DIFF
@@ -159,7 +159,7 @@ describe Dirb::Diff do
       end
 
       it "should accept overrides to diff's options" do
-        @diff = Dirb::Diff.new(@string1, @string2, :diff => "--rcs")
+        @diff = Diffy::Diff.new(@string1, @string2, :diff => "--rcs")
         @diff.to_s.should == <<-DIFF
 d1 1
 a1 3
@@ -178,7 +178,7 @@ baz
       it "should highlight the changes within the line" do
         @string1 = "hahaha\ntime flies like an arrow\nfoo bar\nbang baz\n"
         @string2 = "hahaha\nfruit flies like a banana\nbang baz\n"
-        @diff = Dirb::Diff.new(@string1, @string2)
+        @diff = Diffy::Diff.new(@string1, @string2)
         html = <<-HTML
 <div class="diff">
   <ul>
@@ -196,7 +196,7 @@ baz
       it "should not duplicate some lines" do
         @string1 = "hahaha\ntime flies like an arrow\n"
         @string2 = "hahaha\nfruit flies like a banana\nbang baz"
-        @diff = Dirb::Diff.new(@string1, @string2)
+        @diff = Diffy::Diff.new(@string1, @string2)
         html = <<-HTML
 <div class="diff">
   <ul>
@@ -213,7 +213,7 @@ baz
       it "should escape html" do
         @string1 = "ha<br>haha\ntime flies like an arrow\n"
         @string2 = "ha<br>haha\nfruit flies like a banana\nbang baz"
-        @diff = Dirb::Diff.new(@string1, @string2)
+        @diff = Diffy::Diff.new(@string1, @string2)
         html = <<-HTML
 <div class="diff">
   <ul>
@@ -230,7 +230,7 @@ baz
       it "should highlight the changes within the line with windows style line breaks" do
         @string1 = "hahaha\r\ntime flies like an arrow\r\nfoo bar\r\nbang baz\n"
         @string2 = "hahaha\r\nfruit flies like a banana\r\nbang baz\n"
-        @diff = Dirb::Diff.new(@string1, @string2)
+        @diff = Diffy::Diff.new(@string1, @string2)
         html = <<-HTML
 <div class="diff">
   <ul>
@@ -247,13 +247,13 @@ baz
     end
 
     it "should escape diffed html in html output" do
-      diff = Dirb::Diff.new("<script>alert('bar')</script>", "<script>alert('foo')</script>").to_s(:html)
+      diff = Diffy::Diff.new("<script>alert('bar')</script>", "<script>alert('foo')</script>").to_s(:html)
       diff.should include('&lt;script&gt;')
       diff.should_not include('<script>')
     end
 
     it "should be easy to generate custom format" do
-      Dirb::Diff.new("foo\nbar\n", "foo\nbar\nbaz\n").map do |line|
+      Diffy::Diff.new("foo\nbar\n", "foo\nbar\nbaz\n").map do |line|
         case line
         when /^\+/ then "line #{line.chomp} added"
         when /^-/ then "line #{line.chomp} removed"
@@ -262,13 +262,13 @@ baz
     end
 
     it "should let you iterate over chunks instead of lines" do
-      Dirb::Diff.new("foo\nbar\n", "foo\nbar\nbaz\n").each_chunk.map do |chunk|
+      Diffy::Diff.new("foo\nbar\n", "foo\nbar\nbaz\n").each_chunk.map do |chunk|
         chunk
       end.should == [" foo\n bar\n", "+baz\n"]
     end
 
     it "should allow chaining enumerable methods" do
-      Dirb::Diff.new("foo\nbar\n", "foo\nbar\nbaz\n").each.map do |line|
+      Diffy::Diff.new("foo\nbar\n", "foo\nbar\nbaz\n").each.map do |line|
         line
       end.should == [" foo\n", " bar\n", "+baz\n"]
     end

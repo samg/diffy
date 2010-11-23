@@ -1,4 +1,4 @@
-module Dirb
+module Diffy
   class HtmlFormatter
     def initialize(diff, options = {})
       @diff = diff
@@ -49,7 +49,7 @@ module Dirb
         dir2 = chunk2.each_char.first
         case [dir1, dir2]
         when ['-', '+']
-          line_diff = Dirb::Diff.new(
+          line_diff = Diffy::Diff.new(
             split_characters(chunk1),
             split_characters(chunk2)
           )

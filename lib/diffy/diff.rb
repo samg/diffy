@@ -1,4 +1,4 @@
-module Dirb
+module Diffy
   class Diff
     class << self
       attr_writer :default_format
@@ -73,7 +73,7 @@ module Dirb
     end
 
     def tempfile(string)
-      t = Tempfile.new('dirb')
+      t = Tempfile.new('diffy')
       t.print(string)
       t.flush
       t.path

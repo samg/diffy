@@ -1,4 +1,4 @@
-module Dirb
+module Diffy
   module Format
     # ANSI color output suitable for terminal output
     def color

@@ -4,12 +4,12 @@
 # -*- encoding: utf-8 -*-
 
 Gem::Specification.new do |s|
-  s.name = %q{dirb}
+  s.name = %q{diffy}
   s.version = "2.0.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Sam Goldstein"]
-  s.date = %q{2010-11-20}
+  s.date = %q{2010-11-22}
   s.description = %q{Convenient diffing in ruby}
   s.email = %q{sgrock@gmail.com}
   s.extra_rdoc_files = [
@@ -24,13 +24,13 @@ Gem::Specification.new do |s|
      "Rakefile",
      "VERSION",
      "dirb.gemspec",
-     "lib/dirb.rb",
-     "lib/dirb/diff.rb",
-     "lib/dirb/format.rb",
-     "lib/dirb/html_formatter.rb",
+     "lib/diffy.rb",
+     "lib/diffy/diff.rb",
+     "lib/diffy/format.rb",
+     "lib/diffy/html_formatter.rb",
      "spec/dirb_spec.rb"
   ]
-  s.homepage = %q{http://github.com/samg/dirb/tree/master}
+  s.homepage = %q{http://github.com/samg/diffy/tree/master}
   s.rdoc_options = ["--inline-source", "--charset=UTF-8"]
   s.require_paths = ["lib"]
   s.rubygems_version = %q{1.3.7}
