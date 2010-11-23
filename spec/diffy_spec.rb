@@ -1,7 +1,7 @@
 require 'spec'
-require File.join(File.dirname(__FILE__), '..', 'lib', 'dirb')
+require File.join(File.dirname(__FILE__), '..', 'lib', 'diffy')
 
-describe Dirb::Diff do
+describe Diffy::Diff do
   describe "#to_s" do
     describe "with no line different" do
       before do
@@ -10,7 +10,7 @@ describe Dirb::Diff do
       end
 
       it "should show everything" do
-        Dirb::Diff.new(@string1, @string2).to_s.should == <<-DIFF
+        Diffy::Diff.new(@string1, @string2).to_s.should == <<-DIFF
  foo
  bar
  bang
@@ -24,7 +24,7 @@ describe Dirb::Diff do
       end
 
       it "should show one line removed" do
-        Dirb::Diff.new(@string1, @string2).to_s.should == <<-DIFF
+        Diffy::Diff.new(@string1, @string2).to_s.should == <<-DIFF
  foo
 -bar
  bang
@@ -32,20 +32,20 @@ describe Dirb::Diff do
       end
 
       it "to_s should accept a format key" do
-        Dirb::Diff.new(@string1, @string2).to_s(:color).
+        Diffy::Diff.new(@string1, @string2).to_s(:color).
           should == " foo\n\e[31m-bar\e[0m\n bang\n"
       end
 
       it "should accept a default format option" do
-        old_format = Dirb::Diff.default_format
-        Dirb::Diff.default_format = :color
-        Dirb::Diff.new(@string1, @string2).to_s.
+        old_format = Diffy::Diff.default_format
+        Diffy::Diff.default_format = :color
+        Diffy::Diff.new(@string1, @string2).to_s.
           should == " foo\n\e[31m-bar\e[0m\n bang\n"
-        Dirb::Diff.default_format = old_format
+        Diffy::Diff.default_format = old_format
       end
 
       it "should show one line added" do
-        Dirb::Diff.new(@string2, @string1).to_s.should == <<-DIFF
+        Diffy::Diff.new(@string2, @string1).to_s.should == <<-DIFF
  foo
 +bar
  bang
@@ -59,7 +59,7 @@ describe Dirb::Diff do
         @string2 = "foo\nbong\nbang\n"
       end
       it "should show one line added and one removed" do
-        Dirb::Diff.new(@string1, @string2).to_s.should == <<-DIFF
+        Diffy::Diff.new(@string1, @string2).to_s.should == <<-DIFF
  foo
 -bar
 +bong
@@ -74,7 +74,7 @@ describe Dirb::Diff do
         @string2 = "one\ntwo\nthree\n"
       end
       it "should show one line added and one removed" do
-        Dirb::Diff.new(@string1, @string2).to_s.should == <<-DIFF
+        Diffy::Diff.new(@string1, @string2).to_s.should == <<-DIFF
 -foo
 -bar
 -bang
@@ -89,7 +89,7 @@ describe Dirb::Diff do
       before do
         @string1 = "foo\nbar\nbang\nwoot\n"
         @string2 = "one\ntwo\nthree\nbar\nbang\nbaz\n"
-        @diff = Dirb::Diff.new(@string1, @string2)
+        @diff = Diffy::Diff.new(@string1, @string2)
       end
       it "should show one line added and one removed" do
         @diff.to_s.should == <<-DIFF
@@ -122,7 +122,7 @@ describe Dirb::Diff do
       end
 
       it "should accept overrides to diff's options" do
-        @diff = Dirb::Diff.new(@string1, @string2, "--rcs")
+        @diff = Diffy::Diff.new(@string1, @string2, "--rcs")
         @diff.to_s.should == <<-DIFF
 d1 1
 a1 3
@@ -137,13 +137,13 @@ baz
     end
 
     it "should escape diffed html in html output" do
-      diff = Dirb::Diff.new("<script>alert('bar')</script>", "<script>alert('foo')</script>").to_s(:html)
+      diff = Diffy::Diff.new("<script>alert('bar')</script>", "<script>alert('foo')</script>").to_s(:html)
       diff.should include('&lt;script&gt;')
       diff.should_not include('<script>')
     end
 
     it "should be easy to generate custom format" do
-      Dirb::Diff.new("foo\nbar\n", "foo\nbar\nbaz\n").map do |line|
+      Diffy::Diff.new("foo\nbar\n", "foo\nbar\nbaz\n").map do |line|
         case line
         when /^\+/ then "line #{line.chomp} added"
         when /^-/ then "line #{line.chomp} removed"

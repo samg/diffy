@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Sam Goldstein"]
-  s.date = %q{2010-10-15}
+  s.date = %q{2010-11-22}
   s.description = %q{Convenient diffing in ruby}
   s.email = %q{sgrock@gmail.com}
   s.extra_rdoc_files = [
@@ -23,9 +23,7 @@ Gem::Specification.new do |s|
      "README.md",
      "Rakefile",
      "VERSION",
-     "diffy.gemspec",
-     "lib/diffy.rb",
-     "spec/diffy_spec.rb"
+     "dirb.gemspec"
   ]
   s.homepage = %q{http://github.com/samg/diffy/tree/master}
   s.rdoc_options = ["--inline-source", "--charset=UTF-8"]

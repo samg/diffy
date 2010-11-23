@@ -1,21 +1,21 @@
-Dirb - Easy Diffing With Ruby
+Diffy - Easy Diffing With Ruby
 ============================
 
-Need diffs in your ruby app?  Dirb has you covered.  It provides a convenient
+Need diffs in your ruby app?  Diffy has you covered.  It provides a convenient
 way to generate a diff from two strings.  Instead of reimplementing the LCS diff
-algorithm Dirb uses battle tested Unix diff to generate diffs, and focuses on
+algorithm Diffy uses battle tested Unix diff to generate diffs, and focuses on
 providing a convenient interface, and getting out of your way.
 
 It provides several built in format options.  Pass `:text`, `:color`, or
-`:html` to `Dirb::Diff#to_s` to force that format, or set
-`Dirb::Diff.default_format`
+`:html` to `Diffy::Diff#to_s` to force that format, or set
+`Diffy::Diff.default_format`
 
 Getting Started
 ---------------
 
-    sudo gem install dirb
+    sudo gem install diffy
 
-Here's an example of using Dirb to diff two strings
+Here's an example of using Diffy to diff two strings
 
     $ irb
     >> string1 = <<-TXT
@@ -30,7 +30,7 @@ Here's an example of using Dirb to diff two strings
     >" That's swell
     >" TXT
     => "Hello how are you?\nI'm fine\nThat's swell\n"
-    >> puts Dirb::Diff.new(string1, string2)
+    >> puts Diffy::Diff.new(string1, string2)
     -Hello how are you
     +Hello how are you?
      I'm fine
@@ -39,7 +39,7 @@ Here's an example of using Dirb to diff two strings
 
 Outputing the diff as html is easy too.
 
-    >> puts Dirb::Diff.new(string1, string2).to_s(:html)
+    >> puts Diffy::Diff.new(string1, string2).to_s(:html)
     <div class="diff">
       <ul>
         <li class="del"><del>Hello how are you</del></li>
@@ -61,12 +61,12 @@ Then try adding this css to your stylesheets:
     .diff li:hover{background:#ffc}
     .diff del, .diff ins, .diff span{white-space:pre;font-family:courier;}
 
-`Dirb::Diff` also alows you to set a default format.  Here we set the default to
+`Diffy::Diff` also alows you to set a default format.  Here we set the default to
 use ANSI termnial color escape sequences.
 
-    >> Dirb::Diff.default_format = :color
+    >> Diffy::Diff.default_format = :color
     => :color
-    >> puts Dirb::Diff.new(string1, string2) # prints color in the terminal
+    >> puts Diffy::Diff.new(string1, string2) # prints color in the terminal
     -Hello how are you
     +Hello how are you?
      I'm fine
@@ -74,10 +74,10 @@ use ANSI termnial color escape sequences.
     +That's swell
 
 
-Creating custom formatted output is easy too.  `Dirb::Diff` provides an
+Creating custom formatted output is easy too.  `Diffy::Diff` provides an
 enumberable interface which lets you iterate over lines in the diff.
 
-    >> Dirb::Diff.new("foo\nbar\n", "foo\nbar\nbaz\n").each do |line|
+    >> Diffy::Diff.new("foo\nbar\n", "foo\nbar\nbaz\n").each do |line|
     >*   case line
     >>   when /^\+/ then puts "line #{line.chomp} added"
     >>   when /^-/ then puts "line #{line.chomp} removed"
@@ -88,5 +88,5 @@ enumberable interface which lets you iterate over lines in the diff.
 
 Use `#map`, `#inject`, or any of Enumerable's methods.  Go crazy.
 
-Report bugs or request features at http://github.com/samg/Dirb/issues
+Report bugs or request features at http://github.com/samg/Diffy/issues
 
