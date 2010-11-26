@@ -66,13 +66,14 @@ Then try adding this css to your stylesheets:
     .diff{overflow:auto;}
     .diff ul{background:#fff;overflow:auto;font-size:13px;list-style:none;margin:0;padding:0;display:table;width:100%;}
     .diff del, .diff ins{display:block;text-decoration:none;}
-    .diff li{padding:0; display:table-row;margin: 0;}
+    .diff li{padding:0; display:table-row;margin: 0;height:1em;}
+    .diff li.ins{background:#dfd; color:#080}
+    .diff li.del{background:#fee; color:#b00}
+    .diff li:hover{background:#ffc}
     /* try 'whitespace:pre;' if you don't want lines to wrap */
     .diff del, .diff ins, .diff span{white-space:pre-wrap;font-family:courier;}
-    .diff li.ins{background:#9f9;}
-    .diff li.del{background:#fcc;}
-    .diff li.ins strong{font-weight:normal; background: #6f6 }
-    .diff li.del strong{font-weight:normal; background: #f99 }
+    .diff del strong{font-weight:normal;background:#fcc;}
+    .diff ins strong{font-weight:normal;background:#9f9;}
 
 You can also diff files instead of strings
 
