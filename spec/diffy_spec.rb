@@ -190,8 +190,6 @@ baz
   </ul>
 </div>
         HTML
-        puts html
-        puts @diff.to_s(:html)
         @diff.to_s(:html).should ==  html
       end
 
