@@ -182,9 +182,9 @@ baz
 <div class="diff">
   <ul>
     <li class="unchanged"><span>hahaha</span></li>
-    <li class="del"><del><strong>t</strong>i<strong>me</strong> flies like a<strong>n arrow</strong></del></li>
+    <li class="del"><del><strong>time</strong> flies like a<strong>n arrow</strong></del></li>
     <li class="del"><del><strong>foo</strong> ba<strong>r</strong></del></li>
-    <li class="ins"><ins><strong>fru</strong>i<strong>t</strong> flies like a ba<strong>nana</strong></ins></li>
+    <li class="ins"><ins><strong>fruit</strong> flies like a ba<strong>nana</strong></ins></li>
     <li class="unchanged"><span>bang baz</span></li>
     <li class="unchanged"><span>&lt;script&gt;</span></li>
   </ul>
@@ -201,9 +201,9 @@ baz
 <div class="diff">
   <ul>
     <li class="unchanged"><span>hahaha</span></li>
-    <li class="del"><del><strong>t</strong>i<strong>me</strong> flies like a<strong>n arrow</strong></del></li>
+    <li class="del"><del><strong>time</strong> flies like a<strong>n arrow</strong></del></li>
     <li class="del"><del><strong>foo</strong> ba<strong>r</strong></del></li>
-    <li class="ins"><ins><strong>fru</strong>i<strong>t</strong> flies like a ba<strong>nana</strong></ins></li>
+    <li class="ins"><ins><strong>fruit</strong> flies like a ba<strong>nana</strong></ins></li>
     <li class="unchanged"><span>bang baz</span></li>
   </ul>
 </div>
@@ -219,9 +219,9 @@ baz
 <div class="diff">
   <ul>
     <li class="unchanged"><span>hahaha</span></li>
-    <li class="del"><del><strong>t</strong>i<strong>me</strong> flies like an a<strong>rrow</strong></del></li>
-    <li class="ins"><ins><strong>fru</strong>i<strong>t</strong> flies like a<strong> ba</strong>n<strong>ana</strong></ins></li>
-    <li class="ins"><ins><strong>bang</strong> <strong>b</strong>a<strong>z</strong></ins></li>
+    <li class="del"><del><strong>time</strong> flies like a<strong>n arrow</strong></del></li>
+    <li class="ins"><ins><strong>fruit</strong> flies like a<strong> banana</strong></ins></li>
+    <li class="ins"><ins><strong>bang baz</strong></ins></li>
   </ul>
 </div>
         HTML
@@ -236,9 +236,9 @@ baz
 <div class="diff">
   <ul>
     <li class="unchanged"><span>ha&lt;br&gt;haha</span></li>
-    <li class="del"><del><strong>t</strong>i<strong>me</strong> flies like an a<strong>rrow</strong></del></li>
-    <li class="ins"><ins><strong>fru</strong>i<strong>t</strong> flies like a<strong> ba</strong>n<strong>ana</strong></ins></li>
-    <li class="ins"><ins><strong>bang</strong> <strong>b</strong>a<strong>z</strong></ins></li>
+    <li class="del"><del><strong>time</strong> flies like a<strong>n arrow</strong></del></li>
+    <li class="ins"><ins><strong>fruit</strong> flies like a<strong> banana</strong></ins></li>
+    <li class="ins"><ins><strong>bang baz</strong></ins></li>
   </ul>
 </div>
         HTML
@@ -253,9 +253,9 @@ baz
 <div class="diff">
   <ul>
     <li class="unchanged"><span>hahaha</span></li>
-    <li class="del"><del><strong>t</strong>i<strong>me</strong> flies like a<strong>n arrow</strong></del></li>
+    <li class="del"><del><strong>time</strong> flies like a<strong>n arrow</strong></del></li>
     <li class="del"><del><strong>foo</strong> ba<strong>r</strong></del></li>
-    <li class="ins"><ins><strong>fru</strong>i<strong>t</strong> flies like a ba<strong>nana</strong></ins></li>
+    <li class="ins"><ins><strong>fruit</strong> flies like a ba<strong>nana</strong></ins></li>
     <li class="unchanged"><span>bang baz</span></li>
   </ul>
 </div>

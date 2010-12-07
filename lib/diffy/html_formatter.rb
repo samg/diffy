@@ -67,23 +67,32 @@ module Diffy
     def split_characters(chunk)
       chunk.gsub(/^./, '').each_line.map do |line|
         line.chomp.split('') + ['\n']
-      end.flatten.join("\n")
+      end.flatten.join("\n") + "\n"
     end
 
     def reconstruct_characters(line_diff, type)
-      line_diff.each_chunk.map do |l|
+      enum = line_diff.each_chunk
+      enum.each_with_index.map do |l, i|
         re = /(^|\\n)#{Regexp.escape(type)}/
         case l
         when re
-          "<strong>" + l.gsub(re, '').gsub("\n", '').
-            gsub('\n', "</strong>\n<strong>") + "</strong>"
+          highlight(l)
         when /^ /
-          l.gsub(/^./, '').gsub("\n", '').
-            gsub('\r', "\r").gsub('\n', "\n")
+          if i > 1 and enum.to_a[i+1] and l.each_line.to_a.size < 3
+            highlight(l)
+          else
+            l.gsub(/^./, '').gsub("\n", '').
+              gsub('\r', "\r").gsub('\n', "\n")
+          end
         end
       end.join('').split("\n").map do |l|
-        type + l
+        type + l.gsub('</strong><strong>' , '')
       end
+    end
+
+    def highlight(lines)
+      "<strong>" + lines.gsub(/(^|\\n)./, '').gsub("\n", '').
+        gsub('\n', "</strong>\n<strong>") + "</strong>"
     end
   end
 end
