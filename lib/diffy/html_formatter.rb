@@ -39,9 +39,8 @@ module Diffy
         chunk1 = chunk1
         chunk2 = chunks[index + 1]
         if not chunk2
-          next chunk1
+          next ERB::Util.h(chunk1)
         end
-
         chunk1 = ERB::Util.h(chunk1)
         chunk2 = ERB::Util.h(chunk2)
 

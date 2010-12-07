@@ -174,6 +174,26 @@ baz
     end
 
     describe "html" do
+      it "should not allow html injection on the last line" do
+        @string1 = "hahaha\ntime flies like an arrow\nfoo bar\nbang baz\n<script>\n"
+        @string2 = "hahaha\nfruit flies like a banana\nbang baz\n<script>\n"
+        @diff = Diffy::Diff.new(@string1, @string2)
+        html = <<-HTML
+<div class="diff">
+  <ul>
+    <li class="unchanged"><span>hahaha</span></li>
+    <li class="del"><del><strong>t</strong>i<strong>me</strong> flies like a<strong>n arrow</strong></del></li>
+    <li class="del"><del><strong>foo</strong> ba<strong>r</strong></del></li>
+    <li class="ins"><ins><strong>fru</strong>i<strong>t</strong> flies like a ba<strong>nana</strong></ins></li>
+    <li class="unchanged"><span>bang baz</span></li>
+    <li class="unchanged"><span>&lt;script&gt;</span></li>
+  </ul>
+</div>
+        HTML
+        puts html
+        puts @diff.to_s(:html)
+        @diff.to_s(:html).should ==  html
+      end
 
       it "should highlight the changes within the line" do
         @string1 = "hahaha\ntime flies like an arrow\nfoo bar\nbang baz\n"
