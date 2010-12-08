@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{diffy}
-  s.version = "2.0.0"
+  s.version = "2.0.1"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Sam Goldstein"]
-  s.date = %q{2010-11-22}
+  s.date = %q{2010-12-07}
   s.description = %q{Convenient diffing in ruby}
   s.email = %q{sgrock@gmail.com}
   s.extra_rdoc_files = [
@@ -23,12 +23,12 @@ Gem::Specification.new do |s|
      "README.md",
      "Rakefile",
      "VERSION",
-     "dirb.gemspec",
+     "diffy.gemspec",
      "lib/diffy.rb",
      "lib/diffy/diff.rb",
      "lib/diffy/format.rb",
      "lib/diffy/html_formatter.rb",
-     "spec/dirb_spec.rb"
+     "spec/diffy_spec.rb"
   ]
   s.homepage = %q{http://github.com/samg/diffy/tree/master}
   s.rdoc_options = ["--inline-source", "--charset=UTF-8"]
@@ -36,7 +36,7 @@ Gem::Specification.new do |s|
   s.rubygems_version = %q{1.3.7}
   s.summary = %q{A convenient way to diff string in ruby}
   s.test_files = [
-    "spec/dirb_spec.rb"
+    "spec/diffy_spec.rb"
   ]
 
   if s.respond_to? :specification_version then
