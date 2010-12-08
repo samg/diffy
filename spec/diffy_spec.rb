@@ -183,8 +183,8 @@ baz
   <ul>
     <li class="unchanged"><span>hahaha</span></li>
     <li class="del"><del><strong>time</strong> flies like a<strong>n arrow</strong></del></li>
-    <li class="del"><del><strong>foo</strong> ba<strong>r</strong></del></li>
-    <li class="ins"><ins><strong>fruit</strong> flies like a ba<strong>nana</strong></ins></li>
+    <li class="del"><del><strong>foo bar</strong></del></li>
+    <li class="ins"><ins><strong>fruit</strong> flies like a<strong> banana</strong></ins></li>
     <li class="unchanged"><span>bang baz</span></li>
     <li class="unchanged"><span>&lt;script&gt;</span></li>
   </ul>
@@ -202,8 +202,8 @@ baz
   <ul>
     <li class="unchanged"><span>hahaha</span></li>
     <li class="del"><del><strong>time</strong> flies like a<strong>n arrow</strong></del></li>
-    <li class="del"><del><strong>foo</strong> ba<strong>r</strong></del></li>
-    <li class="ins"><ins><strong>fruit</strong> flies like a ba<strong>nana</strong></ins></li>
+    <li class="del"><del><strong>foo bar</strong></del></li>
+    <li class="ins"><ins><strong>fruit</strong> flies like a<strong> banana</strong></ins></li>
     <li class="unchanged"><span>bang baz</span></li>
   </ul>
 </div>
@@ -254,8 +254,8 @@ baz
   <ul>
     <li class="unchanged"><span>hahaha</span></li>
     <li class="del"><del><strong>time</strong> flies like a<strong>n arrow</strong></del></li>
-    <li class="del"><del><strong>foo</strong> ba<strong>r</strong></del></li>
-    <li class="ins"><ins><strong>fruit</strong> flies like a ba<strong>nana</strong></ins></li>
+    <li class="del"><del><strong>foo bar</strong></del></li>
+    <li class="ins"><ins><strong>fruit</strong> flies like a<strong> banana</strong></ins></li>
     <li class="unchanged"><span>bang baz</span></li>
   </ul>
 </div>

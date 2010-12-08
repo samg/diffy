@@ -78,7 +78,7 @@ module Diffy
         when re
           highlight(l)
         when /^ /
-          if i > 1 and enum.to_a[i+1] and l.each_line.to_a.size < 3
+          if i > 1 and enum.to_a[i+1] and l.each_line.to_a.size < 4
             highlight(l)
           else
             l.gsub(/^./, '').gsub("\n", '').
