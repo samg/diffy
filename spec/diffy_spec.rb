@@ -1,4 +1,4 @@
-require 'spec'
+require 'rspec'
 require File.expand_path(File.join(File.dirname(__FILE__), '..', 'lib', 'diffy'))
 
 describe Diffy::Diff do
@@ -239,6 +239,21 @@ baz
     <li class="del"><del><strong>time</strong> flies like a<strong>n arrow</strong></del></li>
     <li class="ins"><ins><strong>fruit</strong> flies like a<strong> banana</strong></ins></li>
     <li class="ins"><ins><strong>bang baz</strong></ins></li>
+  </ul>
+</div>
+        HTML
+        @diff.to_s(:html).should ==  html
+      end
+
+      it "should not double escape html in wierd edge cases" do
+        @string1 = "preface = (! title .)+ title &{YYACCEPT}\n"
+        @string2 = "preface = << (! title .)+ title >> &{YYACCEPT}\n"
+        @diff = Diffy::Diff.new @string1, @string2
+        html = <<-HTML
+<div class="diff">
+  <ul>
+    <li class="del"><del>preface = (! title .)+ title &amp;{YYACCEPT}</del></li>
+    <li class="ins"><ins>preface = <strong>&lt;&lt; </strong>(! title .)+ title <strong>&gt;&gt; </strong>&amp;{YYACCEPT}</ins></li>
   </ul>
 </div>
         HTML

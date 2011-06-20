@@ -41,8 +41,6 @@ module Diffy
         if not chunk2
           next ERB::Util.h(chunk1)
         end
-        chunk1 = ERB::Util.h(chunk1)
-        chunk2 = ERB::Util.h(chunk2)
 
         dir1 = chunk1.each_char.first
         dir2 = chunk2.each_char.first
@@ -57,7 +55,7 @@ module Diffy
           processed << (index + 1)
           [hi1, hi2]
         else
-          chunk1
+          ERB::Util.h(chunk1)
         end
       end.flatten
       lines.map{|line| line.each_line.map(&:chomp).to_a if line }.flatten.compact.
@@ -66,7 +64,7 @@ module Diffy
 
     def split_characters(chunk)
       chunk.gsub(/^./, '').each_line.map do |line|
-        line.chomp.split('') + ['\n']
+        (line.chomp.split('') + ['\n']).map{|chr| ERB::Util.h(chr) }
       end.flatten.join("\n") + "\n"
     end
 
