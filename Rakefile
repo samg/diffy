@@ -23,7 +23,6 @@ begin
 
     s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
     s.authors = ["Sam Goldstein"]
-    s.date = %q{2010-06-28}
     s.description = %q{Convenient diffing in ruby}
     s.email = %q{sgrock@gmail.com}
     s.has_rdoc = true
@@ -34,6 +33,6 @@ begin
 
   end
 rescue LoadError
-  puts "Jeweler not available. Install it with: sudo gem install technicalpickles-jeweler -s http://gems.github.com"
+  puts "Jeweler not available."
 end
 
