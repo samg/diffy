@@ -1,13 +1,12 @@
-require 'spec/rake/spectask'
 require 'rake/rdoctask'
-require 'rake/gempackagetask'
+require 'rubygems/package_task'
+require 'rspec/core/rake_task'
 
 task :default => :spec
 
 desc "Run all specs in spec directory"
-Spec::Rake::SpecTask.new(:spec) do |t|
-  t.spec_files = FileList['spec/**/*_spec.rb']
-  t.spec_opts = %w{--color --format profile}
+RSpec::Core::RakeTask.new(:spec) do |t|
+  t.pattern = "./spec/**/*_spec.rb" # don't need this, it's default.
 end
 
 Rake::RDocTask.new do |rd|
