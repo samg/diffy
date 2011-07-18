@@ -39,6 +39,25 @@ describe Diffy::Diff do
     end
   end
 
+  describe "options[:diff]" do
+    it "should accept an option to diff" do
+      @diff = Diffy::Diff.new(" foo\nbar\n", "foo\nbar\n", :diff => "-w")
+      @diff.to_s.should == <<-DIFF
+  foo
+ bar
+      DIFF
+    end
+
+    it "should accept multiple arguments to diff" do
+      @diff = Diffy::Diff.new(" foo\nbar\n", "foo\nbaz\n", :diff => ["-w", "-U 3"])
+      @diff.to_s.should == <<-DIFF
+  foo
+-bar
++baz
+      DIFF
+    end
+  end
+
   describe "#to_s" do
     describe "with no line different" do
       before do
