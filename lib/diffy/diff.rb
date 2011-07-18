@@ -29,9 +29,8 @@ module Diffy
           when 'files'
             [string1, string2]
           end
-        diff ||= Open3.popen3(
-          *[ diff_bin, options[:diff], *paths ]
-        ) { |i, o, e| o.read }
+        diff_opts = options[:diff].is_a?(Array) ? options[:diff] : [options[:diff]]
+        diff = Open3.popen3(diff_bin, *diff_opts, *paths) { |i, o, e| o.read }
         if diff =~ /\A\s*\Z/
           diff = case options[:source]
           when 'strings' then string1
