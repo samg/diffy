@@ -18,6 +18,9 @@ module Diffy
       if ! ['strings', 'files'].include?(@options[:source])
         raise ArgumentError, "Invalid :source option #{@options[:source].inspect}. Supported options are 'strings' and 'files'."
       end
+	  # Having \\ on a line freaks out the diff utility, not an elegant fix but it does work
+	  string1.gsub "\\", ""
+	  string2.gsub "\\", ""
       @string1, @string2 = string1, string2
     end
 
