@@ -37,6 +37,23 @@ describe Diffy::Diff do
         DIFF
       end
     end
+    describe "with lines that start with backslashes" do
+      before do
+        string1 = "foo\n\\\\bag\nbang\n"
+        string2 = "foo\n\\\\bar\nbang\n"
+        @path1, @path2 = tempfile(string1), tempfile(string2)
+      end
+
+      it "should not leave lines out" do
+        Diffy::Diff.new(@path1, @path2, :source => 'files').to_s.should == <<-DIFF
+ foo
+-\\\\bag
++\\\\bar
+ bang
+        DIFF
+      end
+    end
+
   end
 
   describe "options[:diff]" do
