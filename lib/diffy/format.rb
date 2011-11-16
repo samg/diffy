@@ -8,6 +8,10 @@ module Diffy
           "\033[32m#{line.chomp}\033[0m"
         when /^-/
           "\033[31m#{line.chomp}\033[0m"
+        when /^(---|\+\+\+|\\\\)/
+          "\e[90m#{line.chomp}\e[0m"
+        when /^@@/
+          "\033[36m\#{line.chomp}\033[0m"
         else
           line.chomp
         end

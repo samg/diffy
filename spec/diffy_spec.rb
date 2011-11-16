@@ -118,7 +118,8 @@ describe Diffy::Diff do
       end
 
       it "should show one line added" do
-        Diffy::Diff.new(@string2, @string1).to_s.should == <<-DIFF
+        Diffy::Diff.new(@string2, @string1).to_s.
+          should == <<-DIFF
  foo
 +bar
  bang

@@ -23,6 +23,10 @@ module Diffy
         '    <li class="del"><del>' + cleaned + '</del></li>'
       when /^ /
         '    <li class="unchanged"><span>' + cleaned + '</span></li>'
+      when /^@@/
+        '    <li class="diff-block-info"><span>' + cleaned + '</span></li>'
+      when /^(---|\+\+\+|\\\\)/
+        '    <li class="diff-comment"><span>' + cleaned + '</span></li>'
       end
     end
 

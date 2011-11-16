@@ -14,7 +14,7 @@ module Diffy
     # +:source+::  Either _strings_ or _files_.  Determines whether string1
     #              and string2 should be interpreted as strings or file paths.
     def initialize(string1, string2, options = {})
-      @options = {:diff => '-U 10000', :source => 'strings'}.merge(options)
+      @options = {:diff => '-U 10000', :source => 'strings', :include_diff_info => false}.merge(options)
       if ! ['strings', 'files'].include?(@options[:source])
         raise ArgumentError, "Invalid :source option #{@options[:source].inspect}. Supported options are 'strings' and 'files'."
       end
@@ -42,8 +42,10 @@ module Diffy
     end
 
     def each
-      lines = diff.split("\n").reject{|x| x =~ /^(---|\+\+\+|@@|\\\\)/ }.
-        map{|line| line + "\n"}
+      lines = case @options[:include_diff_info]
+      when false then diff.split("\n").reject{|x| x =~ /^(---|\+\+\+|@@|\\\\)/ }.map {|line| line + "\n" }
+      when true then diff.split("\n").map {|line| line + "\n" }
+      end
       if block_given?
         lines.each{|line| yield line}
       else
