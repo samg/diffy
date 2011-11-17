@@ -17,6 +17,8 @@ module Diffy
     def wrap_line(line)
       cleaned = line.gsub(/^./, '').chomp
       case line
+      when /^(---|\+\+\+|\\\\)/
+        '    <li class="diff-comment"><span>' + cleaned + '</span></li>'
       when /^\+/
         '    <li class="ins"><ins>' + cleaned + '</ins></li>'
       when /^-/
@@ -25,8 +27,6 @@ module Diffy
         '    <li class="unchanged"><span>' + cleaned + '</span></li>'
       when /^@@/
         '    <li class="diff-block-info"><span>' + cleaned + '</span></li>'
-      when /^(---|\+\+\+|\\\\)/
-        '    <li class="diff-comment"><span>' + cleaned + '</span></li>'
       end
     end
 
