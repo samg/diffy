@@ -18,7 +18,7 @@ module Diffy
       cleaned = line.gsub(/^./, '').chomp
       case line
       when /^(---|\+\+\+|\\\\)/
-        '    <li class="diff-comment"><span>' + line + '</span></li>'
+        '    <li class="diff-comment"><span>' + line.chomp + '</span></li>'
       when /^\+/
         '    <li class="ins"><ins>' + cleaned + '</ins></li>'
       when /^-/
@@ -26,7 +26,7 @@ module Diffy
       when /^ /
         '    <li class="unchanged"><span>' + cleaned + '</span></li>'
       when /^@@/
-        '    <li class="diff-block-info"><span>' + line + '</span></li>'
+        '    <li class="diff-block-info"><span>' + line.chomp + '</span></li>'
       end
     end
 

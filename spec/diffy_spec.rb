@@ -84,7 +84,7 @@ describe Diffy::Diff do
   
       it "works for :html_simple" do
         output = Diffy::Diff.new("foo\nbar\nbang\n", "foo\nbang\n", :include_diff_info => true ).to_s(:html_simple)
-        output.split("\n").should include( "    <li class=\"diff-block-info\"><span>@@ -1,3 +1,2 @@", "</span></li>" )
+        output.split("\n").should include( "    <li class=\"diff-block-info\"><span>@@ -1,3 +1,2 @@</span></li>" )
         output.should match( "<li class=\"diff-comment\"><span>---")
         output.should match( "<li class=\"diff-comment\"><span>+++")
       end
