@@ -74,6 +74,8 @@ Then try adding this css to your stylesheets:
     .diff del, .diff ins, .diff span{white-space:pre-wrap;font-family:courier;}
     .diff del strong{font-weight:normal;background:#fcc;}
     .diff ins strong{font-weight:normal;background:#9f9;}
+    .diff li.diff-comment { display: none; }
+    .diff li.diff-block-info { background: none repeat scroll 0 0 gray; }
 
 You can also diff files instead of strings
 
