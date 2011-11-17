@@ -42,7 +42,6 @@ module Diffy
     end
 
     def each
-      puts @options[:include_diff_info].to_s
       lines = case @options[:include_diff_info]
       when false then diff.split("\n").reject{|x| x =~ /^(---|\+\+\+|@@|\\\\)/ }.map {|line| line + "\n" }
       when true then diff.split("\n").map {|line| line + "\n" }
