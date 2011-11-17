@@ -112,8 +112,14 @@ By default diffy removes the superfluous diff output.  This is because its defau
 
 Diffy does support full output, just use the `:include_diff_info => true` option when initializing:
 
-  >> Diffy::Diff.new("foo\nbar\n", "foo\nbar\nbaz\n", :include_diff_info => true).to_s(:text)
-
+    >> Diffy::Diff.new("foo\nbar\n", "foo\nbar\nbaz\n", :include_diff_info => true).to_s(:text)
+    =>--- /Users/chaffeqa/Projects/stiwiki/tmp/diffy20111116-82153-ie27ex	2011-11-16 20:16:41.000000000 -0500
+    +++ /Users/chaffeqa/Projects/stiwiki/tmp/diffy20111116-82153-wzrhw5	2011-11-16 20:16:41.000000000 -0500
+    @@ -1,2 +1,3 @@
+     foo
+     bar
+    +baz
+    
 And even deals a bit with the formatting!
 
 Ruby Version Compatibility
