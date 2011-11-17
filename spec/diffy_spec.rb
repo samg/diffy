@@ -55,6 +55,25 @@ describe Diffy::Diff do
     end
 
   end
+  
+  describe "options[:include_diff_info]" do
+    it "defaults to false" do
+      @diffy = Diffy::Diff.new(" foo\nbar\n", "foo\nbar\n")
+      @diffy.options[:include_diff_info].should == false
+    end
+    
+    it "can be set to true" do
+      @diffy = Diffy::Diff.new(" foo\nbar\n", "foo\nbar\n", :include_diff_info => true )
+      @diffy.options[:include_diff_info].should == true
+    end
+    
+    it "includes all diff output" do
+      @diffy = Diffy::Diff.new("foo\nbar\nbang\n", "foo\nbang\n", :include_diff_info => true )
+      @diffy.to_s.should match( /@@/)
+      @diffy.to_s.should match( /---/)
+      @diffy.to_s.should match( /\+\+\+/)
+    end
+  end
 
   describe "options[:diff]" do
     it "should accept an option to diff" do

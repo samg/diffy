@@ -103,6 +103,17 @@ deletions, and unchanged in a diff.
 
 Use `#map`, `#inject`, or any of Enumerable's methods.  Go crazy.
 
+Full Diff Output
+----------------
+
+By default diffy removes the superfluous diff output.  This is because its default is to show the complete diff'ed file (`diff -U 1000` is the default).
+
+Diffy does support full output, just use the `:include_diff_info => true` option when initializing:
+
+  >> Diffy::Diff.new("foo\nbar\n", "foo\nbar\nbaz\n", :include_diff_info => true).to_s(:text)
+
+And even deals a bit with the formatting!
+
 Ruby Version Compatibility
 -------------------------
 
