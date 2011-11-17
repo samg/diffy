@@ -55,6 +55,41 @@ describe Diffy::Diff do
     end
 
   end
+  
+  describe "options[:include_diff_info]" do
+    it "defaults to false" do
+      @diffy = Diffy::Diff.new(" foo\nbar\n", "foo\nbar\n")
+      @diffy.options[:include_diff_info].should == false
+    end
+    
+    it "can be set to true" do
+      @diffy = Diffy::Diff.new(" foo\nbar\n", "foo\nbar\n", :include_diff_info => true )
+      @diffy.options[:include_diff_info].should == true
+    end
+    
+    it "includes all diff output" do
+      output = Diffy::Diff.new("foo\nbar\nbang\n", "foo\nbang\n", :include_diff_info => true ).to_s
+      output.to_s.should match( /@@/)
+      output.should match( /---/)
+      output.should match( /\+\+\+/)
+    end
+    
+    describe "formats" do
+      it "works for :color" do
+        output = Diffy::Diff.new("foo\nbar\nbang\n", "foo\nbang\n", :include_diff_info => true ).to_s(:color)
+        output.should match( /\e\[0m\n\e\[36m\@\@/ )
+        output.to_s.should match( /\e\[90m---/)
+        output.to_s.should match( /\e\[0m\n\e\[90m\+\+\+/)
+      end
+  
+      it "works for :html_simple" do
+        output = Diffy::Diff.new("foo\nbar\nbang\n", "foo\nbang\n", :include_diff_info => true ).to_s(:html_simple)
+        output.split("\n").should include( "    <li class=\"diff-block-info\"><span>@@ -1,3 +1,2 @@</span></li>" )
+        output.should match( "<li class=\"diff-comment\"><span>---")
+        output.should match( "<li class=\"diff-comment\"><span>+++")
+      end
+    end
+  end
 
   describe "options[:diff]" do
     it "should accept an option to diff" do
@@ -118,7 +153,8 @@ describe Diffy::Diff do
       end
 
       it "should show one line added" do
-        Diffy::Diff.new(@string2, @string1).to_s.should == <<-DIFF
+        Diffy::Diff.new(@string2, @string1).to_s.
+          should == <<-DIFF
  foo
 +bar
  bang

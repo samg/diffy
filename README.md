@@ -74,6 +74,8 @@ Then try adding this css to your stylesheets:
     .diff del, .diff ins, .diff span{white-space:pre-wrap;font-family:courier;}
     .diff del strong{font-weight:normal;background:#fcc;}
     .diff ins strong{font-weight:normal;background:#9f9;}
+    .diff li.diff-comment { display: none; }
+    .diff li.diff-block-info { background: none repeat scroll 0 0 gray; }
 
 You can also diff files instead of strings
 
@@ -102,6 +104,23 @@ deletions, and unchanged in a diff.
     => [" foo\n bar\n", "-bang\n-baz\n", "+bing\n+bong\n"]
 
 Use `#map`, `#inject`, or any of Enumerable's methods.  Go crazy.
+
+Full Diff Output
+----------------
+
+By default diffy removes the superfluous diff output.  This is because its default is to show the complete diff'ed file (`diff -U 1000` is the default).
+
+Diffy does support full output, just use the `:include_diff_info => true` option when initializing:
+
+    >> Diffy::Diff.new("foo\nbar\n", "foo\nbar\nbaz\n", :include_diff_info => true).to_s(:text)
+    =>--- /Users/chaffeqa/Projects/stiwiki/tmp/diffy20111116-82153-ie27ex	2011-11-16 20:16:41.000000000 -0500
+    +++ /Users/chaffeqa/Projects/stiwiki/tmp/diffy20111116-82153-wzrhw5	2011-11-16 20:16:41.000000000 -0500
+    @@ -1,2 +1,3 @@
+     foo
+     bar
+    +baz
+    
+And even deals a bit with the formatting!
 
 Ruby Version Compatibility
 -------------------------
