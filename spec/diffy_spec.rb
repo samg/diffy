@@ -54,6 +54,7 @@ describe Diffy::Diff do
       end
     end
 
+
   end
   
   describe "options[:include_diff_info]" do
@@ -349,6 +350,26 @@ baz
         HTML
         @diff.to_s(:html).should ==  html
       end
+
+      describe 'with lines that include \n' do
+        before do
+          string1 = 'a\nb'"\n"
+
+          string2 = 'acb'"\n"
+          @string1, @string2 = string1, string2
+        end
+
+        it "should not leave lines out" do
+          Diffy::Diff.new(@string1, @string2 ).to_s(:html).should == <<-DIFF
+<div class="diff">
+  <ul>
+    <li class="del"><del>a<strong>\\n</strong>b</del></li>
+    <li class="ins"><ins>a<strong>c</strong>b</ins></li>
+  </ul>
+</div>
+          DIFF
+        end
+      end
     end
 
     it "should escape diffed html in html output" do
@@ -377,6 +398,7 @@ baz
         line
       end.should == [" foo\n", " bar\n", "+baz\n"]
     end
+
   end
 end
 

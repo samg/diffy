@@ -93,8 +93,18 @@ module Diffy
     end
 
     def highlight(lines)
-      "<strong>" + lines.gsub(/(^|\\n)./, '').gsub("\n", '').
-        gsub('\n', "</strong>\n<strong>") + "</strong>"
+      "<strong>" +
+        lines.
+          # strip diff tokens (e.g. +,-,etc.)
+          gsub(/(^|\\n)./, '').
+          # mark line boundaries from higher level line diff
+          # html is all escaped so using brackets should make this safe.
+          gsub('\n', '<LINE_BOUNDARY>').
+          # join characters back by stripping out newlines
+          gsub("\n", '').
+          # close and reopen strong tags.  we don't want inline elements
+          # spanning block elements which get added later.
+          gsub('<LINE_BOUNDARY>',"</strong>\n<strong>") + "</strong>"
     end
   end
 end
