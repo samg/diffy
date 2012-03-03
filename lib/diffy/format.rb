@@ -26,12 +26,12 @@ module Diffy
     # Basic html output which does not attempt to highlight the changes
     # between lines, and is more performant.
     def html_simple
-      HtmlFormatter.new(self).to_s
+      HtmlFormatter.new(self, options).to_s
     end
 
     # Html output which does inline highlighting of changes between two lines.
     def html
-      HtmlFormatter.new(self, :highlight_words => true).to_s
+      HtmlFormatter.new(self, options.merge(:highlight_words => true)).to_s
     end
   end
 end

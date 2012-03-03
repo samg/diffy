@@ -56,25 +56,70 @@ describe Diffy::Diff do
 
 
   end
-  
+
+  describe "options[:include_plus_and_minus_in_html]" do
+    it "defaults to false" do
+      @diffy = Diffy::Diff.new(" foo\nbar\n", "foo\nbar\n")
+      @diffy.options[:include_plus_and_minus_in_html].should == false
+    end
+
+    it "can be set to true" do
+      @diffy = Diffy::Diff.new(" foo\nbar\n", "foo\nbar\n", :include_plus_and_minus_in_html=> true )
+      @diffy.options[:include_plus_and_minus_in_html].should == true
+    end
+
+    describe "formats" do
+      it "includes symbols in html_simple" do
+        output = Diffy::Diff.new("foo\nbar\nbang\n", "foo\nbang\n", :include_plus_and_minus_in_html => true ).
+          to_s(:html_simple)
+        output.should == <<-HTML
+<div class="diff">
+  <ul>
+    <li class="unchanged"><span><span class="symbol"> </span>foo</span></li>
+    <li class="del"><del><span class="symbol">-</span>bar</del></li>
+    <li class="unchanged"><span><span class="symbol"> </span>bang</span></li>
+  </ul>
+</div>
+        HTML
+      end
+
+      it "includes symbols in html" do
+        output = Diffy::Diff.new("foo\nbar\nbang\n", "foo\naba\nbang\n", :include_plus_and_minus_in_html => true ).
+          to_s(:html)
+        output.should == <<-HTML
+<div class="diff">
+  <ul>
+    <li class="unchanged"><span><span class="symbol"> </span>foo</span></li>
+    <li class="del"><del><span class="symbol">-</span>ba<strong>r</strong></del></li>
+    <li class="ins"><ins><span class="symbol">+</span><strong>a</strong>ba</ins></li>
+    <li class="unchanged"><span><span class="symbol"> </span>bang</span></li>
+  </ul>
+</div>
+        HTML
+      end
+
+    end
+
+  end
+
   describe "options[:include_diff_info]" do
     it "defaults to false" do
       @diffy = Diffy::Diff.new(" foo\nbar\n", "foo\nbar\n")
       @diffy.options[:include_diff_info].should == false
     end
-    
+
     it "can be set to true" do
       @diffy = Diffy::Diff.new(" foo\nbar\n", "foo\nbar\n", :include_diff_info => true )
       @diffy.options[:include_diff_info].should == true
     end
-    
+
     it "includes all diff output" do
       output = Diffy::Diff.new("foo\nbar\nbang\n", "foo\nbang\n", :include_diff_info => true ).to_s
       output.to_s.should match( /@@/)
       output.should match( /---/)
       output.should match( /\+\+\+/)
     end
-    
+
     describe "formats" do
       it "works for :color" do
         output = Diffy::Diff.new("foo\nbar\nbang\n", "foo\nbang\n", :include_diff_info => true ).to_s(:color)
@@ -82,7 +127,7 @@ describe Diffy::Diff do
         output.to_s.should match( /\e\[90m---/)
         output.to_s.should match( /\e\[0m\n\e\[90m\+\+\+/)
       end
-  
+
       it "works for :html_simple" do
         output = Diffy::Diff.new("foo\nbar\nbang\n", "foo\nbang\n", :include_diff_info => true ).to_s(:html_simple)
         output.split("\n").should include( "    <li class=\"diff-block-info\"><span>@@ -1,3 +1,2 @@</span></li>" )

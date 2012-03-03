@@ -13,8 +13,16 @@ module Diffy
     # +:diff+::    A cli options string passed to diff
     # +:source+::  Either _strings_ or _files_.  Determines whether string1
     #              and string2 should be interpreted as strings or file paths.
+    # +:include_diff_info+::    Include diff header info
+    # +:include_plus_and_minus_in_html+::    Show the +, -, ' ' at the
+    #                                        beginning of lines in html output.
     def initialize(string1, string2, options = {})
-      @options = {:diff => '-U 10000', :source => 'strings', :include_diff_info => false}.merge(options)
+      @options = {
+        :diff => '-U 10000',
+        :source => 'strings',
+        :include_diff_info => false,
+        :include_plus_and_minus_in_html => false
+      }.merge(options)
       if ! ['strings', 'files'].include?(@options[:source])
         raise ArgumentError, "Invalid :source option #{@options[:source].inspect}. Supported options are 'strings' and 'files'."
       end

@@ -15,7 +15,7 @@ module Diffy
 
     private
     def wrap_line(line)
-      cleaned = line.gsub(/^./, '').chomp
+      cleaned = clean_line(line)
       case line
       when /^(---|\+\+\+|\\\\)/
         '    <li class="diff-comment"><span>' + line.chomp + '</span></li>'
@@ -28,6 +28,15 @@ module Diffy
       when /^@@/
         '    <li class="diff-block-info"><span>' + line.chomp + '</span></li>'
       end
+    end
+
+    # remove +/- or wrap in html
+    def clean_line(line)
+      if @options[:include_plus_and_minus_in_html]
+        line.gsub(/^(.)/, '<span class="symbol">\1</span>')
+      else
+        line.gsub(/^./, '')
+      end.chomp
     end
 
     def wrap_lines(lines)

@@ -61,6 +61,21 @@ Outputing the diff as html is easy too.
       </ul>
     </div>
 
+You can use the `:include_plus_and_minus_in_html` option to include those
+symbols in the output.
+
+    >> puts Diffy::Diff.new(string1, string2, :include_plus_and_minus_in_html => true).to_s(:html_simple)
+    <div class="diff">
+      <ul>
+        <li class="del"><del><span class="symbol">-</span>Hello how are you</del></li>
+        <li class="ins"><ins><span class="symbol">+</span>Hello how are you?</ins></li>
+        <li class="unchanged"><span class="symbol"> </span><span>I'm fine</span></li>
+        <li class="del"><del><span class="symbol">-</span>That's great</del></li>
+        <li class="ins"><ins><span class="symbol">+</span>That's swell</ins></li>
+      </ul>
+    </div>
+
+
 Then try adding this css to your stylesheets:
 
     .diff{overflow:auto;}
@@ -108,9 +123,11 @@ Use `#map`, `#inject`, or any of Enumerable's methods.  Go crazy.
 Full Diff Output
 ----------------
 
-By default diffy removes the superfluous diff output.  This is because its default is to show the complete diff'ed file (`diff -U 1000` is the default).
+By default diffy removes the superfluous diff output.  This is because its
+default is to show the complete diff'ed file (`diff -U 1000` is the default).
 
-Diffy does support full output, just use the `:include_diff_info => true` option when initializing:
+Diffy does support full output, just use the `:include_diff_info => true`
+option when initializing:
 
     >> Diffy::Diff.new("foo\nbar\n", "foo\nbar\nbaz\n", :include_diff_info => true).to_s(:text)
     =>--- /Users/chaffeqa/Projects/stiwiki/tmp/diffy20111116-82153-ie27ex	2011-11-16 20:16:41.000000000 -0500
