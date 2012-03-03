@@ -5,6 +5,17 @@ module Diffy
       def default_format
         @default_format || :text
       end
+
+      attr_writer :default_options
+      # default options passed to new Diff objects
+      def default_options
+        @default_options ||= {
+          :diff => '-U 10000',
+          :source => 'strings',
+          :include_diff_info => false,
+          :include_plus_and_minus_in_html => false
+        }
+      end
     end
     include Enumerable
     attr_reader :string1, :string2, :options, :diff
@@ -17,12 +28,7 @@ module Diffy
     # +:include_plus_and_minus_in_html+::    Show the +, -, ' ' at the
     #                                        beginning of lines in html output.
     def initialize(string1, string2, options = {})
-      @options = {
-        :diff => '-U 10000',
-        :source => 'strings',
-        :include_diff_info => false,
-        :include_plus_and_minus_in_html => false
-      }.merge(options)
+      @options = self.class.default_options.merge(options)
       if ! ['strings', 'files'].include?(@options[:source])
         raise ArgumentError, "Invalid :source option #{@options[:source].inspect}. Supported options are 'strings' and 'files'."
       end

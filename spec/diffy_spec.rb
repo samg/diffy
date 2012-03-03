@@ -198,6 +198,14 @@ describe Diffy::Diff do
         Diffy::Diff.default_format = old_format
       end
 
+      it "should accept a default options" do
+        old_options = Diffy::Diff.default_options
+        Diffy::Diff.default_options = old_options.merge(:include_diff_info => true)
+        Diffy::Diff.new(@string1, @string2).to_s.
+          should include('@@ -1,3 +1,2 @@')
+        Diffy::Diff.default_options = old_options
+      end
+
       it "should show one line added" do
         Diffy::Diff.new(@string2, @string1).to_s.
           should == <<-DIFF

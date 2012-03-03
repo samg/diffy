@@ -1,8 +1,10 @@
 require 'rubygems'
 require 'sinatra'
+require 'json'
 require File.dirname(__FILE__) + '/../lib/diffy'
 
 blk = proc do
+  Diffy::Diff.default_options.merge! JSON.parse(params[:options]) rescue {}
   haml "- d = Diffy::Diff.new(params[:one].to_s, params[:two].to_s)\n%div= d.to_s(:html)\n%pre= d.to_s"
 end
 post '/', &blk
@@ -26,18 +28,18 @@ __END__
       .diff li.diff-comment { display: none; }
       .diff li.diff-block-info { background: none repeat scroll 0 0 gray; }
     %body
+      = yield
       %form{:action => '', :method => 'post'}
+        %label JSON diff options
+        %textarea{:name => 'options', :style => 'width:100%;height:250px;'}= params[:options]
         %label One
-        %textarea{:name => 'one', :style => 'width:100%;height:250px;'}
-          = params[:one]
+        %textarea{:name => 'one', :style => 'width:100%;height:250px;'}= params[:one]
         %br/
         %label Two
-        %textarea{:name => 'two', :style => 'width:100%;height:250px;'}
-          = params[:two]
+        %textarea{:name => 'two', :style => 'width:100%;height:250px;'}= params[:two]
         %br/
         %input{:type => 'submit'}
         %br/
-      = yield
 
 @@ index
 %div.title Hello world!!!!!

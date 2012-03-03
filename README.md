@@ -136,8 +136,21 @@ option when initializing:
      foo
      bar
     +baz
-    
+
 And even deals a bit with the formatting!
+
+Default Diff Options
+--------------------
+
+You can set the default options for new Diffy::Diff using the
+Diffy::Diff.default_options and Diffy::Diff.default_options= methods
+Options passed to Diffy::Diff.new will be merged into the default options.
+
+    >> Diffy::Diff.default_options
+    => {:diff=>"-U 10000", :source=>"strings", :include_diff_info=>false, :include_plus_and_minus_in_html=>false}
+    >> ^C
+    >> Diffy::Diff.default_options.merge!(:sources => 'files')
+    => {:diff=>"-U 10000", :source=>"strings", :include_diff_info=>false, :include_plus_and_minus_in_html=>false, :sources=>"files"}
 
 Ruby Version Compatibility
 -------------------------
