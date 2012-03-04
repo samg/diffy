@@ -16,6 +16,7 @@ module Diffy
           :include_plus_and_minus_in_html => false
         }
       end
+
     end
     include Enumerable
     attr_reader :string1, :string2, :options, :diff

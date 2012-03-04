@@ -455,3 +455,9 @@ baz
   end
 end
 
+describe 'Diffy::CSS' do
+  it "should be some css" do
+    Diffy::CSS.should include 'diff{overflow:auto;}'
+  end
+end
+

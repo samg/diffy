@@ -48,7 +48,11 @@ Here's an example of using Diffy to diff two strings
     -That's great
     +That's swell
 
-Outputing the diff as html is easy too.
+HTML Output
+---------------
+
+Outputing the diff as html is easy too.  Here's an example using the
+`:html_simple` formatter.
 
     >> puts Diffy::Diff.new(string1, string2).to_s(:html_simple)
     <div class="diff">
@@ -60,6 +64,65 @@ Outputing the diff as html is easy too.
         <li class="ins"><ins>That's swell</ins></li>
       </ul>
     </div>
+
+The `:html` formatter will give you inline highlighting a la github.
+
+    >> puts Diffy::Diff.new("foo\n", "Foo\n").to_s(:html)
+    <div class="diff">
+      <ul>
+        <li class="del"><del><strong>f</strong>oo</del></li>
+        <li class="ins"><ins><strong>F</strong>oo</ins></li>
+      </ul>
+    </div>
+
+There's some pretty nice css provided in `Diffy::CSS`.
+
+    >> puts Diffy::CSS
+    .diff{overflow:auto;}
+    .diff ul{background:#fff;overflow:auto;font-size:13px;list-style:none;margin:0;padding:0;display:table;width:100%;}
+    .diff del, .diff ins{display:block;text-decoration:none;}
+    .diff li{padding:0; display:table-row;margin: 0;height:1em;}
+    .diff li.ins{background:#dfd; color:#080}
+    .diff li.del{background:#fee; color:#b00}
+    .diff li:hover{background:#ffc}
+    /* try 'whitespace:pre;' if you don't want lines to wrap */
+    .diff del, .diff ins, .diff span{white-space:pre-wrap;font-family:courier;}
+    .diff del strong{font-weight:normal;background:#fcc;}
+    .diff ins strong{font-weight:normal;background:#9f9;}
+    .diff li.diff-comment { display: none; }
+    .diff li.diff-block-info { background: none repeat scroll 0 0 gray; }
+
+Other Diff Options
+------------------
+
+### Diffing files instead of strings
+
+You can diff files instead of strings by using the `:source` option.
+
+    >> puts Diffy::Diff.new('/tmp/foo', '/tmp/bar', :source => 'files')
+
+### Full Diff Output
+
+By default diffy removes the superfluous diff output.  This is because its
+default is to show the complete diff'ed file (`diff -U 10000` is the default).
+
+Diffy does support full output, just use the `:include_diff_info => true`
+option when initializing:
+
+    >> Diffy::Diff.new("foo\nbar\n", "foo\nbar\nbaz\n", :include_diff_info => true).to_s(:text)
+    =>--- /Users/chaffeqa/Projects/stiwiki/tmp/diffy20111116-82153-ie27ex	2011-11-16 20:16:41.000000000 -0500
+    +++ /Users/chaffeqa/Projects/stiwiki/tmp/diffy20111116-82153-wzrhw5	2011-11-16 20:16:41.000000000 -0500
+    @@ -1,2 +1,3 @@
+     foo
+     bar
+    +baz
+
+And even deals a bit with the formatting!
+
+### Plus and Minus symbols in HTML output
+
+By default Diffy doesn't include the `+`, `-`, and ` ` at the beginning of line for
+HTML output.
 
 You can use the `:include_plus_and_minus_in_html` option to include those
 symbols in the output.
@@ -76,25 +139,27 @@ symbols in the output.
     </div>
 
 
-Then try adding this css to your stylesheets:
+### Overriding the command line options passed to diff.
 
-    .diff{overflow:auto;}
-    .diff ul{background:#fff;overflow:auto;font-size:13px;list-style:none;margin:0;padding:0;display:table;width:100%;}
-    .diff del, .diff ins{display:block;text-decoration:none;}
-    .diff li{padding:0; display:table-row;margin: 0;height:1em;}
-    .diff li.ins{background:#dfd; color:#080}
-    .diff li.del{background:#fee; color:#b00}
-    .diff li:hover{background:#ffc}
-    /* try 'whitespace:pre;' if you don't want lines to wrap */
-    .diff del, .diff ins, .diff span{white-space:pre-wrap;font-family:courier;}
-    .diff del strong{font-weight:normal;background:#fcc;}
-    .diff ins strong{font-weight:normal;background:#9f9;}
-    .diff li.diff-comment { display: none; }
-    .diff li.diff-block-info { background: none repeat scroll 0 0 gray; }
+You can use the `:diff` option to override the command line options that are
+passed to unix diff. They default to `-U 10000`.
 
-You can also diff files instead of strings
+    >> puts Diffy::Diff.new(" foo\nbar\n", "foo\nbar\n", :diff => "-w")
+      foo
+     bar
 
-    >> puts Diffy::Diff.new('/tmp/foo', '/tmp/bar', :source => 'files')
+Default Diff Options
+--------------------
+
+You can set the default options for new `Diffy::Diff`s using the
+`Diffy::Diff.default_options` and `Diffy::Diff.default_options=` methods.
+Options passed to Diffy::Diff.new will be merged into the default options.
+
+    >> Diffy::Diff.default_options
+    => {:diff=>"-U 10000", :source=>"strings", :include_diff_info=>false, :include_plus_and_minus_in_html=>false}
+    >> Diffy::Diff.default_options.merge!(:source => 'files')
+    => {:diff=>"-U 10000", :source=>"files", :include_diff_info=>false, :include_plus_and_minus_in_html=>false}
+
 
 Custom Formats
 --------------
@@ -120,37 +185,6 @@ deletions, and unchanged in a diff.
 
 Use `#map`, `#inject`, or any of Enumerable's methods.  Go crazy.
 
-Full Diff Output
-----------------
-
-By default diffy removes the superfluous diff output.  This is because its
-default is to show the complete diff'ed file (`diff -U 1000` is the default).
-
-Diffy does support full output, just use the `:include_diff_info => true`
-option when initializing:
-
-    >> Diffy::Diff.new("foo\nbar\n", "foo\nbar\nbaz\n", :include_diff_info => true).to_s(:text)
-    =>--- /Users/chaffeqa/Projects/stiwiki/tmp/diffy20111116-82153-ie27ex	2011-11-16 20:16:41.000000000 -0500
-    +++ /Users/chaffeqa/Projects/stiwiki/tmp/diffy20111116-82153-wzrhw5	2011-11-16 20:16:41.000000000 -0500
-    @@ -1,2 +1,3 @@
-     foo
-     bar
-    +baz
-
-And even deals a bit with the formatting!
-
-Default Diff Options
---------------------
-
-You can set the default options for new Diffy::Diff using the
-Diffy::Diff.default_options and Diffy::Diff.default_options= methods
-Options passed to Diffy::Diff.new will be merged into the default options.
-
-    >> Diffy::Diff.default_options
-    => {:diff=>"-U 10000", :source=>"strings", :include_diff_info=>false, :include_plus_and_minus_in_html=>false}
-    >> ^C
-    >> Diffy::Diff.default_options.merge!(:sources => 'files')
-    => {:diff=>"-U 10000", :source=>"strings", :include_diff_info=>false, :include_plus_and_minus_in_html=>false, :sources=>"files"}
 
 Ruby Version Compatibility
 -------------------------
