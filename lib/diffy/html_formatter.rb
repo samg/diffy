@@ -44,7 +44,9 @@ module Diffy
     end
 
     def highlighted_words
-      chunks = @diff.each_chunk.to_a
+      chunks = @diff.each_chunk.
+        reject{|c| c == '\ No newline at end of file'"\n"}
+
       processed = []
       lines = chunks.each_with_index.map do |chunk1, index|
         next if processed.include? index

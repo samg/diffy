@@ -423,6 +423,21 @@ baz
           DIFF
         end
       end
+
+      it "should do highlighting on the last line when there's no trailing newlines" do
+        s1 = "foo\nbar\nbang"
+        s2 = "foo\nbar\nbangleize"
+        Diffy::Diff.new(s1,s2).to_s(:html).should == <<-DIFF
+<div class="diff">
+  <ul>
+    <li class="unchanged"><span>foo</span></li>
+    <li class="unchanged"><span>bar</span></li>
+    <li class="del"><del>bang</del></li>
+    <li class="ins"><ins>bang<strong>leize</strong></ins></li>
+  </ul>
+</div>
+        DIFF
+      end
     end
 
     it "should escape diffed html in html output" do
