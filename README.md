@@ -119,6 +119,13 @@ option when initializing:
 
 And even deals a bit with the formatting!
 
+### Empty Diff Behavior
+
+By default diffy will return the full text of its first input if there are no 
+differences with the second input.  Sometimes it's useful to return the actual 
+diff, the empty string, in this case.  To enable this behavior, simply use the
+`:allow_empty_diff => true` option when initializing.
+
 ### Plus and Minus symbols in HTML output
 
 By default Diffy doesn't include the `+`, `-`, and ` ` at the beginning of line for
