@@ -36,6 +36,10 @@ describe Diffy::Diff do
  bang
         DIFF
       end
+
+      it "should not show everything if the :allow_empty_diff option is set" do
+        Diffy::Diff.new(@path1, @path2, :source => 'files', :allow_empty_diff => true).to_s.should == ''
+      end
     end
     describe "with lines that start with backslashes" do
       before do
