@@ -1,3 +1,8 @@
+== 2.0.7 ==
+Added :allow_empty_diff option
+
+== Oops, need to backfill changelog ==
+
 == 1.0.1 ==
 * Compatibility with ruby 1.8.6 and 1.9
 
