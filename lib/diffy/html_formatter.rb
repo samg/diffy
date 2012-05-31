@@ -33,9 +33,9 @@ module Diffy
     # remove +/- or wrap in html
     def clean_line(line)
       if @options[:include_plus_and_minus_in_html]
-        line.gsub(/^(.)/, '<span class="symbol">\1</span>')
+        line.sub(/^(.)/, '<span class="symbol">\1</span>')
       else
-        line.gsub(/^./, '')
+        line.sub(/^./, '')
       end.chomp
     end
 

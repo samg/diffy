@@ -91,7 +91,7 @@ module Diffy
     def tempfile(string)
       t = Tempfile.new('diffy')
       t.print(string)
-      t.flush
+      t.close
       t.path
     end
 
