@@ -6,6 +6,10 @@ describe Diffy::Diff do
   describe "diffing two files" do
     def tempfile(string)
       t = Tempfile.new('diffy-spec')
+      # ensure tempfiles aren't unlinked when GC runs by maintaining a
+      # reference to them.
+      @tempfiles ||=[]
+      @tempfiles.push(t)
       t.print(string)
       t.flush
       t.path

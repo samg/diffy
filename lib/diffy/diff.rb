@@ -90,8 +90,12 @@ module Diffy
 
     def tempfile(string)
       t = Tempfile.new('diffy')
+      # ensure tempfiles aren't unlinked when GC runs by maintaining a
+      # reference to them.
+      @tempfiles ||=[]
+      @tempfiles.push(t)
       t.print(string)
-      t.close
+      t.flush
       t.path
     end
 
