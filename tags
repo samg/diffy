@@ -1,0 +1,37 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+Diff	lib/diffy/diff.rb	/^  class Diff$/;"	c	class:Diffy
+Diffy	lib/diffy.rb	/^module Diffy; end$/;"	m
+Diffy	lib/diffy/css.rb	/^module Diffy$/;"	m
+Diffy	lib/diffy/diff.rb	/^module Diffy$/;"	m
+Diffy	lib/diffy/format.rb	/^module Diffy$/;"	m
+Diffy	lib/diffy/html_formatter.rb	/^module Diffy$/;"	m
+Format	lib/diffy/format.rb	/^  module Format$/;"	m	class:Diffy
+HtmlFormatter	lib/diffy/html_formatter.rb	/^  class HtmlFormatter$/;"	c	class:Diffy
+clean_line	lib/diffy/html_formatter.rb	/^    def clean_line(line)$/;"	f	class:Diffy.HtmlFormatter
+color	lib/diffy/format.rb	/^    def color$/;"	f	class:Diffy.Format
+default_format	lib/diffy/diff.rb	/^      def default_format$/;"	f	class:Diffy.Diff
+default_options	lib/diffy/diff.rb	/^      def default_options$/;"	f	class:Diffy.Diff
+diff	lib/diffy/diff.rb	/^    def diff$/;"	f	class:Diffy
+diff_bin	lib/diffy/diff.rb	/^    def diff_bin$/;"	f
+each	lib/diffy/diff.rb	/^    def each$/;"	f
+each_chunk	lib/diffy/diff.rb	/^    def each_chunk$/;"	f
+highlight	lib/diffy/html_formatter.rb	/^    def highlight(lines)$/;"	f	class:Diffy.HtmlFormatter.clean_line.split_characters
+highlighted_words	lib/diffy/html_formatter.rb	/^    def highlighted_words$/;"	f	class:Diffy.HtmlFormatter.clean_line
+html	lib/diffy/format.rb	/^    def html$/;"	f	class:Diffy.Format.color
+html_simple	lib/diffy/format.rb	/^    def html_simple$/;"	f	class:Diffy.Format.color
+initialize	lib/diffy/diff.rb	/^    def initialize(string1, string2, options = {})$/;"	f	class:Diffy
+initialize	lib/diffy/html_formatter.rb	/^    def initialize(diff, options = {})$/;"	f	class:Diffy.HtmlFormatter
+reconstruct_characters	lib/diffy/html_formatter.rb	/^    def reconstruct_characters(line_diff, type)$/;"	f	class:Diffy.HtmlFormatter.clean_line.split_characters
+split_characters	lib/diffy/html_formatter.rb	/^    def split_characters(chunk)$/;"	f	class:Diffy.HtmlFormatter.clean_line
+tempfile	lib/diffy/diff.rb	/^    def tempfile(string)$/;"	f
+tempfile	spec/diffy_spec.rb	/^    def tempfile(string)$/;"	f
+text	lib/diffy/format.rb	/^    def text$/;"	f	class:Diffy.Format.color
+to_s	lib/diffy/diff.rb	/^    def to_s(format = nil)$/;"	f
+to_s	lib/diffy/html_formatter.rb	/^    def to_s$/;"	f	class:Diffy.HtmlFormatter
+wrap_line	lib/diffy/html_formatter.rb	/^    def wrap_line(line)$/;"	f	class:Diffy.HtmlFormatter
+wrap_lines	lib/diffy/html_formatter.rb	/^    def wrap_lines(lines)$/;"	f	class:Diffy.HtmlFormatter.clean_line
