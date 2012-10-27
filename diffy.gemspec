@@ -5,7 +5,7 @@
 
 Gem::Specification.new do |s|
   s.name = "diffy"
-  s.version = "2.0.9"
+  s.version = "2.0.10"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Sam Goldstein"]
@@ -32,8 +32,7 @@ Gem::Specification.new do |s|
     "lib/diffy/format.rb",
     "lib/diffy/html_formatter.rb",
     "spec/demo_app.rb",
-    "spec/diffy_spec.rb",
-    "tags"
+    "spec/diffy_spec.rb"
   ]
   s.homepage = "http://github.com/samg/diffy/tree/master"
   s.rdoc_options = ["--inline-source", "--charset=UTF-8"]

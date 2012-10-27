@@ -1,3 +1,6 @@
+== 2.0.10 ==
+Close tempfile after it's been written to to avoid too many open file handles
+
 == 2.0.9 ==
 Memoize calls to `which diff` which should result in a minor performance
 improvement in high use environments.
