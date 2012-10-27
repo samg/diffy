@@ -97,6 +97,7 @@ module Diffy
       @tempfiles.push(t)
       t.print(string)
       t.flush
+      t.close
       t.path
     end
 
