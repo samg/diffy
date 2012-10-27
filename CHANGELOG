@@ -1,3 +1,7 @@
+== 2.0.9 ==
+Memoize calls to `which diff` which should result in a minor performance
+improvement in high use environments.
+
 == 2.0.8 ==
 Handle non-UTF-8 byte sequences in Ruby 1.9.
 Avoid non-deterministic deletion of temp files when GC runs
