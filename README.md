@@ -203,6 +203,14 @@ If you want to use Diffy and Ruby 1.8.6 then:
 
     $ gem install diffy -v1.1.0
 
+Testing
+------------
+
+Diffy includes a full set of rspec tests.  When contributing please include
+tests for your changes.
+
+[![Build Status](https://secure.travis-ci.org/samg/diffy.png)](http://travis-ci.org/samg/diffy)
+
 ---------------------------------------------------------------------
 
 Report bugs or request features at http://github.com/samg/diffy/issues
