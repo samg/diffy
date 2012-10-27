@@ -115,11 +115,11 @@ module Diffy
     private
 
     def diff_bin
-      bin = `which diff`.chomp
-      if bin.empty?
+      @@bin ||= `which diff`.chomp
+      if @@bin.empty?
         raise "Can't find a diff executable in PATH #{ENV['PATH']}"
       end
-      bin
+      @@bin
     end
 
   end
