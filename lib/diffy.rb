@@ -1,5 +1,4 @@
 require 'tempfile'
-require 'open3'
 require 'erb'
 # 1.9 compatibility
 if defined? Enumerator and ! defined? Enumerable::Enumerator
