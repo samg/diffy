@@ -12,6 +12,7 @@ describe Diffy::Diff do
       @tempfiles.push(t)
       t.print(string)
       t.flush
+      t.close
       t.path
     end
 
@@ -487,7 +488,24 @@ baz
         line
       end.should == [" foo\n", " bar\n", "+baz\n"]
     end
-
+    
+    it "should allow to handle hundreds of diffs" do
+        count=0
+        begin
+            1.upto(200) {|i|
+                s1= "this is string #{i} which \nwill be compared to #{i+1}\n"
+                s2= "this is string #{i+1} which \nwill be compared to #{i}\n"
+                a = Diffy::Diff.new(s1, s2).to_s(:html)
+                count +=1
+            }
+           result="successfully handled #{count} iterations"    
+        rescue
+            puts "failed at #{count}"
+            result="failed to after #{count} iterations"
+        end
+        
+        result.should=="successfully handled 200 iterations"
+    end
   end
 end
 

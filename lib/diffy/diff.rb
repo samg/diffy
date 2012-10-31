@@ -45,7 +45,8 @@ module Diffy
             [string1, string2]
           end
         diff_opts = options[:diff].is_a?(Array) ? options[:diff] : [options[:diff]]
-        diff = Open3.popen3(diff_bin, *(diff_opts + paths)) { |i, o, e| o.read }
+        cmd = "#{diff_bin} #{diff_opts.join(' ')} #{paths.join(' ')}"
+        diff = `#{cmd}`
         diff.force_encoding('ASCII-8BIT') if diff.respond_to?(:valid_encoding?) && !diff.valid_encoding?
         if diff =~ /\A\s*\Z/ && !options[:allow_empty_diff]
           diff = case options[:source]
@@ -116,7 +117,11 @@ module Diffy
     private
 
     def diff_bin
-      @@bin ||= `which diff`.chomp
+      @@bin ||=""
+      
+      @@bin = `which diff.exe`.chomp if @@bin.empty?
+      @@bin = `which diff`.chomp if @@bin.empty?
+
       if @@bin.empty?
         raise "Can't find a diff executable in PATH #{ENV['PATH']}"
       end

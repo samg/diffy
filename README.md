@@ -21,10 +21,40 @@ A default format can be set like so:
 
     Diffy::Diff.default_format = :html
 
-Getting Started
----------------
+Installation
+------------
+
+###on Unix
 
     sudo gem install diffy
+
+###on Windows:
+
+1.  ensure that you have a working `which` and `diff` on your machine and on 
+    your search path.
+
+    There are two options:
+    
+    1.  install unxutils <http://sourceforge.net/projects/unxutils>
+    
+        note that these tools contain diff 2.7 which has a different handling
+        of whitespace in the diff results. This makes diffy spec tests
+        yielding one fail on windows.
+                
+    2.  install these two individually from the gnuwin32 project
+        <http://gnuwin32.sourceforge.net/>
+        
+        note that this delivers diff 2.8 which makes diffy spec pass
+        even on windows.
+         
+
+2.   install the gem by
+
+         gem install diffy
+
+
+Getting Started
+---------------
 
 Here's an example of using Diffy to diff two strings
 
