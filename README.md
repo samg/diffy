@@ -26,7 +26,7 @@ Installation
 
 ###on Unix
 
-    sudo gem install diffy
+    gem install diffy
 
 ###on Windows:
 
