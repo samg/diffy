@@ -30,23 +30,23 @@ Installation
 
 ###on Windows:
 
-1.  ensure that you have a working `which` and `diff` on your machine and on 
+1.  ensure that you have a working `which` and `diff` on your machine and on
     your search path.
 
     There are two options:
-    
+
     1.  install unxutils <http://sourceforge.net/projects/unxutils>
-    
+
         note that these tools contain diff 2.7 which has a different handling
         of whitespace in the diff results. This makes diffy spec tests
         yielding one fail on windows.
-                
+
     2.  install these two individually from the gnuwin32 project
         <http://gnuwin32.sourceforge.net/>
-        
+
         note that this delivers diff 2.8 which makes diffy spec pass
         even on windows.
-         
+
 
 2.   install the gem by
 
@@ -151,8 +151,8 @@ And even deals a bit with the formatting!
 
 ### Empty Diff Behavior
 
-By default diffy will return the full text of its first input if there are no 
-differences with the second input.  Sometimes it's useful to return the actual 
+By default diffy will return the full text of its first input if there are no
+differences with the second input.  Sometimes it's useful to return the actual
 diff, the empty string, in this case.  To enable this behavior, simply use the
 `:allow_empty_diff => true` option when initializing.
 
