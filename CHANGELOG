@@ -1,3 +1,6 @@
+== 2.1.0 ==
+Windows support
+
 == 2.0.10 ==
 Close tempfile after it's been written to to avoid too many open file handles
 
