@@ -1,4 +1,8 @@
-require 'rdoc/task'
+begin
+  require 'rdoc/task'
+rescue LoadError
+  require 'rake/rdoctask'
+end
 require 'rubygems/package_task'
 require 'rspec/core/rake_task'
 
