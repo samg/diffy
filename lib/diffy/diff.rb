@@ -117,10 +117,12 @@ module Diffy
     private
 
     def diff_bin
+      @@dev_null_path ||= ["/dev/null", "/NUL"].select{|p| File.exists?(p)}.first
+
       @@bin ||=""
       
-      @@bin = `which diff.exe`.chomp if @@bin.empty?
-      @@bin = `which diff`.chomp if @@bin.empty?
+      @@bin = `which diff.exe 2>#{@@dev_null_path}`.chomp if @@bin.empty?
+      @@bin = `which diff 2>#{@@dev_null_path}`.chomp if @@bin.empty?
 
       if @@bin.empty?
         raise "Can't find a diff executable in PATH #{ENV['PATH']}"
