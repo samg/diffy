@@ -2,3 +2,5 @@
 *.swp
 Gemfile.lock
 tags
+.rvmrc
+.idea

@@ -3,7 +3,7 @@ module Diffy
     # ANSI color output suitable for terminal output
     def color
       map do |line|
-        case line          
+        case line
         when /^(---|\+\+\+|\\\\)/
           "\033[90m#{line.chomp}\033[0m"
         when /^\+/
@@ -13,14 +13,16 @@ module Diffy
         when /^@@/
           "\033[36m#{line.chomp}\033[0m"
         else
-          line.chomp
+          line.chomp unless @options[:hide_unchanged_lines]
         end
-      end.join("\n") + "\n"
+      end.compact.join("\n") + "\n"
     end
 
     # Basic text output
     def text
-      to_a.join
+      map do |line|
+        line unless line =~ /^ / && @options[:hide_unchanged_lines]
+      end.compact.join
     end
 
     # Basic html output which does not attempt to highlight the changes
