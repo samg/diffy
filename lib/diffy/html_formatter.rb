@@ -24,7 +24,7 @@ module Diffy
       when /^-/
         '    <li class="del"><del>' + cleaned + '</del></li>'
       when /^ /
-        '    <li class="unchanged"><span>' + cleaned + '</span></li>'
+        '    <li class="unchanged"><span>' + cleaned + '</span></li>' unless @options[:hide_unchanged_lines]
       when /^@@/
         '    <li class="diff-block-info"><span>' + line.chomp + '</span></li>'
       end
@@ -40,7 +40,7 @@ module Diffy
     end
 
     def wrap_lines(lines)
-      %'<div class="diff">\n  <ul>\n#{lines.join("\n")}\n  </ul>\n</div>\n'
+      %'<div class="diff">\n  <ul>\n#{lines.compact.join("\n")}\n  </ul>\n</div>\n'
     end
 
     def highlighted_words

@@ -124,6 +124,56 @@ describe Diffy::Diff do
 
   end
 
+  describe "options[:hide_unchanged_lines]" do
+    it "defaults to false" do
+      @diffy = Diffy::Diff.new(" foo\nbar\n", "foo\nbar\n")
+      @diffy.options[:hide_unchanged_lines].should == false
+    end
+
+    it "can be set to true" do
+      @diffy = Diffy::Diff.new(" foo\nbar\n", "foo\nbar\n", :hide_unchanged_lines=> true )
+      @diffy.options[:hide_unchanged_lines].should == true
+    end
+
+    describe "formats" do
+      it "hide lines in html_simple" do
+        output = Diffy::Diff.new("foo\nbar\nbang\n", "foo\nbang\n", :hide_unchanged_lines => true ).
+          to_s(:html_simple)
+        output.should == <<-HTML
+<div class="diff">
+  <ul>
+    <li class="del"><del>bar</del></li>
+  </ul>
+</div>
+        HTML
+      end
+
+      it "hide lines in html" do
+        output = Diffy::Diff.new("foo\nbar\nbang\n", "foo\naba\nbang\n", :hide_unchanged_lines => true ).
+          to_s(:html)
+        output.should == <<-HTML
+<div class="diff">
+  <ul>
+    <li class="del"><del>ba<strong>r</strong></del></li>
+    <li class="ins"><ins><strong>a</strong>ba</ins></li>
+  </ul>
+</div>
+        HTML
+      end
+
+      it 'hide lines in color' do
+        output = Diffy::Diff.new("foo\nbar\nbang\n", "foo\nbang\n", :hide_unchanged_lines => true ).to_s(:color)
+        output.should == "\033[31m-bar\033[0m\n"
+      end
+
+      it 'hide lines in text' do
+        output = Diffy::Diff.new("foo\nbar\nbang\n", "foo\nbang\n", :hide_unchanged_lines => true ).to_s(:text)
+        output.should == "-bar\n"
+      end
+    end
+
+  end
+
   describe "options[:include_diff_info]" do
     it "defaults to false" do
       @diffy = Diffy::Diff.new(" foo\nbar\n", "foo\nbar\n")

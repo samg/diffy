@@ -13,7 +13,8 @@ module Diffy
           :diff => '-U 10000',
           :source => 'strings',
           :include_diff_info => false,
-          :include_plus_and_minus_in_html => false
+          :include_plus_and_minus_in_html => false,
+          :hide_unchanged_lines => false
         }
       end
 
@@ -118,7 +119,7 @@ module Diffy
 
     def diff_bin
       @@bin ||=""
-      
+
       @@bin = `which diff.exe`.chomp if @@bin.empty?
       @@bin = `which diff`.chomp if @@bin.empty?
 
