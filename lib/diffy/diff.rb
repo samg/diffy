@@ -92,7 +92,7 @@ module Diffy
       if block_given?
         chunks.each{|chunk| yield chunk }
       else
-        Enumerable::Enumerator.new(chunks)
+        chunks.to_enum
       end
     end
 
