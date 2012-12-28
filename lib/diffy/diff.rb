@@ -72,7 +72,7 @@ module Diffy
       if block_given?
         lines.each{|line| yield line}
       else
-        Enumerable::Enumerator.new(lines)
+        lines.to_enum
       end
     end
 
