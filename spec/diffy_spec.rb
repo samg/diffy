@@ -82,7 +82,6 @@ describe Diffy::Diff do
   describe "options[:context]" do
     it "should limit context lines to 1" do
       diff = Diffy::Diff.new("foo\nfoo\nBAR\nbang\nbaz", "foo\nfoo\nbar\nbang\nbaz", :context => 1)
-      puts diff
       diff.to_s.should == <<-DIFF
  foo
 -BAR
