@@ -175,11 +175,24 @@ symbols in the output.
       </ul>
     </div>
 
+### Number of lines of context around changes
+
+You can use the `:context` option to override the number of lines of context
+that are shown around each change (this defaults to 10000 to show the full
+file).
+
+    >> puts Diffy::Diff.new("foo\nfoo\nBAR\nbang\nbaz", "foo\nfoo\nbar\nbang\nbaz", :context => 1)
+     foo
+    -BAR
+    +bar
+     bang
+
 
 ### Overriding the command line options passed to diff.
 
 You can use the `:diff` option to override the command line options that are
-passed to unix diff. They default to `-U 10000`.
+passed to unix diff. They default to `-U 10000`.  This option will noop if
+combined with the `:context` option.
 
     >> puts Diffy::Diff.new(" foo\nbar\n", "foo\nbar\n", :diff => "-w")
       foo

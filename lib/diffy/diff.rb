@@ -13,7 +13,8 @@ module Diffy
           :diff => '-U 10000',
           :source => 'strings',
           :include_diff_info => false,
-          :include_plus_and_minus_in_html => false
+          :include_plus_and_minus_in_html => false,
+          :context => nil
         }
       end
 
@@ -44,14 +45,13 @@ module Diffy
           when 'files'
             [string1, string2]
           end
-        diff_opts = options[:diff].is_a?(Array) ? options[:diff] : [options[:diff]]
 
         if WINDOWS
           # don't use open3 on windows
-          cmd = "#{diff_bin} #{diff_opts.join(' ')} #{paths.join(' ')}"
+          cmd = "#{diff_bin} #{diff_options.join(' ')} #{paths.join(' ')}"
           diff = `#{cmd}`
         else
-          diff = Open3.popen3(diff_bin, *(diff_opts + paths)) { |i, o, e| o.read }
+          diff = Open3.popen3(diff_bin, *(diff_options + paths)) { |i, o, e| o.read }
         end
         diff.force_encoding('ASCII-8BIT') if diff.respond_to?(:valid_encoding?) && !diff.valid_encoding?
         if diff =~ /\A\s*\Z/ && !options[:allow_empty_diff]
@@ -136,6 +136,11 @@ module Diffy
         raise "Can't find a diff executable in PATH #{ENV['PATH']}"
       end
       @@bin
+    end
+
+    # options pass to diff program
+    def diff_options
+      Array(options[:context] ? "-U #{options[:context]}" : options[:diff])
     end
 
   end
