@@ -45,8 +45,14 @@ module Diffy
             [string1, string2]
           end
         diff_opts = options[:diff].is_a?(Array) ? options[:diff] : [options[:diff]]
-        cmd = "#{diff_bin} #{diff_opts.join(' ')} #{paths.join(' ')}"
-        diff = `#{cmd}`
+
+        if WINDOWS
+          # don't use open3 on windows
+          cmd = "#{diff_bin} #{diff_opts.join(' ')} #{paths.join(' ')}"
+          diff = `#{cmd}`
+        else
+          diff = Open3.popen3(diff_bin, *(diff_opts + paths)) { |i, o, e| o.read }
+        end
         diff.force_encoding('ASCII-8BIT') if diff.respond_to?(:valid_encoding?) && !diff.valid_encoding?
         if diff =~ /\A\s*\Z/ && !options[:allow_empty_diff]
           diff = case options[:source]
@@ -116,10 +122,14 @@ module Diffy
     end
     private
 
+    @@bin = nil
     def diff_bin
-      @@bin ||=""
-      
-      @@bin = `which diff.exe`.chomp if @@bin.empty?
+      return @@bin if @@bin
+
+      @@bin ||= ""
+      if WINDOWS
+        @@bin = `which diff.exe`.chomp if @@bin.empty?
+      end
       @@bin = `which diff`.chomp if @@bin.empty?
 
       if @@bin.empty?
