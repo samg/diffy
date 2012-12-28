@@ -1,10 +1,6 @@
 require 'tempfile'
 require 'erb'
 require 'rbconfig'
-# 1.9 compatibility
-if defined? Enumerator and ! defined? Enumerable::Enumerator
-  Enumerable::Enumerator = Enumerator
-end
 
 module Diffy
   WINDOWS = (RbConfig::CONFIG['host_os'] =~ /mswin|mingw|cygwin/)
