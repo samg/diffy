@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = "diffy"
-  s.version = "2.1.3"
+  s.version = "2.1.4"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Sam Goldstein"]
-  s.date = "2012-12-28"
+  s.date = "2013-04-10"
   s.description = "Convenient diffing in ruby"
   s.email = "sgrock@gmail.com"
   s.extra_rdoc_files = [
