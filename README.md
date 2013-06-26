@@ -151,10 +151,10 @@ And even deals a bit with the formatting!
 
 ### Empty Diff Behavior
 
-By default diffy will return the full text of its first input if there are no
-differences with the second input.  Sometimes it's useful to return the actual
-diff, the empty string, in this case.  To enable this behavior, simply use the
-`:allow_empty_diff => true` option when initializing.
+By default diffy will return empty string if there are no
+differences in inputs. In previous versions the full text of its first input
+was returned in this case. To restore this behaviour simply use the
+`:allow_empty_diff => false` option when initializing.
 
 ### Plus and Minus symbols in HTML output
 

@@ -14,7 +14,8 @@ module Diffy
           :source => 'strings',
           :include_diff_info => false,
           :include_plus_and_minus_in_html => false,
-          :context => nil
+          :context => nil,
+          :allow_empty_diff => true,
         }
       end
 

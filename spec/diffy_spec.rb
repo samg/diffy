@@ -35,7 +35,8 @@ describe Diffy::Diff do
       end
 
       it "should show everything" do
-        Diffy::Diff.new(@path1, @path2, :source => 'files').to_s.should == <<-DIFF
+        Diffy::Diff.new(@path1, @path2, :source => 'files', :allow_empty_diff => false).
+          to_s.should == <<-DIFF
  foo
  bar
  bang
@@ -173,7 +174,7 @@ describe Diffy::Diff do
 
   describe "options[:diff]" do
     it "should accept an option to diff" do
-      @diff = Diffy::Diff.new(" foo\nbar\n", "foo\nbar\n", :diff => "-w")
+      @diff = Diffy::Diff.new(" foo\nbar\n", "foo\nbar\n", :diff => "-w", :allow_empty_diff => false)
       @diff.to_s.should == <<-DIFF
   foo
  bar
@@ -198,7 +199,7 @@ describe Diffy::Diff do
       end
 
       it "should show everything" do
-        Diffy::Diff.new(@string1, @string2).to_s.should == <<-DIFF
+        Diffy::Diff.new(@string1, @string2, :allow_empty_diff => false).to_s.should == <<-DIFF
  foo
  bar
  bang
