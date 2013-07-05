@@ -40,7 +40,11 @@ module Diffy
     end
 
     def wrap_lines(lines)
-      %'<div class="diff">\n  <ul>\n#{lines.join("\n")}\n  </ul>\n</div>\n'
+      if lines.empty?
+        %'<div class="diff"/>'
+      else
+        %'<div class="diff">\n  <ul>\n#{lines.join("\n")}\n  </ul>\n</div>\n'
+      end
     end
 
     def highlighted_words
@@ -61,14 +65,19 @@ module Diffy
         dir2 = chunk2.each_char.first
         case [dir1, dir2]
         when ['-', '+']
-          line_diff = Diffy::Diff.new(
-            split_characters(chunk1),
-            split_characters(chunk2)
-          )
-          hi1 = reconstruct_characters(line_diff, '-')
-          hi2 = reconstruct_characters(line_diff, '+')
-          processed << (index + 1)
-          [hi1, hi2]
+          if chunk1.each_char.take(3).join("") =~ /^(---|\+\+\+|\\\\)/ and
+              chunk2.each_char.take(3).join("") =~ /^(---|\+\+\+|\\\\)/
+            ERB::Util.h(chunk1)
+          else
+            line_diff = Diffy::Diff.new(
+                                        split_characters(chunk1),
+                                        split_characters(chunk2)
+                                        )
+            hi1 = reconstruct_characters(line_diff, '-')
+            hi2 = reconstruct_characters(line_diff, '+')
+            processed << (index + 1)
+            [hi1, hi2]
+          end
         else
           ERB::Util.h(chunk1)
         end
