@@ -1,3 +1,5 @@
+allow_empty_diff is true by default
+
 == 2.1.0 ==
 Windows support
 
