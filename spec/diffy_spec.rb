@@ -71,10 +71,12 @@ describe Diffy::Diff do
          @path1, @path2 = tempfile(string1), tempfile(string2)
        end
        it "should not raise invalid encoding issues" do
-         Diffy::Diff.new(@path1, @path2, :source => 'files').to_s.should == <<-DIFF
+         desired = <<-DIFF
 -Foo ICS95095010000000000083320000BS01030000004100+\xFF00000000000000000
 +Bar ICS95095010000000000083320000BS01030000004100+\xFF00000000000000000
          DIFF
+         desired.force_encoding("ASCII-8BIT") if desired.respond_to?(:force_encoding)
+         Diffy::Diff.new(@path1, @path2, :source => 'files').to_s.should == desired
        end
      end
 
