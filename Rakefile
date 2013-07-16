@@ -33,6 +33,7 @@ begin
     s.rdoc_options = ["--inline-source", "--charset=UTF-8"]
     s.require_paths = ["lib"]
     s.summary = %q{A convenient way to diff string in ruby}
+    s.license = 'MIT'
 
   end
 rescue LoadError
