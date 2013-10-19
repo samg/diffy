@@ -203,7 +203,7 @@ Default Diff Options
 
 You can set the default options for new `Diffy::Diff`s using the
 `Diffy::Diff.default_options` and `Diffy::Diff.default_options=` methods.
-Options passed to Diffy::Diff.new will be merged into the default options.
+Options passed to `Diffy::Diff.new` will be merged into the default options.
 
     >> Diffy::Diff.default_options
     => {:diff=>"-U 10000", :source=>"strings", :include_diff_info=>false, :include_plus_and_minus_in_html=>false}
