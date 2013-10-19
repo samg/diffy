@@ -215,7 +215,7 @@ Custom Formats
 --------------
 
 Diffy tries to make generating your own custom formatted output easy.
-`Diffy::Diff` provides an enumberable interface which lets you iterate over
+`Diffy::Diff` provides an enumerable interface which lets you iterate over
 lines in the diff.
 
     >> Diffy::Diff.new("foo\nbar\n", "foo\nbar\nbaz\n").each do |line|
@@ -239,7 +239,7 @@ Use `#map`, `#inject`, or any of Enumerable's methods.  Go crazy.
 Ruby Version Compatibility
 -------------------------
 
-Support for Ruby 1.8.6 was dropped beggining at version 2.0 in order to support
+Support for Ruby 1.8.6 was dropped beginning at version 2.0 in order to support
 the chainable enumerators available in 1.8.7 and 1.9.
 
 If you want to use Diffy and Ruby 1.8.6 then:
