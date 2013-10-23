@@ -4,8 +4,8 @@ require File.expand_path(File.join(File.dirname(__FILE__), '..', 'lib', 'diffy')
 describe Diffy::Diff do
 
   describe "diffing two files" do
-    def tempfile(string)
-      t = Tempfile.new('diffy-spec')
+    def tempfile(string, fn = 'diffy-spec')
+      t = Tempfile.new(fn)
       # ensure tempfiles aren't unlinked when GC runs by maintaining a
       # reference to them.
       @tempfiles ||=[]
@@ -25,6 +25,36 @@ describe Diffy::Diff do
 -bar
  bang
       DIFF
+    end
+
+    it "should accept file paths with spaces as arguments" do
+      string1 = "foo\nbar\nbang\n"
+      string2 = "foo\nbang\n"
+      path1, path2 = tempfile(string1, 'path with spaces'), tempfile(string2, 'path with spaces')
+      Diffy::Diff.new(path1, path2, :source => 'files').to_s.should == <<-DIFF
+ foo
+-bar
+ bang
+      DIFF
+    end
+
+    it "should accept file paths with spaces as arguments on windows" do
+      begin
+
+        orig_verbose, $VERBOSE = $VERBOSE, nil #silence redefine constant warnings
+        orig_windows, Diffy::WINDOWS = Diffy::WINDOWS, true
+        string1 = "foo\nbar\nbang\n"
+        string2 = "foo\nbang\n"
+        path1, path2 = tempfile(string1, 'path with spaces'), tempfile(string2, 'path with spaces')
+        Diffy::Diff.new(path1, path2, :source => 'files').to_s.should == <<-DIFF
+ foo
+-bar
+ bang
+        DIFF
+      ensure
+        Diffy::WINDOWS, $VERBOSE = orig_windows, orig_verbose
+      end
+
     end
 
     describe "with no line different" do

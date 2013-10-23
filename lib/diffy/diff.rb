@@ -49,7 +49,7 @@ module Diffy
 
         if WINDOWS
           # don't use open3 on windows
-          cmd = "\"#{diff_bin}\" #{diff_options.join(' ')} #{paths.join(' ')}"
+          cmd = "\"#{diff_bin}\" #{diff_options.join(' ')} #{paths.map{|s| "\"#{s}\""}.join(' ')}"
           diff = `#{cmd}`
         else
           diff = Open3.popen3(diff_bin, *(diff_options + paths)) { |i, o, e| o.read }
