@@ -38,14 +38,14 @@ Installation
     1.  install unxutils <http://sourceforge.net/projects/unxutils>
 
         note that these tools contain diff 2.7 which has a different handling
-        of whitespace in the diff results. This makes diffy spec tests
-        yielding one fail on windows.
+        of whitespace in the diff results. This makes Diffy spec tests
+        yielding one fail on Windows.
 
     2.  install these two individually from the gnuwin32 project
         <http://gnuwin32.sourceforge.net/>
 
-        note that this delivers diff 2.8 which makes diffy spec pass
-        even on windows.
+        note that this delivers diff 2.8 which makes Diffy spec pass
+        even on Windows.
 
 
 2.   install the gem by
@@ -133,7 +133,7 @@ You can diff files instead of strings by using the `:source` option.
 
 ### Full Diff Output
 
-By default diffy removes the superfluous diff output.  This is because its
+By default Diffy removes the superfluous diff output.  This is because its
 default is to show the complete diff'ed file (`diff -U 10000` is the default).
 
 Diffy does support full output, just use the `:include_diff_info => true`
@@ -151,7 +151,7 @@ And even deals a bit with the formatting!
 
 ### Empty Diff Behavior
 
-By default diffy will return empty string if there are no
+By default Diffy will return empty string if there are no
 differences in inputs. In previous versions the full text of its first input
 was returned in this case. To restore this behaviour simply use the
 `:allow_empty_diff => false` option when initializing.
