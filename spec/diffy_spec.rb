@@ -641,7 +641,7 @@ describe Diffy::Diff3 do
   let(:code_alt_diff3) {Diffy::Diff3.new(older, yours, mine2)}
 
   it 'should have correct default options' do
-    basic_diff3.options[:diff3].should == '-m'
+    basic_diff3.options[:diff3].should == ["-m", "-L older", "-L mine", "-L yours"]
     basic_diff3.options[:diff].should == '-U 10000'
   end
 
