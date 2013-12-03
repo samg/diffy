@@ -19,6 +19,19 @@ module Diffy
         }
       end
 
+      def diff_bin
+        @bin ||= begin
+          if WINDOWS
+            bin = `which diff.exe`.chomp
+          else
+            bin = `which diff`.chomp
+          end
+
+          raise "Can't find a diff executable in PATH #{ENV['PATH']}" if bin.empty?
+          bin
+       end
+      end
+
     end
     include Enumerable
     attr_reader :string1, :string2, :options, :diff
@@ -47,28 +60,14 @@ module Diffy
             [string1, string2]
           end
 
-        if WINDOWS
-          # don't use open3 on windows
-          cmd = "\"#{diff_bin}\" #{diff_options.join(' ')} #{paths.map{|s| "\"#{s}\""}.join(' ')}"
-          diff = `#{cmd}`
-        else
-          diff = Open3.popen3(diff_bin, *(diff_options + paths)) { |i, o, e| o.read }
-        end
-        diff.force_encoding('ASCII-8BIT') if diff.respond_to?(:valid_encoding?) && !diff.valid_encoding?
-        if diff =~ /\A\s*\Z/ && !options[:allow_empty_diff]
-          diff = case options[:source]
-          when 'strings' then string1
-          when 'files' then File.read(string1)
-          end.gsub(/^/, " ")
-        end
-        diff
+        exec(paths)
       end
     end
 
     def each
       lines = case @options[:include_diff_info]
-      when false then diff.split("\n").reject{|x| x =~ /^(---|\+\+\+|@@|\\\\)/ }.map {|line| line + "\n" }
-      when true then diff.split("\n").map {|line| line + "\n" }
+      when false then diff.lines.reject{|x| x =~ /^(---|\+\+\+|@@|\\\\)/ }
+      when true then diff.lines
       end
       if block_given?
         lines.each{|line| yield line}
@@ -121,22 +120,32 @@ module Diffy
           "Format #{format.inspect} not found in #{formats.inspect}"
       end
     end
+
+    protected
+
+    def exec(paths)
+      if WINDOWS
+        # don't use open3 on windows
+        cmd = "\"#{diff_bin}\" #{diff_options.join(' ')} #{paths.map{|s| "\"#{s}\""}.join(' ')}"
+        diff = `#{cmd}`
+      else
+        diff = Open3.popen3(diff_bin, *(diff_options + paths)) { |i, o, e| o.read }
+      end
+      diff.force_encoding('ASCII-8BIT') if diff.respond_to?(:valid_encoding?) && !diff.valid_encoding?
+      if diff =~ /\A\s*\Z/ && !options[:allow_empty_diff]
+        diff = case options[:source]
+                 when 'strings' then string1
+                 when 'files' then File.read(string1)
+               end.gsub(/^/, " ")
+      end
+      diff
+    end
+
+
     private
 
-    @@bin = nil
     def diff_bin
-      return @@bin if @@bin
-
-      @@bin ||= ""
-      if WINDOWS
-        @@bin = `which diff.exe`.chomp if @@bin.empty?
-      end
-      @@bin = `which diff`.chomp if @@bin.empty?
-
-      if @@bin.empty?
-        raise "Can't find a diff executable in PATH #{ENV['PATH']}"
-      end
-      @@bin
+      self.class.diff_bin
     end
 
     # options pass to diff program

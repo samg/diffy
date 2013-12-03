@@ -536,6 +536,175 @@ baz
   end
 end
 
+
+describe Diffy::Diff3 do
+
+  older = <<-TXT
+    class Bounds
+      def initialize
+      end
+
+      def top
+      end
+
+      def left
+      end
+
+      def width
+      end
+
+      def set
+      end
+    end
+  TXT
+
+  yours = <<-TXT
+    class Bounds
+      def initialize
+        @top = 0
+        @left = 0
+        @width = 0
+      end
+
+      def top
+      end
+
+      def left
+      end
+
+      def width
+      end
+
+      def set(top, left, width)
+        @top = top
+        @left = left
+        @width = width
+      end
+    end
+  TXT
+
+  mine = <<-TXT
+    class Bounds
+      def initialize
+      end
+
+      def top
+        @top ||= 0
+      end
+
+      def left
+        @left ||= 0
+      end
+
+      def width
+        @width ||= 0
+      end
+
+      def set
+      end
+
+      def height
+        @height ||= 0
+      end
+
+    end
+  TXT
+
+  mine2 = <<-TXT
+    class Bounds
+      def initialize
+      end
+
+      def top
+        @top ||= 0
+      end
+
+      def left
+        @left ||= 0
+      end
+
+      def width
+        @width ||= 0
+      end
+
+      def set
+      end
+
+      def height
+        @height ||= 0
+      end
+    end
+  TXT
+
+  let(:basic_diff3) {Diffy::Diff3.new("foo\nbar\npar\ncar", "foo\nbars\npar\ncar\n", "foo\nbar\npars\ncars\n" )}
+  let(:code_diff3) {Diffy::Diff3.new(older, yours, mine)}
+  let(:code_alt_diff3) {Diffy::Diff3.new(older, yours, mine2)}
+
+  it 'should have correct default options' do
+    basic_diff3.options[:diff3].should == '-m'
+    basic_diff3.options[:diff].should == '-U 10000'
+  end
+
+  it 'should return diff content' do
+    basic_diff3.diff3.should_not be_nil
+    basic_diff3.diff3.should_not == ""
+    basic_diff3.diff3.include?("<<<<<<<").should be_true
+    puts code_diff3.diff3
+  end
+
+  it 'should return valid change_groups' do
+    basic_diff3.change_groups.count.should == 2
+    basic_diff3.change_groups.first.conflicts?.should be_false
+    basic_diff3.change_groups.last.conflicts?.should be_true
+    basic_diff3.change_groups.last.mine.any?.should be_true
+    basic_diff3.change_groups.last.yours.any?.should be_true
+  end
+
+  it 'should support three_way_conflicts?' do
+    basic_diff3.three_way_conflicts?.should be_true
+    code_diff3.three_way_conflicts?.should be_false
+  end
+
+  it 'should support patched_mine' do
+    code_diff3.patched_mine.should == <<-TXT
+    class Bounds
+      def initialize
+        @top = 0
+        @left = 0
+        @width = 0
+      end
+
+      def top
+        @top ||= 0
+      end
+
+      def left
+        @left ||= 0
+      end
+
+      def width
+        @width ||= 0
+      end
+
+      def set(top, left, width)
+        @top = top
+        @left = left
+        @width = width
+      end
+
+      def height
+        @height ||= 0
+      end
+
+    end
+    TXT
+  end
+
+  it 'should support to_s' do
+    basic_diff3.to_s.should == " foo\n bars\n-par\n-car\n+pars\n+cars\n"
+  end
+end
+
 describe 'Diffy::CSS' do
   it "should be some css" do
     Diffy::CSS.should include 'diff{overflow:auto;}'
