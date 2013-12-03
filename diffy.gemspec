@@ -5,7 +5,7 @@
 
 Gem::Specification.new do |s|
   s.name = "diffy"
-  s.version = "3.0.1"
+  s.version = "3.1.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Sam Goldstein"]
@@ -30,6 +30,7 @@ Gem::Specification.new do |s|
     "lib/diffy.rb",
     "lib/diffy/css.rb",
     "lib/diffy/diff.rb",
+    "lib/diffy/diff3.rb",
     "lib/diffy/format.rb",
     "lib/diffy/html_formatter.rb",
     "spec/demo_app.rb",
