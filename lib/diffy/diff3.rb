@@ -178,7 +178,7 @@ module Diffy
 
     # attempts to update mine to include newly added, non-conflicted changes from yours
     def patched_mine
-      @rebased_mine ||= begin
+      @patched_mine ||= begin
         lines = []
         change_groups.each do |group|
           lines += group.patched_mine
