@@ -41,7 +41,7 @@ module Diffy
 
     def wrap_lines(lines)
       if lines.empty?
-        %'<div class="diff"/>'
+        %'<div class="diff"></div>'
       else
         %'<div class="diff">\n  <ul>\n#{lines.join("\n")}\n  </ul>\n</div>\n'
       end
