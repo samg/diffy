@@ -112,6 +112,21 @@ describe Diffy::Diff do
 
   end
 
+  describe "handling temp files" do
+    it "should unlink tempfiles after generating the diff" do
+      before_tmpfiles = Dir.entries(Dir.tmpdir)
+      d = ::Diffy::Diff.new("a", "b").to_s
+      after_tmpfiles = Dir.entries(Dir.tmpdir)
+      before_tmpfiles.should =~ after_tmpfiles
+    end
+
+    it "should still be able to generate multiple diffs" do
+      d = ::Diffy::Diff.new("a", "b")
+      d.to_s.should be_a String
+      d.to_s(:html).should be_a String
+    end
+  end
+
   describe "options[:context]" do
     it "should limit context lines to 1" do
       diff = Diffy::Diff.new("foo\nfoo\nBAR\nbang\nbaz", "foo\nfoo\nbar\nbang\nbaz", :context => 1)
