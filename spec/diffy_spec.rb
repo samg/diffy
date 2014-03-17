@@ -486,6 +486,23 @@ baz
         @diff.to_s(:html).should ==  html
       end
 
+      it "should treat unix vs windows newlines as differences" do
+        @diff = Diffy::Diff.new("one\ntwo\nthree\n", "one\r\ntwo\r\nthree\r\n")
+        html = <<-HTML
+<div class="diff">
+  <ul>
+    <li class="del"><del>one</del></li>
+    <li class="del"><del>two</del></li>
+    <li class="del"><del>three</del></li>
+    <li class="ins"><ins>one<strong></strong></ins></li>
+    <li class="ins"><ins>two<strong></strong></ins></li>
+    <li class="ins"><ins>three<strong></strong></ins></li>
+  </ul>
+</div>
+        HTML
+        @diff.to_s(:html).should ==  html
+      end
+
       describe 'with lines that include \n' do
         before do
           string1 = 'a\nb'"\n"

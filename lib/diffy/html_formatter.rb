@@ -88,7 +88,10 @@ module Diffy
 
     def split_characters(chunk)
       chunk.gsub(/^./, '').each_line.map do |line|
-        (line.chomp.split('') + ['\n']).map{|chr| ERB::Util.h(chr) }
+        chars = line.sub(/([\r\n]$)/, '').split('')
+        # add escaped newlines
+        chars += [($1 || "\n").gsub("\r", '\r').gsub("\n", '\n')]
+        chars.map{|chr| ERB::Util.h(chr) }
       end.flatten.join("\n") + "\n"
     end
 
