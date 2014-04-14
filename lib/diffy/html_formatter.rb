@@ -90,7 +90,7 @@ module Diffy
       chunk.gsub(/^./, '').each_line.map do |line|
         chars = line.sub(/([\r\n]$)/, '').split('')
         # add escaped newlines
-        chars += [($1 || "\n").gsub("\r", '\r').gsub("\n", '\n')]
+        chars << '\n'
         chars.map{|chr| ERB::Util.h(chr) }
       end.flatten.join("\n") + "\n"
     end
