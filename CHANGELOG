@@ -1,3 +1,10 @@
+== 3.0.4 ==
+handle windows vs. unix line breaks consistently in html output
+
+== 3.0.3 ==
+explicitly unlink tempfiles to avoid occasional file handle leaks
+
+== 3.0.0 ==
 allow_empty_diff is true by default
 
 == 2.1.0 ==
