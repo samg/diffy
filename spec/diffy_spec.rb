@@ -382,25 +382,6 @@ baz
     end
 
     describe "html" do
-      it "should not allow html injection on the last line" do
-        @string1 = "hahaha\ntime flies like an arrow\nfoo bar\nbang baz\n<script>\n"
-        @string2 = "hahaha\nfruit flies like a banana\nbang baz\n<script>\n"
-        @diff = Diffy::Diff.new(@string1, @string2)
-        html = <<-HTML
-<div class="diff">
-  <ul>
-    <li class="unchanged"><span>hahaha</span></li>
-    <li class="del"><del><strong>time</strong> flies like a<strong>n arrow</strong></del></li>
-    <li class="del"><del><strong>foo bar</strong></del></li>
-    <li class="ins"><ins><strong>fruit</strong> flies like a<strong> banana</strong></ins></li>
-    <li class="unchanged"><span>bang baz</span></li>
-    <li class="unchanged"><span>&lt;script&gt;</span></li>
-  </ul>
-</div>
-        HTML
-        expect(@diff.to_s(:html)).to eq(html)
-      end
-
       it "should highlight the changes within the line" do
         @string1 = "hahaha\ntime flies like an arrow\nfoo bar\nbang baz\n"
         @string2 = "hahaha\nfruit flies like a banana\nbang baz\n"
@@ -430,38 +411,6 @@ baz
     <li class="del"><del><strong>time</strong> flies like a<strong>n arrow</strong></del></li>
     <li class="ins"><ins><strong>fruit</strong> flies like a<strong> banana</strong></ins></li>
     <li class="ins"><ins><strong>bang baz</strong></ins></li>
-  </ul>
-</div>
-        HTML
-        expect(@diff.to_s(:html)).to eq(html)
-      end
-
-      it "should escape html" do
-        @string1 = "ha<br>haha\ntime flies like an arrow\n"
-        @string2 = "ha<br>haha\nfruit flies like a banana\nbang baz"
-        @diff = Diffy::Diff.new(@string1, @string2)
-        html = <<-HTML
-<div class="diff">
-  <ul>
-    <li class="unchanged"><span>ha&lt;br&gt;haha</span></li>
-    <li class="del"><del><strong>time</strong> flies like a<strong>n arrow</strong></del></li>
-    <li class="ins"><ins><strong>fruit</strong> flies like a<strong> banana</strong></ins></li>
-    <li class="ins"><ins><strong>bang baz</strong></ins></li>
-  </ul>
-</div>
-        HTML
-        expect(@diff.to_s(:html)).to eq(html)
-      end
-
-      it "should not double escape html in wierd edge cases" do
-        @string1 = "preface = (! title .)+ title &{YYACCEPT}\n"
-        @string2 = "preface = << (! title .)+ title >> &{YYACCEPT}\n"
-        @diff = Diffy::Diff.new @string1, @string2
-        html = <<-HTML
-<div class="diff">
-  <ul>
-    <li class="del"><del>preface = (! title .)+ title &amp;{YYACCEPT}</del></li>
-    <li class="ins"><ins>preface = <strong>&lt;&lt; </strong>(! title .)+ title <strong>&gt;&gt; </strong>&amp;{YYACCEPT}</ins></li>
   </ul>
 </div>
         HTML
@@ -539,12 +488,6 @@ baz
       end
     end
 
-    it "should escape diffed html in html output" do
-      diff = Diffy::Diff.new("<script>alert('bar')</script>", "<script>alert('foo')</script>").to_s(:html)
-      expect(diff).to include('&lt;script&gt;')
-      expect(diff).not_to include('<script>')
-    end
-
     it "should be easy to generate custom format" do
       expect(Diffy::Diff.new("foo\nbar\n", "foo\nbar\nbaz\n").map do |line|
         case line
@@ -573,4 +516,3 @@ describe 'Diffy::CSS' do
     expect(Diffy::CSS).to include 'diff{overflow:auto;}'
   end
 end
-

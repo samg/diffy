@@ -9,7 +9,7 @@ module Diffy
       if @options[:highlight_words]
         wrap_lines(highlighted_words)
       else
-        wrap_lines(@diff.map{|line| wrap_line(ERB::Util.h(line))})
+        wrap_lines(format_lines)
       end
     end
 
@@ -47,6 +47,13 @@ module Diffy
       end
     end
 
+    def format_lines
+      # if there is any '\ No newline at end of file'"\n" line then remove
+      # so that wrap_line doesn't return nil for that line
+      @diff.reject{ |line| line == '\ No newline at end of file'"\n" }.
+            map{ |line| wrap_line(line) }
+    end
+
     def highlighted_words
       chunks = @diff.each_chunk.
         reject{|c| c == '\ No newline at end of file'"\n"}
@@ -58,7 +65,7 @@ module Diffy
         chunk1 = chunk1
         chunk2 = chunks[index + 1]
         if not chunk2
-          next ERB::Util.h(chunk1)
+          next chunk1
         end
 
         dir1 = chunk1.each_char.first
@@ -67,7 +74,7 @@ module Diffy
         when ['-', '+']
           if chunk1.each_char.take(3).join("") =~ /^(---|\+\+\+|\\\\)/ and
               chunk2.each_char.take(3).join("") =~ /^(---|\+\+\+|\\\\)/
-            ERB::Util.h(chunk1)
+            chunk1
           else
             line_diff = Diffy::Diff.new(
                                         split_characters(chunk1),
@@ -79,7 +86,7 @@ module Diffy
             [hi1, hi2]
           end
         else
-          ERB::Util.h(chunk1)
+          chunk1
         end
       end.flatten
       lines.map{|line| line.each_line.map(&:chomp).to_a if line }.flatten.compact.
@@ -91,7 +98,7 @@ module Diffy
         chars = line.sub(/([\r\n]$)/, '').split('')
         # add escaped newlines
         chars << '\n'
-        chars.map{|chr| ERB::Util.h(chr) }
+        chars.map{|chr| chr }
       end.flatten.join("\n") + "\n"
     end
 
