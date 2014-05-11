@@ -122,6 +122,10 @@ There's some pretty nice css provided in `Diffy::CSS`.
     .diff li.diff-comment { display: none; }
     .diff li.diff-block-info { background: none repeat scroll 0 0 gray; }
 
+**Note**: Diffy doesn't escape any HTML tag on input strings.
+If your strings contain HTML tags, then you should sanitize them first before giving
+input to `Diff.new`.
+
 Other Diff Options
 ------------------
 

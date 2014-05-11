@@ -1,5 +1,4 @@
 require 'tempfile'
-require 'erb'
 require 'rbconfig'
 
 module Diffy
