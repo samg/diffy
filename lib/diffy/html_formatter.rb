@@ -96,14 +96,14 @@ module Diffy
     end
 
     def reconstruct_characters(line_diff, type)
-      enum = line_diff.each_chunk
+      enum = line_diff.each_chunk.to_a
       enum.each_with_index.map do |l, i|
         re = /(^|\\n)#{Regexp.escape(type)}/
         case l
         when re
           highlight(l)
         when /^ /
-          if i > 1 and enum.to_a[i+1] and l.each_line.to_a.size < 4
+          if i > 1 and enum[i+1] and l.each_line.to_a.size < 4
             highlight(l)
           else
             l.gsub(/^./, '').gsub("\n", '').
