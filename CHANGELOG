@@ -1,3 +1,7 @@
+== 3.0.5 ==
+Improve performance when generating html output (with inline highlighting) on
+long lines. Thanks Jason Barnabe!
+
 == 3.0.4 ==
 handle windows vs. unix line breaks consistently in html output
 
