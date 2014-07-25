@@ -1,22 +1,24 @@
 module Diffy
   class Diff
+    ORIGINAL_DEFAULT_OPTIONS = {
+      :diff => '-U 10000',
+      :source => 'strings',
+      :include_diff_info => false,
+      :include_plus_and_minus_in_html => false,
+      :context => nil,
+      :allow_empty_diff => true,
+    }
+
     class << self
       attr_writer :default_format
       def default_format
         @default_format || :text
       end
 
-      attr_writer :default_options
       # default options passed to new Diff objects
+      attr_writer :default_options
       def default_options
-        @default_options ||= {
-          :diff => '-U 10000',
-          :source => 'strings',
-          :include_diff_info => false,
-          :include_plus_and_minus_in_html => false,
-          :context => nil,
-          :allow_empty_diff => true,
-        }
+        @default_options ||= ORIGINAL_DEFAULT_OPTIONS.dup
       end
 
     end

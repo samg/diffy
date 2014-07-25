@@ -537,6 +537,26 @@ baz
 </div>
         DIFF
       end
+
+      it "should correctly do inline hightlighting when default diff options are changed" do
+        original_options = ::Diffy::Diff.default_options
+        begin
+              ::Diffy::Diff.default_options.merge!(:diff => '-U0')
+
+              s1 = "foo\nbar\nbang"
+              s2 = "foo\nbar\nbangleize"
+              expect(Diffy::Diff.new(s1,s2).to_s(:html)).to eq <<-DIFF
+<div class="diff">
+  <ul>
+    <li class="del"><del>bang</del></li>
+    <li class="ins"><ins>bang<strong>leize</strong></ins></li>
+  </ul>
+</div>
+        DIFF
+        ensure
+          ::Diffy::Diff.default_options = original_options
+        end
+      end
     end
 
     it "should escape diffed html in html output" do

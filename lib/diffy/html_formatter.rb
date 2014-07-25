@@ -1,5 +1,6 @@
 module Diffy
   class HtmlFormatter
+
     def initialize(diff, options = {})
       @diff = diff
       @options = options
@@ -71,7 +72,8 @@ module Diffy
           else
             line_diff = Diffy::Diff.new(
                                         split_characters(chunk1),
-                                        split_characters(chunk2)
+                                        split_characters(chunk2),
+                                        Diffy::Diff::ORIGINAL_DEFAULT_OPTIONS
                                         )
             hi1 = reconstruct_characters(line_diff, '-')
             hi2 = reconstruct_characters(line_diff, '+')
