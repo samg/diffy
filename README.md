@@ -30,27 +30,29 @@ Installation
 
 ###on Windows:
 
-1.  ensure that you have a working `diff` on your machine and in your search path.
+1.  Ensure that you have a working `diff` on your machine and in your search path.
 
     There are several options:
 
-	1.  install [RSpec](https://www.relishapp.com/rspec/docs/gettingstarted); it depends on Diff::LCS, which [comes bundled with ldiff](https://github.com/halostatue/diff-lcs/blob/master/bin/ldiff).
+	1.  Install [Diff::LCS](https://github.com/halostatue/diff-lcs), which includes `ldiff`. [RSpec](https://www.relishapp.com/rspec/docs/gettingstarted)
+		depends on Diff::LCS so you may already have it installed.
+		
 	1.  If you're using [RubyInstaller](http://rubyinstaller.org), install the [devkit](http://rubyinstaller.org/add-ons/devkit).
 
-	1.  install unxutils <http://sourceforge.net/projects/unxutils>
+	1.  Install unxutils <http://sourceforge.net/projects/unxutils>
 
         note that these tools contain diff 2.7 which has a different handling
         of whitespace in the diff results. This makes Diffy spec tests
         yielding one fail on Windows.
 
-    1.  install these two individually from the gnuwin32 project
+    1.  Install these two individually from the gnuwin32 project
         <http://gnuwin32.sourceforge.net/>
 
         note that this delivers diff 2.8 which makes Diffy spec pass
         even on Windows.
 
 
-2.   install the gem by
+2.   Install the gem by
 
          gem install diffy
 
