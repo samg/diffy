@@ -51,7 +51,7 @@ module Diffy
 
         if WINDOWS
           # don't use open3 on windows
-          cmd = "\"#{diff_bin}\" #{diff_options.join(' ')} #{paths.map{|s| "\"#{s}\""}.join(' ')}"
+          cmd = sprintf '"%s" %s %s', diff_bin, diff_options.join(' '), paths.map { |s| %("#{s}") }.join(' ')
           diff = `#{cmd}`
         else
           diff = Open3.popen3(diff_bin, *(diff_options + paths)) { |i, o, e| o.read }
@@ -142,15 +142,20 @@ module Diffy
     def diff_bin
       return @@bin if @@bin
 
-      @@bin ||= ""
-      if WINDOWS
-        @@bin = `which diff.exe`.chomp if @@bin.empty?
+      if @@bin = ENV['DIFFY_DIFF']
+        # system() trick from Minitest
+        raise "Can't execute diff program '#@@bin'" unless system(@@bin, __FILE__, __FILE__)
+        return @@bin
       end
-      @@bin = `which diff`.chomp if @@bin.empty?
 
-      if @@bin.empty?
+      diffs = ['diff', 'ldiff']
+      diffs.first << '.exe' if WINDOWS  # ldiff does not have exe extension
+      @@bin = diffs.find { |name| system(name, __FILE__, __FILE__) }
+
+      if @@bin.nil?
         raise "Can't find a diff executable in PATH #{ENV['PATH']}"
       end
+
       @@bin
     end
 
