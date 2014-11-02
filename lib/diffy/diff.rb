@@ -7,6 +7,7 @@ module Diffy
       :include_plus_and_minus_in_html => false,
       :context => nil,
       :allow_empty_diff => true,
+      :ignore_cr => false
     }
 
     class << self
@@ -38,10 +39,22 @@ module Diffy
         raise ArgumentError, "Invalid :source option #{@options[:source].inspect}. Supported options are 'strings' and 'files'."
       end
       @string1, @string2 = string1, string2
+
+      if options[:ignore_cr]
+        case options[:source]
+          when 'strings'
+            @string1 = string1.gsub(/\r/,"")
+            @string2 = string2.gsub(/\r/,"")
+          when 'files'
+            @string1 = tempfile(File.read(string1).gsub(/\r/,""))
+            @string2 = tempfile(File.read(string2).gsub(/\r/,""))
+        end
+      end
     end
 
     def diff
       @diff ||= begin
+
         paths = case options[:source]
           when 'strings'
             [tempfile(string1), tempfile(string2)]
