@@ -1,6 +1,7 @@
 require 'tempfile'
 require 'erb'
 require 'rbconfig'
+require 'charlock_holmes'
 
 module Diffy
   WINDOWS = (RbConfig::CONFIG['host_os'] =~ /mswin|mingw|cygwin/)

@@ -7,7 +7,8 @@ module Diffy
       :include_plus_and_minus_in_html => false,
       :context => nil,
       :allow_empty_diff => true,
-      :ignore_cr => false
+      :ignore_cr => false,
+      :encoding => nil
     }
 
     class << self
@@ -40,17 +41,33 @@ module Diffy
       end
       
       if options[:ignore_cr]
-        case options[:source]
+        case @options[:source]
           when 'strings'
-            @string1 = string1.gsub(/\r/,"")
-            @string2 = string2.gsub(/\r/,"")
+            string1 = string1.gsub(/\r/,"")
+            string2 = string2.gsub(/\r/,"")
           when 'files'
-            @string1 = tempfile(File.read(string1).gsub(/\r/,""))
-            @string2 = tempfile(File.read(string2).gsub(/\r/,""))
+            string1 = tempfile(File.read(string1).gsub(/\r/,""))
+            string2 = tempfile(File.read(string2).gsub(/\r/,""))
         end
-      else
-        @string1, @string2 = string1, string2
       end
+
+      if options[:encoding]
+        case @options[:source]
+          when 'strings'
+            string1_encoding = CharlockHolmes::EncodingDetector.detect(string1)
+            string2_encoding = CharlockHolmes::EncodingDetector.detect(string2)
+            string1 = CharlockHolmes::Converter.convert(string1, string1_encoding[:encoding], options[:encoding]).to_s
+            string2 = CharlockHolmes::Converter.convert(string2, string2_encoding[:encoding], options[:encoding]).to_s
+          when 'files'
+            str1 = File.read(string1)
+            str2 = File.read(string2)
+            string1_encoding = CharlockHolmes::EncodingDetector.detect(str1)
+            string2_encoding = CharlockHolmes::EncodingDetector.detect(str2)
+            string1 = tempfile(CharlockHolmes::Converter.convert(str1, string1_encoding[:encoding], options[:encoding]).to_s)
+            string2 = tempfile(CharlockHolmes::Converter.convert(str2, string2_encoding[:encoding], options[:encoding]).to_s)
+        end
+      end
+      @string1, @string2 = string1, string2
     end
 
     def diff
