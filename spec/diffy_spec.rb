@@ -110,6 +110,12 @@ describe Diffy::Diff do
        end
      end
 
+    it "should ignore carriage return for files if asked to" do
+      string1 = "foo\nbar\n"
+      string2 = "foo\r\nbar\r\n"
+      expect(Diffy::Diff.new(tempfile(string1), tempfile(string2), ignore_cr: true).to_s).to eq("")
+    end
+
   end
 
   describe "handling temp files" do
@@ -585,6 +591,11 @@ baz
         line
       end).to eq([" foo\n", " bar\n", "+baz\n"])
     end
+
+    it "should ignore carriage return for strings if asked to" do
+      expect(Diffy::Diff.new("foo\nbar\n", "foo\r\nbar\r\n", ignore_cr: true).to_s).to eq("")
+    end
+
   end
 end
 
