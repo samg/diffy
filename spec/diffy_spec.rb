@@ -139,6 +139,18 @@ describe Diffy::Diff do
     end
   end
 
+  describe "options[:context]" do
+    it "should limit context lines to 1" do
+      diff = Diffy::Diff.new("foo\nbaz\n", "foo \nbar\n", :diff => ["-U 10000", "w"])
+
+      expect(diff.to_s).to eq <<-DIFF
+ foo
+-baz
++bar
+      DIFF
+    end
+  end
+
   describe "options[:include_plus_and_minus_in_html]" do
     it "defaults to false" do
       @diffy = Diffy::Diff.new(" foo\nbar\n", "foo\nbar\n")
