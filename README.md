@@ -1,4 +1,4 @@
-Diffy - Easy Diffing With Ruby [![Build Status](https://secure.travis-ci.org/samg/diffy.png)](http://travis-ci.org/samg/diffy)
+Diffy - Easy Diffing With Ruby [![Build Status](https://travis-ci.org/samg/diffy.svg?branch=master)](https://travis-ci.org/samg/diffy)
 ============================
 
 Need diffs in your ruby app?  Diffy has you covered.  It provides a convenient
