@@ -126,6 +126,10 @@ There's some pretty nice css provided in `Diffy::CSS`.
     .diff li.diff-comment { display: none; }
     .diff li.diff-block-info { background: none repeat scroll 0 0 gray; }
 
+
+There's also a colorblind-safe version of the pallete provided in `Diffy::CSS_COLORBLIND_1`.
+
+
 Other Diff Options
 ------------------
 
