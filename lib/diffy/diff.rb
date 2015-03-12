@@ -34,10 +34,18 @@ module Diffy
     #                                        beginning of lines in html output.
     def initialize(string1, string2, options = {})
       @options = self.class.default_options.merge(options)
-      if ! ['strings', 'files'].include?(@options[:source])
+      if ! ['strings', 'files', 'pre_diffed'].include?(@options[:source])
         raise ArgumentError, "Invalid :source option #{@options[:source].inspect}. Supported options are 'strings' and 'files'."
       end
-      @string1, @string2 = string1, string2
+      if @options[:source] == 'pre_diffed'
+        @diff = string1
+      else
+        @string1, @string2 = string1, string2
+      end
+    end
+
+    def self.from_diff(diff_text, options = {})
+      new(diff_text, nil, options.merge(:source => 'pre_diffed'))
     end
 
     def diff
