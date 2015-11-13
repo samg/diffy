@@ -130,6 +130,77 @@ There's some pretty nice css provided in `Diffy::CSS`.
 There's also a colorblind-safe version of the pallete provided in `Diffy::CSS_COLORBLIND_1`.
 
 
+Side-by-side comparisons
+------------------------
+
+Side-by-side comparisons, or split views as called by some, are supported by
+using the `Diffy::SplitDiff` class.  This class takes a diff returned from
+`Diffy::Diff` and splits it in two parts (or two sides): left and right.  The
+left side represents deletions while the right side represents insertions.
+
+The class is used as follows:
+
+```
+Diffy::SplitDiff.new(string1, string2, options = {})
+```
+
+The optional options hash is passed along to the main `Diff::Diff` class, so
+all default options such as full diff output are supported.  The output format
+may be changed by passing the format with the options hash (see below), and all
+default formats are supported.
+
+Unlinke `Diffy::Diff`, `Diffy::SplitDiff` does not use `#to_s` to output
+the resulting diff.  Instead, two self-explanatory methods are used to output
+the diff; `#left` and `#right`.  Using the earlier example, this is what they
+look like in action:
+
+```
+>> puts Diffy::SplitDiff.new(string1, string2).left
+-Hello how are you
+ I'm fine
+-That's great
+```
+
+```
+>> puts Diffy::SplitDiff.new(string1, string2).right
++Hello how are you?
+ I'm fine
++That's swell
+```
+
+### Changing the split view output format
+
+The output format may be changed by passing the format with the options hash:
+
+```
+Diffy::SplitDiff.new(string1, string2, { format: :html }
+```
+
+This will result in the following:
+
+```
+>> puts Diffy::SplitDiff.new(string1, string2, { format: :html }).left
+<div class="diff">
+  <ul>
+    <li class="del"><del>Hello how are you</del></li>
+    <li class="unchanged"><span>I&#39;m fine</span></li>
+    <li class="del"><del>That&#39;s <strong>great</strong></del></li>
+  </ul>
+</div>
+```
+
+```
+>> puts Diffy::SplitDiff.new(string1, string2, { format: :html }).right
+<div class="diff">
+  <ul>
+    <li class="ins"><ins>Hello how are you<strong>?</strong></ins></li>
+    <li class="unchanged"><span>I&#39;m fine</span></li>
+    <li class="ins"><ins>That&#39;s <strong>swell</strong></ins></li>
+  </ul>
+</div>
+```
+
+
 Other Diff Options
 ------------------
 
