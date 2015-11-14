@@ -590,12 +590,12 @@ end
 
 describe Diffy::SplitDiff do
   before do
-    ::Diffy::Diff.default_options.merge!(diff: '-U 10000')
+    ::Diffy::Diff.default_options.merge!(:diff => '-U 10000')
   end
 
   it "should fail with invalid format" do
     expected_fail = expect do
-      Diffy::SplitDiff.new("lorem\n", "ipsum\n", { format: :fail })
+      Diffy::SplitDiff.new("lorem\n", "ipsum\n", :format => :fail)
     end
     expected_fail.to raise_error(ArgumentError)
   end
@@ -615,7 +615,7 @@ describe Diffy::SplitDiff do
     it "should also format left diff as html" do
       string1 = "lorem\nipsum\ndolor\nsit amet\n"
       string2 = "lorem\nipsumdolor\nsit amet\n"
-      expect(Diffy::SplitDiff.new(string1, string2, { format: :html}).left).to eq <<-HTML
+      expect(Diffy::SplitDiff.new(string1, string2, :format => :html).left).to eq <<-HTML
 <div class="diff">
   <ul>
     <li class="unchanged"><span>lorem</span></li>
@@ -642,7 +642,7 @@ describe Diffy::SplitDiff do
     it "should also format right diff as html" do
       string1 = "lorem\nipsum\ndolor\nsit amet\n"
       string2 = "lorem\nipsumdolor\nsit amet\n"
-      expect(Diffy::SplitDiff.new(string1, string2, { format: :html}).right).to eq <<-HTML
+      expect(Diffy::SplitDiff.new(string1, string2, :format => :html).right).to eq <<-HTML
 <div class="diff">
   <ul>
     <li class="unchanged"><span>lorem</span></li>

@@ -173,13 +173,13 @@ look like in action:
 The output format may be changed by passing the format with the options hash:
 
 ```
-Diffy::SplitDiff.new(string1, string2, { format: :html }
+Diffy::SplitDiff.new(string1, string2, :format => :html)
 ```
 
 This will result in the following:
 
 ```
->> puts Diffy::SplitDiff.new(string1, string2, { format: :html }).left
+>> puts Diffy::SplitDiff.new(string1, string2, :format => :html).left
 <div class="diff">
   <ul>
     <li class="del"><del>Hello how are you</del></li>
@@ -190,7 +190,7 @@ This will result in the following:
 ```
 
 ```
->> puts Diffy::SplitDiff.new(string1, string2, { format: :html }).right
+>> puts Diffy::SplitDiff.new(string1, string2, :format => :html).right
 <div class="diff">
   <ul>
     <li class="ins"><ins>Hello how are you<strong>?</strong></ins></li>
