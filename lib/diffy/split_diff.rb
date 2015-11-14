@@ -3,7 +3,8 @@ module Diffy
     def initialize(left, right, options = {})
       @format = options[:format] || Diffy::Diff.default_format
 
-      unless Format.instance_methods.include?(@format)
+      formats = Format.instance_methods(false).map { |x| x.to_s }
+      unless formats.include?(@format.to_s)
         fail ArgumentError, "Format #{format.inspect} is not a valid format"
       end
 
