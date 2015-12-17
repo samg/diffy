@@ -1,3 +1,6 @@
+== 3.1.0 ==
+Side by side diffs.  Thanks Runar Skaare Tveiten!
+
 == 3.0.5 ==
 Improve performance when generating html output (with inline highlighting) on
 long lines. Thanks Jason Barnabe!
