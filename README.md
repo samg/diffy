@@ -149,9 +149,9 @@ all default options such as full diff output are supported.  The output format
 may be changed by passing the format with the options hash (see below), and all
 default formats are supported.
 
-Unlinke `Diffy::Diff`, `Diffy::SplitDiff` does not use `#to_s` to output
+Unlike `Diffy::Diff`, `Diffy::SplitDiff` does not use `#to_s` to output
 the resulting diff.  Instead, two self-explanatory methods are used to output
-the diff; `#left` and `#right`.  Using the earlier example, this is what they
+the diff: `#left` and `#right`.  Using the earlier example, this is what they
 look like in action:
 
 ```
