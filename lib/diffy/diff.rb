@@ -7,6 +7,7 @@ module Diffy
       :include_plus_and_minus_in_html => false,
       :context => nil,
       :allow_empty_diff => true,
+      :amplify_with => false
     }
 
     class << self

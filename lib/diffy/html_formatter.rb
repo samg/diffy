@@ -77,6 +77,14 @@ module Diffy
                                         )
             hi1 = reconstruct_characters(line_diff, '-')
             hi2 = reconstruct_characters(line_diff, '+')
+
+            amplify_with = @options[:amplify_with]
+            if amplify_with == true ||
+               (amplify_with.is_a?(Array) && !amplify_with.empty?)
+              hi1[0] = Diffy::HtmlAmplifier.new(hi1[0], amplify_with).amplify
+              hi2[0] = Diffy::HtmlAmplifier.new(hi2[0], amplify_with).amplify
+            end
+
             processed << (index + 1)
             [hi1, hi2]
           end
