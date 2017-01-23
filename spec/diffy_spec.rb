@@ -115,7 +115,7 @@ describe Diffy::Diff do
   describe "handling temp files" do
     it "should unlink tempfiles after generating the diff" do
       before_tmpfiles = Dir.entries(Dir.tmpdir)
-      d = ::Diffy::Diff.new("a", "b").to_s
+      ::Diffy::Diff.new("a", "b").to_s
       after_tmpfiles = Dir.entries(Dir.tmpdir)
       expect(before_tmpfiles).to match_array(after_tmpfiles)
     end
