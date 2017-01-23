@@ -23,7 +23,7 @@ module Diffy
 
     end
     include Enumerable
-    attr_reader :string1, :string2, :options, :diff
+    attr_reader :string1, :string2, :options
 
     # supported options
     # +:diff+::    A cli options string passed to diff
