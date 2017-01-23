@@ -12,7 +12,7 @@ module Diffy
     class << self
       attr_writer :default_format
       def default_format
-        @default_format || :text
+        @default_format ||= :text
       end
 
       # default options passed to new Diff objects
