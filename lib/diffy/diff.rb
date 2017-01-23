@@ -67,15 +67,17 @@ module Diffy
       end
     ensure
       # unlink the tempfiles explicitly now that the diff is generated
-      Array(@tempfiles).each do |t|
-        begin
-          # check that the path is not nil and file still exists.
-          # REE seems to be very agressive with when it magically removes
-          # tempfiles
-          t.unlink if t.path && File.exist?(t.path)
-        rescue => e
-          warn "#{e.class}: #{e}"
-          warn e.backtrace.join("\n")
+      if defined? @tempfiles # to avoid Ruby warnings about undefined ins var.
+        Array(@tempfiles).each do |t|
+          begin
+            # check that the path is not nil and file still exists.
+            # REE seems to be very agressive with when it magically removes
+            # tempfiles
+            t.unlink if t.path && File.exist?(t.path)
+          rescue => e
+            warn "#{e.class}: #{e}"
+            warn e.backtrace.join("\n")
+          end
         end
       end
     end
