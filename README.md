@@ -315,16 +315,6 @@ deletions, and unchanged in a diff.
 Use `#map`, `#inject`, or any of Enumerable's methods.  Go crazy.
 
 
-Ruby Version Compatibility
--------------------------
-
-Support for Ruby 1.8.6 was dropped beginning at version 2.0 in order to support
-the chainable enumerators available in 1.8.7 and 1.9.
-
-If you want to use Diffy and Ruby 1.8.6 then:
-
-    $ gem install diffy -v1.1.0
-
 Testing
 ------------
 
