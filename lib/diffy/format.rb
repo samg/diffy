@@ -3,7 +3,7 @@ module Diffy
     # ANSI color output suitable for terminal output
     def color
       map do |line|
-        case line          
+        case line
         when /^(---|\+\+\+|\\\\)/
           "\033[90m#{line.chomp}\033[0m"
         when /^\+/
