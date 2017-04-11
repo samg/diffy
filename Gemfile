@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-platforms :ruby do
+platforms :ruby, :jruby do
   gem 'posix-spawn'
 end
 
