@@ -50,7 +50,7 @@ module Diffy
           end
 
         if WINDOWS
-          # don't use open3 on windows
+          # don't use posix-spawn on windows
           cmd = sprintf '"%s" %s %s', diff_bin, diff_options.join(' '), paths.map { |s| %("#{s}") }.join(' ')
           diff = `#{cmd}`
         else
