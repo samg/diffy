@@ -20,4 +20,8 @@ Gem::Specification.new do |spec|
 
   spec.add_development_dependency "rake"
   spec.add_development_dependency "rspec"
+
+  spec.requirements << 'posix-spawn, if not Windows'
+
+  spec.post_install_message = "Thanks for installing! Please make sure to add posix-spawn as dependency if NON-Windows OS."
 end
