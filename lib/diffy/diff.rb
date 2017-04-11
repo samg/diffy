@@ -49,10 +49,13 @@ module Diffy
             [string1, string2]
           end
 
-        if WINDOWS
-          # don't use posix-spawn on windows
+        case
+        when WINDOWS
+          # don't use open3 OR posix-spawn on windows
           cmd = sprintf '"%s" %s %s', diff_bin, diff_options.join(' '), paths.map { |s| %("#{s}") }.join(' ')
           diff = `#{cmd}`
+        when JRUBY
+          diff = Open3.popen3(diff_bin, *(diff_options + paths)) { |i, o, e| o.read }
         else
           diff = POSIX::Spawn::Child.new(diff_bin, *(diff_options + paths)).out
         end

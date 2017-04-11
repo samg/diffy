@@ -19,9 +19,9 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
 
   spec.add_development_dependency "rake"
-  spec.add_development_dependency "rspec"
+  spec.add_development_dependency "rspec", '>= 3.4.4'
 
-  spec.requirements << 'posix-spawn, if not Windows'
+  spec.requirements << 'posix-spawn, if not Windows & Not jruby'
 
-  spec.post_install_message = "Thanks for installing! Please make sure to add posix-spawn as dependency if NON-Windows OS."
+  spec.post_install_message = "Thanks for installing! Please make sure to add posix-spawn as dependency if NON-Windows OS & Not jruby"
 end
