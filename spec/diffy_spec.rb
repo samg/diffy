@@ -110,6 +110,22 @@ describe Diffy::Diff do
        end
      end
 
+    it "should ignore carriage return for files if asked to" do
+      string1 = "foo\nbar\n"
+      string2 = "foo\r\nbar\r\n"
+      @path1, @path2 = tempfile(string1), tempfile(string2)
+      expect(Diffy::Diff.new(@path1, @path2, :source => 'files', ignore_cr: true).to_s).to eq("")
+    end
+
+    it "should not show difference with different encoding files" do
+      sample_text = "êncóding tést"
+      detection = CharlockHolmes::EncodingDetector.detect(sample_text)
+      string_utf8 = CharlockHolmes::Converter.convert(sample_text, detection[:encoding], 'UTF-8').to_s
+      string_iso = CharlockHolmes::Converter.convert(sample_text, detection[:encoding], 'ISO-8859-1').to_s
+      @path1, @path2 = tempfile(string_utf8), tempfile(string_iso)
+      expect(Diffy::Diff.new(@path1, @path2, :source => 'files', encoding: 'UTF-8').to_s).to eq("")
+    end
+
   end
 
   describe "handling temp files" do
@@ -585,6 +601,19 @@ baz
         line
       end).to eq([" foo\n", " bar\n", "+baz\n"])
     end
+
+    it "should ignore carriage return for strings if asked to" do
+      expect(Diffy::Diff.new("foo\nbar\n", "foo\r\nbar\r\n", ignore_cr: true).to_s).to eq("")
+    end
+
+    it "should not show difference with different encoding strings" do
+      sample_text = "êncóding tést"
+      detection = CharlockHolmes::EncodingDetector.detect(sample_text)
+      string_utf8 = CharlockHolmes::Converter.convert(sample_text, detection[:encoding], 'UTF-8').to_s
+      string_iso = CharlockHolmes::Converter.convert(sample_text, detection[:encoding], 'ISO-8859-1').to_s
+      expect(Diffy::Diff.new(string_utf8, string_iso, encoding: 'UTF-8').to_s).to eq("")
+    end
+
   end
 end
 
