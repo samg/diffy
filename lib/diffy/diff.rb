@@ -37,8 +37,8 @@ module Diffy
       if ! ['strings', 'files'].include?(@options[:source])
         raise ArgumentError, "Invalid :source option #{@options[:source].inspect}. Supported options are 'strings' and 'files'."
       end
-      @string1 = string1.force_encoding('ASCII-8BIT')
-      @string2 = string2.force_encoding('ASCII-8BIT')
+      @string1 = string1
+      @string2 = string2
     end
 
     def diff
@@ -119,12 +119,12 @@ module Diffy
     end
 
     def tempfile(string)
-      t = Tempfile.new('diffy')
+      t = Tempfile.new('diffy', :encoding => 'ascii-8bit')
       # ensure tempfiles aren't unlinked when GC runs by maintaining a
       # reference to them.
       @tempfiles ||=[]
       @tempfiles.push(t)
-      t.print(string)
+      t.print(string.force_encoding('ASCII-8BIT'))
       t.flush
       t.close
       t.path
