@@ -27,6 +27,12 @@ describe Diffy::Diff do
       DIFF
     end
 
+    it "should report different strings as non-empty" do
+      string1 = "foo\nbar\nbaz\n"
+      string2 = "foo\nbar\nbang\n"
+      expect(Diffy::Diff.new(string1, string2).empty?).to eq false
+    end
+
     it "should accept file paths with spaces as arguments" do
       string1 = "foo\nbar\nbang\n"
       string2 = "foo\nbang\n"
@@ -62,6 +68,14 @@ describe Diffy::Diff do
         string1 = "foo\nbar\nbang\n"
         string2 = "foo\nbar\nbang\n"
         @path1, @path2 = tempfile(string1), tempfile(string2)
+      end
+
+      it "should report allow_empty empty diff as empty" do
+        expect(Diffy::Diff.new(@path1, @path2, :source => 'files', :allow_empty_diff => false).empty?).to eq true
+      end
+
+      it "should report a truly empty diff as empty" do
+        expect(Diffy::Diff.new(@path1, @path2, :source => 'files', :allow_empty_diff => true).empty?).to eq true
       end
 
       it "should show everything" do

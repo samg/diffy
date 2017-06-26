@@ -57,7 +57,8 @@ module Diffy
           diff = Open3.popen3(diff_bin, *(diff_options + paths)) { |i, o, e| o.read }
         end
         diff.force_encoding('ASCII-8BIT') if diff.respond_to?(:valid_encoding?) && !diff.valid_encoding?
-        if diff =~ /\A\s*\Z/ && !options[:allow_empty_diff]
+        @empty = !!(diff =~ /\A\s*\Z/)
+        if @empty && !options[:allow_empty_diff]
           diff = case options[:source]
           when 'strings' then string1
           when 'files' then File.read(string1)
@@ -138,6 +139,12 @@ module Diffy
           "Format #{format.inspect} not found in #{formats.inspect}"
       end
     end
+
+    def empty?
+      diff unless defined? @diff
+      return @empty
+    end
+
     private
 
     @@bin = nil
@@ -165,6 +172,5 @@ module Diffy
     def diff_options
       Array(options[:context] ? "-U #{options[:context]}" : options[:diff])
     end
-
   end
 end
