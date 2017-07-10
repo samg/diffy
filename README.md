@@ -24,11 +24,11 @@ A default format can be set like so:
 Installation
 ------------
 
-###on Unix
+### on Unix
 
     gem install diffy
 
-###on Windows:
+### on Windows:
 
 1.  Ensure that you have a working `diff` on your machine and in your search path.
 
