@@ -1,6 +1,9 @@
 require 'rspec'
 require File.expand_path(File.join(File.dirname(__FILE__), '..', 'lib', 'diffy'))
 
+class Diffy::Diff
+  attr_reader :tempfiles
+end
 describe Diffy::Diff do
 
   describe "diffing two files" do
@@ -36,6 +39,16 @@ describe Diffy::Diff do
 -bar
  bang
       DIFF
+    end
+
+    it "should have and empty tempfiles variable after calling diff" do
+      string1 = "foo\nbar\nbang\n"
+      string2 = "foo\nbang\n"
+      path1, path2 = tempfile(string1, 'path with spaces'), tempfile(string2, 'path with spaces')
+      res = Diffy::Diff.new(path1, path2, :source => 'strings')
+      expect(res.tempfiles).to eq nil
+      res.diff
+      expect(res.tempfiles).to eq []
     end
 
     it "should accept file paths with spaces as arguments on windows" do
