@@ -79,6 +79,7 @@ module Diffy
             warn e.backtrace.join("\n")
           end
         end
+        @tempfiles = []
       end
     end
 
