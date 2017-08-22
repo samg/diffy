@@ -1,3 +1,8 @@
+Yidffy
+======
+
+This a a forked version of the diffy gem, because we needed a patch to work around a deficiency in the odba gem, which tried to persist closed (temp) files.
+
 Diffy - Easy Diffing With Ruby [![Build Status](https://travis-ci.org/samg/diffy.svg?branch=master)](https://travis-ci.org/samg/diffy)
 ============================
 

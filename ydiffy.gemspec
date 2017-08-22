@@ -4,13 +4,13 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'diffy/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = "diffy"
+  spec.name          = "ydiffy"
   spec.version       = Diffy::VERSION
   spec.authors       = ["Sam Goldstein"]
   spec.email         = ["sgrock@gmail.org"]
   spec.description   = "Convenient diffing in ruby"
-  spec.summary       = "A convenient way to diff string in ruby"
-  spec.homepage      = "http://github.com/samg/diffy"
+  spec.summary       = "Ydiffy is a fork of diffy to work around a problem in odba"
+  spec.homepage      = "http://github.com/zdavatz/ydiffy"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files`.split($/)
