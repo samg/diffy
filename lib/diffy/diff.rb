@@ -7,6 +7,7 @@ module Diffy
       :include_plus_and_minus_in_html => false,
       :context => nil,
       :allow_empty_diff => true,
+      :hunk_header_regex => '^@@\s+-\d+,\d+\s+\+\d+,\d+\s+@@\n$'
     }
 
     class << self
@@ -116,14 +117,9 @@ module Diffy
 
     def each_hunk
       # Iterate over "change hunks": contigous hunks of context around a
-      # change. Only works with unified diffs:
-      # https://en.wikipedia.org/wiki/Diff_utility#Unified_format
-      if not @options[:diff] =~ /-U/
-        raise "Diffy only supports each_hunk for unified diffs."
-      end
-      hunk_header_regex = /^@@\s+-\d+,\d+\s+\+\d+,\d+\s+@@\n$/
+      # change, separated by hunk headers.
       hunks = diff.each_line.chunk_while { | _, line |
-        not line =~ hunk_header_regex
+        not line =~ Regexp.new(@options[:hunk_header_regex])
       }.map { | e | e.join }
       if not @options[:include_diff_info]
         # Drop the diff header and each hunk's hunk header
