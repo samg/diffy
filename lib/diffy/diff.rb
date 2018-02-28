@@ -114,6 +114,29 @@ module Diffy
       end
     end
 
+    def each_hunk
+      # Iterate over "change hunks": contigous hunks of context around a
+      # change. Only works with unified diffs:
+      # https://en.wikipedia.org/wiki/Diff_utility#Unified_format
+      if not @options[:diff] =~ /-U/
+        raise "Diffy only supports each_hunk for unified diffs."
+      end
+      hunk_header_regex = /^@@\s+-\d+,\d+\s+\+\d+,\d+\s+@@\n$/
+      hunks = diff.each_line.chunk_while { | _, line |
+        not line =~ hunk_header_regex
+      }.map { | e | e.join }
+      if not @options[:include_diff_info]
+        # Drop the diff header and each hunk's hunk header
+        hunks = hunks[1..-1].map { | hunk | hunk.sub(/^.*\n/, '') }
+      end
+
+      if block_given?
+        hunks.each{|hunk| yield hunk }
+      else
+        hunks.to_enum
+      end
+    end
+
     def tempfile(string)
       t = Tempfile.new('diffy')
       # ensure tempfiles aren't unlinked when GC runs by maintaining a

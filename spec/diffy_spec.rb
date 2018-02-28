@@ -580,6 +580,10 @@ baz
       end).to eq([" foo\n bar\n", "+baz\n"])
     end
 
+    it "should let you iterate over hunks too" do
+      expect(Diffy::Diff.new("foo\nbar\nbaz\nfoo\nbar\nbar\n", "foo\nbaz\nbaz\nfoo\nbar\nbaz\n", :context => 1).each_hunk.to_a).to eq([" foo\n-bar\n+baz\n baz\n", " bar\n-bar\n+baz\n"])
+    end
+
     it "should allow chaining enumerable methods" do
       expect(Diffy::Diff.new("foo\nbar\n", "foo\nbar\nbaz\n").each.map do |line|
         line
