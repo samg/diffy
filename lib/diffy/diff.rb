@@ -7,6 +7,7 @@ module Diffy
       :include_plus_and_minus_in_html => false,
       :context => nil,
       :allow_empty_diff => true,
+      :hunk_header_regex => /^@@[^\n]+@@\n/m
     }
 
     class << self
@@ -111,6 +112,31 @@ module Diffy
         chunks.each{|chunk| yield chunk }
       else
         chunks.to_enum
+      end
+    end
+
+    def each_hunk
+      # Iterate over "change hunks": contigous hunks of context around a
+      # change, separated by hunk headers.
+      header_pattern = @options[:hunk_header_regex]
+
+      remaining_diff = diff
+      hunks = []
+      while i = remaining_diff.index(header_pattern, 1)
+        hunks.push(remaining_diff[0..i-1])
+        remaining_diff = remaining_diff[i..-1]
+      end
+      hunks.push(remaining_diff)
+
+      if not @options[:include_diff_info]
+        # Drop the diff header and each hunk's hunk header
+        hunks = hunks[1..-1].map { | hunk | hunk.sub(header_pattern, '') }
+      end
+
+      if block_given?
+        hunks.each{|hunk| yield hunk }
+      else
+        hunks.to_enum
       end
     end
 

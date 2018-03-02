@@ -36,7 +36,7 @@ Installation
 
 	1.  Install [Diff::LCS](https://github.com/halostatue/diff-lcs), which includes `ldiff`. [RSpec](https://www.relishapp.com/rspec/docs/gettingstarted)
 		depends on Diff::LCS so you may already have it installed.
-		
+
 	1.  If you're using [RubyInstaller](http://rubyinstaller.org), install the [devkit](http://rubyinstaller.org/add-ons/devkit).
 
 	1.  Install unxutils <http://sourceforge.net/projects/unxutils>
@@ -227,6 +227,35 @@ option when initializing:
     +baz
 
 And even deals a bit with the formatting!
+
+### Custom hunk header regex
+
+If you want to use a diff format other than `-U`, but still want to remove diff
+superfluous diff output, you can provide a regex which matches the header that
+precedes each hunk of diff.
+
+For example, to remove extra info for context diff format (`-c`):
+
+    *** /proc/self/fd/11    2018-03-02 20:03:08.545981138 +0000
+    --- /proc/self/fd/12    2018-03-02 20:03:08.546981144 +0000
+    ***************
+    *** 1,2 ****
+    ! foo
+
+    --- 1,2 ----
+    ! fuu
+
+    ***************
+    *** 4,5 ****
+
+    ! bar
+    --- 4,5 ----
+
+    ! baz
+
+You could use
+
+    /^\*+\n\*[^\n]+\*\n/m
 
 ### Empty Diff Behavior
 

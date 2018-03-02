@@ -580,10 +580,26 @@ baz
       end).to eq([" foo\n bar\n", "+baz\n"])
     end
 
+    it "should let you iterate over hunks too" do
+      expect(Diffy::Diff.new("foo\nbar\nbaz\nfoo\nbar\nbar\n", "foo\nbaz\nbaz\nfoo\nbar\nbaz\n", :context => 1).each_hunk.to_a).to eq([" foo\n-bar\n+baz\n baz\n", " bar\n-bar\n+baz\n"])
+    end
+
     it "should allow chaining enumerable methods" do
       expect(Diffy::Diff.new("foo\nbar\n", "foo\nbar\nbaz\n").each.map do |line|
         line
       end).to eq([" foo\n", " bar\n", "+baz\n"])
+    end
+
+    it "should support hunks for different diff formats" do
+      expect(Diffy::Diff.new(
+        "foo\nbar\nbaz\nfoo\nbar\nbar\n",
+        "foo\nbaz\nbaz\nfoo\nbar\nbaz\n",
+        :diff => '-c1',
+        :hunk_header_regex => /^\*+\n\*[^\n]+\*\n/m
+      ).each_hunk.to_a).to eq(
+        ["  foo\n! bar\n  baz\n--- 1,3 ----\n  foo\n! baz\n  baz\n",
+         "  bar\n! bar\n--- 5,6 ----\n  bar\n! baz\n"]
+      )
     end
   end
 end
