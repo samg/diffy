@@ -120,14 +120,13 @@ module Diffy
       # change, separated by hunk headers.
       header_pattern = @options[:hunk_header_regex]
 
-      hunks = []
       remaining_diff = diff
-      i = remaining_diff.index(header_pattern, 1)
-      while i != nil
+      hunks = []
+      while i = remaining_diff.index(header_pattern, 1)
         hunks.push(remaining_diff[0..i-1])
         remaining_diff = remaining_diff[i..-1]
-        i = remaining_diff.index(header_pattern, 1)
       end
+      hunks.push(remaining_diff)
 
       if not @options[:include_diff_info]
         # Drop the diff header and each hunk's hunk header
