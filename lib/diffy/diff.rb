@@ -7,7 +7,7 @@ module Diffy
       :include_plus_and_minus_in_html => false,
       :context => nil,
       :allow_empty_diff => true,
-      :hunk_header_regex => /^@@[^\n]+@@$/m
+      :hunk_header_regex => /^@@[^\n]+@@\n/m
     }
 
     class << self
@@ -130,7 +130,7 @@ module Diffy
 
       if not @options[:include_diff_info]
         # Drop the diff header and each hunk's hunk header
-        hunks = hunks[1..-1].map { | hunk | hunk.sub(/^.*\n/, '') }
+        hunks = hunks[1..-1].map { | hunk | hunk.sub(header_pattern, '') }
       end
 
       if block_given?
