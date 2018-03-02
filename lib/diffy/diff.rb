@@ -7,7 +7,7 @@ module Diffy
       :include_plus_and_minus_in_html => false,
       :context => nil,
       :allow_empty_diff => true,
-      :hunk_header_regex => /^@@\s+-\d+,\d+\s+\+\d+,\d+\s+@@$/m
+      :hunk_header_regex => /^@@[^\n]+@@$/m
     }
 
     class << self
