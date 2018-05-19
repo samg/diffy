@@ -590,7 +590,7 @@ end
 
 describe Diffy::SplitDiff do
   before do
-    ::Diffy::Diff.default_options.merge!(:diff => '-U 10000')
+    ::Diffy::Diff.default_options.merge!(:diff => '-U10000')
   end
 
   it "should fail with invalid format" do

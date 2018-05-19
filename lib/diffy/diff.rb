@@ -1,7 +1,7 @@
 module Diffy
   class Diff
     ORIGINAL_DEFAULT_OPTIONS = {
-      :diff => '-U 10000',
+      :diff => '-U10000',
       :source => 'strings',
       :include_diff_info => false,
       :include_plus_and_minus_in_html => false,
