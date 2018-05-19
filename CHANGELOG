@@ -1,3 +1,5 @@
+== 3.2.1 ==
+Fix default options on alpine linux.  Thanks @evgen!
 == 3.1.0 ==
 Side by side diffs.  Thanks Runar Skaare Tveiten!
 
