@@ -60,6 +60,8 @@ module Diffy
           # don't use open3 on windows
           cmd = sprintf '"%s" %s %s', diff_bin, diff_options.join(' '), paths.map { |s| %("#{s}") }.join(' ')
           diff = `#{cmd}`
+          raise DiffFailedError, diff if $?.exitstatus == ERROR_STATUS_CODE
+          diff
         else
           diff = Open3.popen3(diff_bin, *(diff_options + paths)) do |i, o, e, wait_thr|
             output = o.read
