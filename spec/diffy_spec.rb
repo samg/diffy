@@ -112,6 +112,13 @@ describe Diffy::Diff do
 
   end
 
+  describe 'error handling' do
+    it 'should raise exception when diff command returns non-zero exit code' do
+      diff = Diffy::Diff.new("foo", "bar", :diff => "--some-wrong-option")
+      expect { diff.to_s }.to raise_error(described_class::DiffFailedError)
+    end
+  end
+
   describe "handling temp files" do
     it "should unlink tempfiles after generating the diff" do
       before_tmpfiles = Dir.entries(Dir.tmpdir)
@@ -660,4 +667,3 @@ describe 'Diffy::CSS' do
     expect(Diffy::CSS).to include 'diff{overflow:auto;}'
   end
 end
-
