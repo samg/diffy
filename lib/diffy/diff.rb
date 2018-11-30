@@ -60,7 +60,6 @@ module Diffy
           cmd = sprintf '"%s" %s %s', diff_bin, diff_options.join(' '), paths.map { |s| %("#{s}") }.join(' ')
           diff = `#{cmd}`
         else
-          # diff = Open3.popen3(diff_bin, *(diff_options + paths)) { |i, o, e| o.read }
           _pid, _i, o, _e = popen4(diff_bin, *(diff_options + paths))
           diff = o.read
         end
