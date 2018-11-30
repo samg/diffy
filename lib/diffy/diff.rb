@@ -1,5 +1,11 @@
+# frozen_string_literal: true
+
+require 'posix/spawn'
+
 module Diffy
   class Diff
+    include POSIX::Spawn
+
     ORIGINAL_DEFAULT_OPTIONS = {
       :diff => '-U10000',
       :source => 'strings',
@@ -54,7 +60,9 @@ module Diffy
           cmd = sprintf '"%s" %s %s', diff_bin, diff_options.join(' '), paths.map { |s| %("#{s}") }.join(' ')
           diff = `#{cmd}`
         else
-          diff = Open3.popen3(diff_bin, *(diff_options + paths)) { |i, o, e| o.read }
+          # diff = Open3.popen3(diff_bin, *(diff_options + paths)) { |i, o, e| o.read }
+          _pid, _i, o, _e = popen4(diff_bin, *(diff_options + paths))
+          diff = o.read
         end
         diff.force_encoding('ASCII-8BIT') if diff.respond_to?(:valid_encoding?) && !diff.valid_encoding?
         if diff =~ /\A\s*\Z/ && !options[:allow_empty_diff]
