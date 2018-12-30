@@ -585,6 +585,30 @@ baz
         line
       end).to eq([" foo\n", " bar\n", "+baz\n"])
     end
+
+    it "should handle lines that begin with --" do
+      string1 = "a a\n-- b\nc c\n"
+      string2 = "a a\nb b\nc c\n"
+
+      expect(Diffy::Diff.new(string1, string2).to_s).to eq <<-DIFF
+ a a
+--- b
++b b
+ c c
+      DIFF
+    end
+
+    it "should handle lines that begin with ++" do
+      string1 = "a a\nb b\nc c\n"
+      string2 = "a a\n++ b\nc c\n"
+
+      expect(Diffy::Diff.new(string1, string2).to_s).to eq <<-DIFF
+ a a
+-b b
++++ b
+ c c
+      DIFF
+    end
   end
 end
 

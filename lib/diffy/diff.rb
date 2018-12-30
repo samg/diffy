@@ -42,7 +42,7 @@ module Diffy
 
     def diff
       @diff ||= begin
-        paths = case options[:source]
+        @paths = case options[:source]
           when 'strings'
             [tempfile(string1), tempfile(string2)]
           when 'files'
@@ -51,10 +51,10 @@ module Diffy
 
         if WINDOWS
           # don't use open3 on windows
-          cmd = sprintf '"%s" %s %s', diff_bin, diff_options.join(' '), paths.map { |s| %("#{s}") }.join(' ')
+          cmd = sprintf '"%s" %s %s', diff_bin, diff_options.join(' '), @paths.map { |s| %("#{s}") }.join(' ')
           diff = `#{cmd}`
         else
-          diff = Open3.popen3(diff_bin, *(diff_options + paths)) { |i, o, e| o.read }
+          diff = Open3.popen3(diff_bin, *(diff_options + @paths)) { |i, o, e| o.read }
         end
         diff.force_encoding('ASCII-8BIT') if diff.respond_to?(:valid_encoding?) && !diff.valid_encoding?
         if diff =~ /\A\s*\Z/ && !options[:allow_empty_diff]
@@ -84,9 +84,20 @@ module Diffy
 
     def each
       lines = case @options[:include_diff_info]
-      when false then diff.split("\n").reject{|x| x =~ /^(---|\+\+\+|@@|\\\\)/ }.map {|line| line + "\n" }
-      when true then diff.split("\n").map {|line| line + "\n" }
+      when false
+        # this "primes" the diff and sets up the paths we'll reference below.
+        diff
+
+        # caching this regexp improves the performance of the loop by a
+        # considerable amount.
+        regexp = /^(--- "?#{@paths[0]}"?|\+\+\+ "?#{@paths[1]}"?|@@|\\\\)/
+
+        diff.split("\n").reject{|x| x =~ regexp }.map {|line| line + "\n" }
+
+      when true
+        diff.split("\n").map {|line| line + "\n" }
       end
+
       if block_given?
         lines.each{|line| yield line}
       else
