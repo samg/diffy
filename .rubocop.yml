@@ -1,3 +1,4 @@
+require: rubocop-rspec
 Style/Documentation:
   Enabled: false
 Metrics/MethodLength:
@@ -19,4 +20,6 @@ Style/ClassVars:
 Layout/IndentHeredoc:
   Enabled: false
 Style/MultilineBlockChain:
+  Enabled: false
+RSpec/ExampleLength:
   Enabled: false
