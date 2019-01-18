@@ -1,23 +1,23 @@
-# coding: utf-8
-lib = File.expand_path('../lib', __FILE__)
+lib = File.expand_path('lib', __dir__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'diffy/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = "diffy"
+  spec.name          = 'diffy'
   spec.version       = Diffy::VERSION
-  spec.authors       = ["Sam Goldstein"]
-  spec.email         = ["sgrock@gmail.org"]
-  spec.description   = "Convenient diffing in ruby"
-  spec.summary       = "A convenient way to diff string in ruby"
-  spec.homepage      = "http://github.com/samg/diffy"
-  spec.license       = "MIT"
+  spec.authors       = ['Sam Goldstein']
+  spec.email         = ['sgrock@gmail.org']
+  spec.description   = 'Convenient diffing in ruby'
+  spec.summary       = 'A convenient way to diff string in ruby'
+  spec.homepage      = 'http://github.com/samg/diffy'
+  spec.license       = 'MIT'
 
-  spec.files         = `git ls-files`.split($/)
+  spec.files         = `git ls-files`.split($INPUT_RECORD_SEPARATOR)
   spec.executables   = spec.files.grep(%r{^bin/}) { |f| File.basename(f) }
   spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
-  spec.require_paths = ["lib"]
+  spec.require_paths = ['lib']
 
-  spec.add_development_dependency "rake"
-  spec.add_development_dependency "rspec"
+  spec.add_development_dependency 'rake'
+  spec.add_development_dependency 'rspec'
+  spec.add_development_dependency 'rubocop'
 end

@@ -4,7 +4,11 @@ require 'json'
 require File.dirname(__FILE__) + '/../lib/diffy'
 
 blk = proc do
-  Diffy::Diff.default_options.merge! JSON.parse(params[:options]) rescue {}
+  begin
+    Diffy::Diff.default_options.merge! JSON.parse(params[:options])
+  rescue StandardError
+    {}
+  end
   haml "- d = Diffy::Diff.new(params[:one].to_s, params[:two].to_s)\n%div= d.to_s(:html)\n%pre= d.to_s"
 end
 post '/', &blk

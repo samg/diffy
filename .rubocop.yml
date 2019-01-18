@@ -1,0 +1,22 @@
+Style/Documentation:
+  Enabled: false
+Metrics/MethodLength:
+  Enabled: false
+Metrics/ClassLength:
+  Enabled: false
+Metrics/BlockLength:
+  Enabled: false
+Metrics/LineLength:
+  Enabled: false
+Metrics/AbcSize:
+  Enabled: false
+Metrics/PerceivedComplexity:
+  Enabled: false
+Metrics/CyclomaticComplexity:
+  Enabled: false
+Style/ClassVars:
+  Enabled: false
+Layout/IndentHeredoc:
+  Enabled: false
+Style/MultilineBlockChain:
+  Enabled: false

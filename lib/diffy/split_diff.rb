@@ -3,16 +3,14 @@ module Diffy
     def initialize(left, right, options = {})
       @format = options[:format] || Diffy::Diff.default_format
 
-      formats = Format.instance_methods(false).map { |x| x.to_s }
-      unless formats.include?(@format.to_s)
-        fail ArgumentError, "Format #{format.inspect} is not a valid format"
-      end
+      formats = Format.instance_methods(false).map(&:to_s)
+      raise ArgumentError, "Format #{format.inspect} is not a valid format" unless formats.include?(@format.to_s)
 
       @diff = Diffy::Diff.new(left, right, options).to_s(@format)
       @left_diff, @right_diff = split
     end
 
-    %w(left right).each do |direction|
+    %w[left right].each do |direction|
       define_method direction do
         instance_variable_get("@#{direction}_diff")
       end

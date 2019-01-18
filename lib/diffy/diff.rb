@@ -1,13 +1,13 @@
 module Diffy
   class Diff
     ORIGINAL_DEFAULT_OPTIONS = {
-      :diff => '-U10000',
-      :source => 'strings',
-      :include_diff_info => false,
-      :include_plus_and_minus_in_html => false,
-      :context => nil,
-      :allow_empty_diff => true,
-    }
+      diff: '-U10000',
+      source: 'strings',
+      include_diff_info: false,
+      include_plus_and_minus_in_html: false,
+      context: nil,
+      allow_empty_diff: true
+    }.freeze
 
     class << self
       attr_writer :default_format
@@ -20,7 +20,6 @@ module Diffy
       def default_options
         @default_options ||= ORIGINAL_DEFAULT_OPTIONS.dup
       end
-
     end
     include Enumerable
     attr_reader :string1, :string2, :options
@@ -34,34 +33,34 @@ module Diffy
     #                                        beginning of lines in html output.
     def initialize(string1, string2, options = {})
       @options = self.class.default_options.merge(options)
-      if ! ['strings', 'files'].include?(@options[:source])
-        raise ArgumentError, "Invalid :source option #{@options[:source].inspect}. Supported options are 'strings' and 'files'."
-      end
-      @string1, @string2 = string1, string2
+      raise ArgumentError, "Invalid :source option #{@options[:source].inspect}. Supported options are 'strings' and 'files'." unless %w[strings files].include?(@options[:source])
+
+      @string1 = string1
+      @string2 = string2
     end
 
     def diff
       @diff ||= begin
         @paths = case options[:source]
-          when 'strings'
-            [tempfile(string1), tempfile(string2)]
-          when 'files'
-            [string1, string2]
-          end
+                 when 'strings'
+                   [tempfile(string1), tempfile(string2)]
+                 when 'files'
+                   [string1, string2]
+                 end
 
         if WINDOWS
           # don't use open3 on windows
-          cmd = sprintf '"%s" %s %s', diff_bin, diff_options.join(' '), @paths.map { |s| %("#{s}") }.join(' ')
+          cmd = format '"%<bin>s" %<options>s %<passthrough>s', bin: diff_bin, options: diff_options.join(' '), passthrough: @paths.map { |s| %("#{s}") }.join(' ')
           diff = `#{cmd}`
         else
-          diff = Open3.popen3(diff_bin, *(diff_options + @paths)) { |i, o, e| o.read }
+          diff = Open3.popen3(diff_bin, *(diff_options + @paths)) { |_i, o, _e| o.read }
         end
         diff.force_encoding('ASCII-8BIT') if diff.respond_to?(:valid_encoding?) && !diff.valid_encoding?
         if diff =~ /\A\s*\Z/ && !options[:allow_empty_diff]
           diff = case options[:source]
-          when 'strings' then string1
-          when 'files' then File.read(string1)
-          end.gsub(/^/, " ")
+                 when 'strings' then string1
+                 when 'files' then File.read(string1)
+                 end.gsub(/^/, ' ')
         end
         diff
       end
@@ -74,7 +73,7 @@ module Diffy
             # REE seems to be very agressive with when it magically removes
             # tempfiles
             t.unlink if t.path && File.exist?(t.path)
-          rescue => e
+          rescue StandardError => e
             warn "#{e.class}: #{e}"
             warn e.backtrace.join("\n")
           end
@@ -84,22 +83,22 @@ module Diffy
 
     def each
       lines = case @options[:include_diff_info]
-      when false
-        # this "primes" the diff and sets up the paths we'll reference below.
-        diff
+              when false
+                # this "primes" the diff and sets up the paths we'll reference below.
+                diff
 
-        # caching this regexp improves the performance of the loop by a
-        # considerable amount.
-        regexp = /^(--- "?#{@paths[0]}"?|\+\+\+ "?#{@paths[1]}"?|@@|\\\\)/
+                # caching this regexp improves the performance of the loop by a
+                # considerable amount.
+                regexp = /^(--- "?#{@paths[0]}"?|\+\+\+ "?#{@paths[1]}"?|@@|\\\\)/
 
-        diff.split("\n").reject{|x| x =~ regexp }.map {|line| line + "\n" }
+                diff.split("\n").reject { |x| x =~ regexp }.map { |line| line + "\n" }
 
-      when true
-        diff.split("\n").map {|line| line + "\n" }
-      end
+              when true
+                diff.split("\n").map { |line| line + "\n" }
+              end
 
       if block_given?
-        lines.each{|line| yield line}
+        lines.each { |line| yield line }
       else
         lines.to_enum
       end
@@ -107,7 +106,7 @@ module Diffy
 
     def each_chunk
       old_state = nil
-      chunks = inject([]) do |cc, line|
+      chunks = each_with_object([]) do |line, cc|
         state = line.each_char.first
         if state == old_state
           cc.last << line
@@ -115,11 +114,10 @@ module Diffy
           cc.push line.dup
         end
         old_state = state
-        cc
       end
 
       if block_given?
-        chunks.each{|chunk| yield chunk }
+        chunks.each { |chunk| yield chunk }
       else
         chunks.to_enum
       end
@@ -129,7 +127,7 @@ module Diffy
       t = Tempfile.new('diffy')
       # ensure tempfiles aren't unlinked when GC runs by maintaining a
       # reference to them.
-      @tempfiles ||=[]
+      @tempfiles ||= []
       @tempfiles.push(t)
       t.print(string)
       t.flush
@@ -139,35 +137,35 @@ module Diffy
 
     def to_s(format = nil)
       format ||= self.class.default_format
-      formats = Format.instance_methods(false).map{|x| x.to_s}
+      formats = Format.instance_methods(false).map(&:to_s)
       if formats.include? format.to_s
         enum = self
         enum.extend Format
         enum.send format
       else
         raise ArgumentError,
-          "Format #{format.inspect} not found in #{formats.inspect}"
+              "Format #{format.inspect} not found in #{formats.inspect}"
       end
     end
+
     private
 
     @@bin = nil
     def diff_bin
       return @@bin if @@bin
 
-      if @@bin = ENV['DIFFY_DIFF']
+      if (@@bin = ENV['DIFFY_DIFF'])
         # system() trick from Minitest
-        raise "Can't execute diff program '#@@bin'" unless system(@@bin, __FILE__, __FILE__)
+        raise "Can't execute diff program '#{@@bin}'" unless system(@@bin, __FILE__, __FILE__)
+
         return @@bin
       end
 
-      diffs = ['diff', 'ldiff']
-      diffs.first << '.exe' if WINDOWS  # ldiff does not have exe extension
+      diffs = %w[diff ldiff]
+      diffs.first << '.exe' if WINDOWS # ldiff does not have exe extension
       @@bin = diffs.find { |name| system(name, __FILE__, __FILE__) }
 
-      if @@bin.nil?
-        raise "Can't find a diff executable in PATH #{ENV['PATH']}"
-      end
+      raise "Can't find a diff executable in PATH #{ENV['PATH']}" if @@bin.nil?
 
       @@bin
     end
@@ -176,6 +174,5 @@ module Diffy
     def diff_options
       Array(options[:context] ? "-U #{options[:context]}" : options[:diff])
     end
-
   end
 end

@@ -31,7 +31,7 @@ module Diffy
 
     # Html output which does inline highlighting of changes between two lines.
     def html
-      HtmlFormatter.new(self, options.merge(:highlight_words => true)).to_s
+      HtmlFormatter.new(self, options.merge(highlight_words: true)).to_s
     end
   end
 end

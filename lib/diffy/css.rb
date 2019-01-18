@@ -1,5 +1,5 @@
 module Diffy
-  CSS = <<-STYLE
+  CSS = <<-STYLE.freeze
 .diff{overflow:auto;}
 .diff ul{background:#fff;overflow:auto;font-size:13px;list-style:none;margin:0;padding:0;display:table;width:100%;}
 .diff del, .diff ins{display:block;text-decoration:none;}
@@ -15,7 +15,7 @@ module Diffy
 .diff li.diff-block-info { background: none repeat scroll 0 0 gray; }
   STYLE
 
-  CSS_COLORBLIND_1 = <<-STYLE
+  CSS_COLORBLIND_1 = <<-STYLE.freeze
 .diff{overflow:auto;}
 .diff ul{background:#fff;overflow:auto;font-size:13px;list-style:none;margin:0;padding:0;display:table;width:100%;}
 .diff del, .diff ins{display:block;text-decoration:none;}
@@ -30,5 +30,4 @@ module Diffy
 .diff li.diff-comment { display: none; }
 .diff li.diff-block-info { background: none repeat scroll 0 0 gray; }
   STYLE
-
 end
