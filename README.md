@@ -277,6 +277,15 @@ combined with the `:context` option.
       foo
      bar
 
+### `:ignore_crlf` when doing HTML compares
+
+You can make the HTML output ignore the CRLF by passing the `:ignore_crlf` option a truthy value.
+
+    >> puts Diffy::Diff.new(" foo\nbar\n", "foo\r\nbar\r\n", ignore_crlf: true).to_s(:html)
+      "<div class=\"diff\"></div>"
+
+
+
 Default Diff Options
 --------------------
 

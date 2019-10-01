@@ -503,6 +503,13 @@ baz
         expect(@diff.to_s(:html)).to eq(html)
       end
 
+      it "should treat unix vs windows newlines as same if option :ignore_crlf" do
+        @diff = Diffy::Diff.new("one\ntwo\nthree\n", "one\r\ntwo\r\nthree\r\n",
+                               ignore_crlf: true)
+        empty_diff = "<div class=\"diff\"></div>"
+        expect(@diff.to_s(:html)).to eq(empty_diff)
+      end
+
       describe 'with lines that include \n' do
         before do
           string1 = 'a\nb'"\n"
