@@ -37,8 +37,7 @@ module Diffy
       if ! ['strings', 'files'].include?(@options[:source])
         raise ArgumentError, "Invalid :source option #{@options[:source].inspect}. Supported options are 'strings' and 'files'."
       end
-      @string1 = string1
-      @string2 = string2
+      @string1, @string2 = string1, string2
     end
 
     def diff
