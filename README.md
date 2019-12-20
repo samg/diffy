@@ -24,11 +24,11 @@ A default format can be set like so:
 Installation
 ------------
 
-###on Unix
+### on Unix
 
     gem install diffy
 
-###on Windows:
+### on Windows:
 
 1.  Ensure that you have a working `diff` on your machine and in your search path.
 
@@ -213,7 +213,7 @@ You can diff files instead of strings by using the `:source` option.
 ### Full Diff Output
 
 By default Diffy removes the superfluous diff output.  This is because its
-default is to show the complete diff'ed file (`diff -U 10000` is the default).
+default is to show the complete diff'ed file (`diff -U10000` is the default).
 
 Diffy does support full output, just use the `:include_diff_info => true`
 option when initializing:
@@ -270,12 +270,21 @@ file).
 ### Overriding the command line options passed to diff.
 
 You can use the `:diff` option to override the command line options that are
-passed to unix diff. They default to `-U 10000`.  This option will noop if
+passed to unix diff. They default to `-U10000`.  This option will noop if
 combined with the `:context` option.
 
     >> puts Diffy::Diff.new(" foo\nbar\n", "foo\nbar\n", :diff => "-w")
       foo
      bar
+
+### `:ignore_crlf` when doing HTML compares
+
+You can make the HTML output ignore the CRLF by passing the `:ignore_crlf` option a truthy value.
+
+    >> puts Diffy::Diff.new(" foo\nbar\n", "foo\r\nbar\r\n", ignore_crlf: true).to_s(:html)
+      "<div class=\"diff\"></div>"
+
+
 
 Default Diff Options
 --------------------
@@ -285,9 +294,9 @@ You can set the default options for new `Diffy::Diff`s using the
 Options passed to `Diffy::Diff.new` will be merged into the default options.
 
     >> Diffy::Diff.default_options
-    => {:diff=>"-U 10000", :source=>"strings", :include_diff_info=>false, :include_plus_and_minus_in_html=>false}
+    => {:diff=>"-U10000", :source=>"strings", :include_diff_info=>false, :include_plus_and_minus_in_html=>false}
     >> Diffy::Diff.default_options.merge!(:source => 'files')
-    => {:diff=>"-U 10000", :source=>"files", :include_diff_info=>false, :include_plus_and_minus_in_html=>false}
+    => {:diff=>"-U10000", :source=>"files", :include_diff_info=>false, :include_plus_and_minus_in_html=>false}
 
 
 Custom Formats

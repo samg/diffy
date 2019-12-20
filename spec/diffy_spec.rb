@@ -503,6 +503,13 @@ baz
         expect(@diff.to_s(:html)).to eq(html)
       end
 
+      it "should treat unix vs windows newlines as same if option :ignore_crlf" do
+        @diff = Diffy::Diff.new("one\ntwo\nthree\n", "one\r\ntwo\r\nthree\r\n",
+                               ignore_crlf: true)
+        empty_diff = "<div class=\"diff\"></div>"
+        expect(@diff.to_s(:html)).to eq(empty_diff)
+      end
+
       describe 'with lines that include \n' do
         before do
           string1 = 'a\nb'"\n"
@@ -585,12 +592,36 @@ baz
         line
       end).to eq([" foo\n", " bar\n", "+baz\n"])
     end
+
+    it "should handle lines that begin with --" do
+      string1 = "a a\n-- b\nc c\n"
+      string2 = "a a\nb b\nc c\n"
+
+      expect(Diffy::Diff.new(string1, string2).to_s).to eq <<-DIFF
+ a a
+--- b
++b b
+ c c
+      DIFF
+    end
+
+    it "should handle lines that begin with ++" do
+      string1 = "a a\nb b\nc c\n"
+      string2 = "a a\n++ b\nc c\n"
+
+      expect(Diffy::Diff.new(string1, string2).to_s).to eq <<-DIFF
+ a a
+-b b
++++ b
+ c c
+      DIFF
+    end
   end
 end
 
 describe Diffy::SplitDiff do
   before do
-    ::Diffy::Diff.default_options.merge!(:diff => '-U 10000')
+    ::Diffy::Diff.default_options.merge!(:diff => '-U10000')
   end
 
   it "should fail with invalid format" do
