@@ -174,7 +174,7 @@ module Diffy
 
     # options pass to diff program
     def diff_options
-      Array(options[:context] ? "-U #{options[:context]}" : options[:diff])
+      Array(options[:context] ? "-U#{options[:context]}" : options[:diff])
     end
 
   end
