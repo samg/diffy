@@ -1,3 +1,12 @@
+Diffy Fork
+==========
+Addresses issue when
+```ruby
+diff = Open3.popen3(diff_bin, *(diff_options + @paths)) { |i, o, e| o.read }
+```
+deadlocks f the program generates too much output on stderr
+
+
 Diffy - Easy Diffing With Ruby [![Build Status](https://travis-ci.org/samg/diffy.svg?branch=master)](https://travis-ci.org/samg/diffy)
 ============================
 

@@ -617,6 +617,25 @@ baz
       DIFF
     end
   end
+
+  describe "program stderr" do
+    it "raises program error" do
+      expected_message = <<-ERROR
+diff: .no_file1.file: No such file or directory
+diff: .no_file2.file: No such file or directory
+ERROR
+      path1 = ".no_file1.file"
+      path2 = ".no_file2.file"
+      expect{ Diffy::Diff.new(path1, path2, :source => 'files').diff }.to raise_exception(Diffy::Errors::ProgramError, expected_message)
+    end
+
+    it "does not raise program error" do
+      path1 = ".no_file1.file"
+      path2 = ".no_file2.file"
+      expect(Diffy::Diff.new(path1, path2, :source => 'files', raise_on_error: false).to_s).to eq('')
+    end
+
+  end
 end
 
 describe Diffy::SplitDiff do

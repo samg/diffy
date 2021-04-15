@@ -1,3 +1,7 @@
+== 3.5.0 ==
+Switch to POSIX.Spawn instead of Open3
+Option not to ignore stderr
+
 == 3.4.0 ==
 Remove space between U diff option and context number. Thanks @tomas!
 Add option to ignore CRLF diffs in HTML comparisons. Thanks @ptyagi16!
