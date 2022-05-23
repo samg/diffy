@@ -7,6 +7,7 @@ module Diffy
       :include_plus_and_minus_in_html => false,
       :context => nil,
       :allow_empty_diff => true,
+      :temp_directory => File.absolute_path('.')
     }
 
     class << self
@@ -126,7 +127,7 @@ module Diffy
     end
 
     def tempfile(string)
-      t = Tempfile.new('diffy')
+      t = Tempfile.new(@options[:temp_directory], 'diffy')
       # ensure tempfiles aren't unlinked when GC runs by maintaining a
       # reference to them.
       @tempfiles ||=[]
