@@ -1,3 +1,8 @@
+== 3.4.1 ==
+Prevent remote code execution from user controlled diff file paths.  This
+issue was only present in Windows platforms. Thanks @tehryanx for reporting
+and testing the fix!
+
 == 3.4.0 ==
 Remove space between U diff option and context number. Thanks @tomas!
 Add option to ignore CRLF diffs in HTML comparisons. Thanks @ptyagi16!
