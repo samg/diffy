@@ -49,13 +49,7 @@ module Diffy
             [string1, string2]
           end
 
-        if WINDOWS
-          # don't use open3 on windows
-          cmd = sprintf '"%s" %s %s', diff_bin, diff_options.join(' '), @paths.map { |s| %("#{s}") }.join(' ')
-          diff = `#{cmd}`
-        else
-          diff = Open3.popen3(diff_bin, *(diff_options + @paths)) { |i, o, e| o.read }
-        end
+        diff, stderr, process_status = Open3.capture3(diff_bin, *(diff_options + @paths))
         diff.force_encoding('ASCII-8BIT') if diff.respond_to?(:valid_encoding?) && !diff.valid_encoding?
         if diff =~ /\A\s*\Z/ && !options[:allow_empty_diff]
           diff = case options[:source]
