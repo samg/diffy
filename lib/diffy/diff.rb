@@ -49,7 +49,7 @@ module Diffy
             [string1, string2]
           end
 
-        diff, stderr, process_status = Open3.capture3(diff_bin, *(diff_options + @paths))
+        diff, _stderr, process_status = Open3.capture3(diff_bin, *(diff_options + @paths))
         diff.force_encoding('ASCII-8BIT') if diff.respond_to?(:valid_encoding?) && !diff.valid_encoding?
         if diff =~ /\A\s*\Z/ && !options[:allow_empty_diff]
           diff = case options[:source]
