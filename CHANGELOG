@@ -1,3 +1,7 @@
+== 3.4.2 ==
+Silence warning from unused variable when using `ruby -w`.  Thanks
+@sambostock!
+
 == 3.4.1 ==
 Prevent remote code execution from user controlled diff file paths.  This
 issue was only present in Windows platforms. Thanks @tehryanx for reporting
