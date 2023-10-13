@@ -1,12 +1,12 @@
 module Diffy
   class Diff
     ORIGINAL_DEFAULT_OPTIONS = {
-      :diff => '-U10000',
       :source => 'strings',
       :include_diff_info => false,
       :include_plus_and_minus_in_html => false,
-      :context => nil,
+      :context => 10_000,
       :allow_empty_diff => true,
+      :rugged => {},
     }
 
     class << self
@@ -37,42 +37,29 @@ module Diffy
       if ! ['strings', 'files'].include?(@options[:source])
         raise ArgumentError, "Invalid :source option #{@options[:source].inspect}. Supported options are 'strings' and 'files'."
       end
+      @options[:rugged][:context_lines] = @options[:context] if @options[:rugged][:context_lines].nil?
       @string1, @string2 = string1, string2
+      @diff_empty = false
     end
 
     def diff
       @diff ||= begin
-        @paths = case options[:source]
+        case options[:source]
           when 'strings'
-            [tempfile(string1), tempfile(string2)]
+            diff = Rugged::Patch.from_strings(string1, string2, **options[:rugged]).to_s
           when 'files'
-            [string1, string2]
+            diff = Rugged::Patch.from_strings(File.read(string1), File.read(string2), **options[:rugged]).to_s
           end
 
-        diff, _stderr, _process_status = Open3.capture3(diff_bin, *(diff_options + @paths))
         diff.force_encoding('ASCII-8BIT') if diff.respond_to?(:valid_encoding?) && !diff.valid_encoding?
         if diff =~ /\A\s*\Z/ && !options[:allow_empty_diff]
+          @diff_empty = true
           diff = case options[:source]
           when 'strings' then string1
           when 'files' then File.read(string1)
           end.gsub(/^/, " ")
         end
         diff
-      end
-    ensure
-      # unlink the tempfiles explicitly now that the diff is generated
-      if defined? @tempfiles # to avoid Ruby warnings about undefined ins var.
-        Array(@tempfiles).each do |t|
-          begin
-            # check that the path is not nil and file still exists.
-            # REE seems to be very agressive with when it magically removes
-            # tempfiles
-            t.unlink if t.path && File.exist?(t.path)
-          rescue => e
-            warn "#{e.class}: #{e}"
-            warn e.backtrace.join("\n")
-          end
-        end
       end
     end
 
@@ -82,11 +69,12 @@ module Diffy
         # this "primes" the diff and sets up the paths we'll reference below.
         diff
 
-        # caching this regexp improves the performance of the loop by a
-        # considerable amount.
-        regexp = /^(--- "?#{@paths[0]}"?|\+\+\+ "?#{@paths[1]}"?|@@|\\\\)/
-
-        diff.split("\n").reject{|x| x =~ regexp }.map {|line| line + "\n" }
+        # diff --git a/file b/file
+        # index 71779d2..d5f7fc3 100644 
+        # --- test/file
+        # +++ b/file
+        # @@ -1 +1 @@
+        diff.split("\n").drop(@diff_empty ? 0 : 5).map {|line| line + "\n" }
 
       when true
         diff.split("\n").map {|line| line + "\n" }
@@ -119,18 +107,6 @@ module Diffy
       end
     end
 
-    def tempfile(string)
-      t = Tempfile.new('diffy')
-      # ensure tempfiles aren't unlinked when GC runs by maintaining a
-      # reference to them.
-      @tempfiles ||=[]
-      @tempfiles.push(t)
-      t.print(string)
-      t.flush
-      t.close
-      t.path
-    end
-
     def to_s(format = nil)
       format ||= self.class.default_format
       formats = Format.instance_methods(false).map{|x| x.to_s}
@@ -143,33 +119,5 @@ module Diffy
           "Format #{format.inspect} not found in #{formats.inspect}"
       end
     end
-    private
-
-    @@bin = nil
-    def diff_bin
-      return @@bin if @@bin
-
-      if @@bin = ENV['DIFFY_DIFF']
-        # system() trick from Minitest
-        raise "Can't execute diff program '#@@bin'" unless system(@@bin, __FILE__, __FILE__)
-        return @@bin
-      end
-
-      diffs = ['diff', 'ldiff']
-      diffs.first << '.exe' if WINDOWS  # ldiff does not have exe extension
-      @@bin = diffs.find { |name| system(name, __FILE__, __FILE__) }
-
-      if @@bin.nil?
-        raise "Can't find a diff executable in PATH #{ENV['PATH']}"
-      end
-
-      @@bin
-    end
-
-    # options pass to diff program
-    def diff_options
-      Array(options[:context] ? "-U#{options[:context]}" : options[:diff])
-    end
-
   end
 end

@@ -1,4 +1,5 @@
 require 'rspec'
+require 'tempfile'
 require File.expand_path(File.join(File.dirname(__FILE__), '..', 'lib', 'diffy'))
 
 describe Diffy::Diff do
@@ -38,11 +39,8 @@ describe Diffy::Diff do
       DIFF
     end
 
-    it "should accept file paths with spaces as arguments on windows" do
+    it "should accept file paths with spaces as arguments" do
       begin
-
-        orig_verbose, $VERBOSE = $VERBOSE, nil #silence redefine constant warnings
-        orig_windows, Diffy::WINDOWS = Diffy::WINDOWS, true
         string1 = "foo\nbar\nbang\n"
         string2 = "foo\nbang\n"
         path1, path2 = tempfile(string1, 'path with spaces'), tempfile(string2, 'path with spaces')
@@ -51,10 +49,7 @@ describe Diffy::Diff do
 -bar
  bang
         DIFF
-      ensure
-        Diffy::WINDOWS, $VERBOSE = orig_windows, orig_verbose
       end
-
     end
 
     describe "with no line different" do
@@ -113,13 +108,6 @@ describe Diffy::Diff do
   end
 
   describe "handling temp files" do
-    it "should unlink tempfiles after generating the diff" do
-      before_tmpfiles = Dir.entries(Dir.tmpdir)
-      ::Diffy::Diff.new("a", "b").to_s
-      after_tmpfiles = Dir.entries(Dir.tmpdir)
-      expect(before_tmpfiles).to match_array(after_tmpfiles)
-    end
-
     it "should still be able to generate multiple diffs" do
       d = ::Diffy::Diff.new("a", "b")
       expect(d.to_s).to be_a String
@@ -220,20 +208,11 @@ describe Diffy::Diff do
   end
 
   describe "options[:diff]" do
-    it "should accept an option to diff" do
+    it "should accept options for rugged" do
       @diff = Diffy::Diff.new(" foo\nbar\n", "foo\nbar\n", :diff => "-w", :allow_empty_diff => false)
       expect(@diff.to_s).to eq <<-DIFF
   foo
  bar
-      DIFF
-    end
-
-    it "should accept multiple arguments to diff" do
-      @diff = Diffy::Diff.new(" foo\nbar\n", "foo\nbaz\n", :diff => ["-w", "-U 3"])
-      expect(@diff.to_s).to eq <<-DIFF
-  foo
--bar
-+baz
       DIFF
     end
   end
@@ -285,6 +264,7 @@ describe Diffy::Diff do
         Diffy::Diff.default_options = old_options.merge(:include_diff_info => true)
         expect(Diffy::Diff.new(@string1, @string2).to_s).
           to include('@@ -1,3 +1,2 @@')
+      ensure
         Diffy::Diff.default_options = old_options
       end
 
@@ -364,20 +344,6 @@ describe Diffy::Diff do
   </ul>
 </div>
         HTML
-      end
-
-      it "should accept overrides to diff's options" do
-        @diff = Diffy::Diff.new(@string1, @string2, :diff => "--rcs")
-        expect(@diff.to_s).to eq <<-DIFF
-d1 1
-a1 3
-one
-two
-three
-d4 1
-a4 1
-baz
-          DIFF
       end
     end
 
@@ -548,7 +514,7 @@ baz
       it "should correctly do inline hightlighting when default diff options are changed" do
         original_options = ::Diffy::Diff.default_options
         begin
-              ::Diffy::Diff.default_options.merge!(:diff => '-U0')
+              ::Diffy::Diff.default_options.merge!(:context => 0)
 
               s1 = "foo\nbar\nbang"
               s2 = "foo\nbar\nbangleize"
@@ -621,7 +587,7 @@ end
 
 describe Diffy::SplitDiff do
   before do
-    ::Diffy::Diff.default_options.merge!(:diff => '-U10000')
+    ::Diffy::Diff.default_options.merge!(:context => 10_000)
   end
 
   it "should fail with invalid format" do
@@ -691,4 +657,3 @@ describe 'Diffy::CSS' do
     expect(Diffy::CSS).to include 'diff{overflow:auto;}'
   end
 end
-
