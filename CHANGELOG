@@ -1,3 +1,6 @@
+== 3.4.3 ==
+Require open3 unconditionally on Windows. Thanks @avdv!
+
 == 3.4.2 ==
 Silence warning from unused variable when using `ruby -w`.  Thanks
 @sambostock!
