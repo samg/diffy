@@ -91,12 +91,10 @@ module Diffy
     def split_characters(chunk)
       chunk.gsub(/^./, '').each_line.map do |line|
         if @options[:ignore_crlf]
-          (line.chomp.split('') + ['\n']).map{|chr| ERB::Util.h(chr) }
+          line.chomp.split('').map{|chr| ERB::Util.h(chr) } + ['<LINE_BOUNDARY>']
         else
           chars = line.sub(/([\r\n]$)/, '').split('')
-          # add escaped newlines
-          chars << '\n'
-          chars.map{|chr| ERB::Util.h(chr) }
+          chars.map{|chr| ERB::Util.h(chr) } + ['<LINE_BOUNDARY>']
         end
       end.flatten.join("\n") + "\n"
     end
@@ -104,7 +102,7 @@ module Diffy
     def reconstruct_characters(line_diff, type)
       enum = line_diff.each_chunk.to_a
       enum.each_with_index.map do |l, i|
-        re = /(^|\\n)#{Regexp.escape(type)}/
+        re = /(^|<LINE_BOUNDARY>)#{Regexp.escape(type)}/
         case l
         when re
           highlight(l)
@@ -113,7 +111,7 @@ module Diffy
             highlight(l)
           else
             l.gsub(/^./, '').gsub("\n", '').
-              gsub('\r', "\r").gsub('\n', "\n")
+              gsub('\r', "\r").gsub('<LINE_BOUNDARY>', "\n")
           end
         end
       end.join('').split("\n").map do |l|
@@ -125,10 +123,7 @@ module Diffy
       "<strong>" +
         lines.
           # strip diff tokens (e.g. +,-,etc.)
-          gsub(/(^|\\n)./, '').
-          # mark line boundaries from higher level line diff
-          # html is all escaped so using brackets should make this safe.
-          gsub('\n', '<LINE_BOUNDARY>').
+          gsub(/(^|<LINE_BOUNDARY>)./, '').
           # join characters back by stripping out newlines
           gsub("\n", '').
           # close and reopen strong tags.  we don't want inline elements
