@@ -530,6 +530,24 @@ baz
         end
       end
 
+      describe 'with lines that include \n but not as a diff' do
+        before do
+          @string1 = 'a\nb'"\n"
+          @string2 = 'a\nc'"\n"
+        end
+
+        it "should not leave lines out" do
+          expect(Diffy::Diff.new(@string1, @string2).to_s(:html)).to eq <<-DIFF
+<div class="diff">
+  <ul>
+    <li class="del"><del>a\\n<strong>b</strong></del></li>
+    <li class="ins"><ins>a\\n<strong>c</strong></ins></li>
+  </ul>
+</div>
+          DIFF
+        end
+      end
+
       it "should do highlighting on the last line when there's no trailing newlines" do
         s1 = "foo\nbar\nbang"
         s2 = "foo\nbar\nbangleize"
