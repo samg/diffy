@@ -21,6 +21,8 @@ A default format can be set like so:
 
     Diffy::Diff.default_format = :html
 
+### [HTML demo](https://codepen.io/jDeppen/pen/MYWMGQK)
+
 Installation
 ------------
 
