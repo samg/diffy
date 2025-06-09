@@ -1,3 +1,6 @@
+== 3.4.4 ==
+Fix HTML diff highlighting bug for lines containing '\n'. Thanks @P-SiZK!
+
 == 3.4.3 ==
 Require open3 unconditionally on Windows. Thanks @avdv!
 
